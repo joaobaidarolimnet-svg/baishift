@@ -50,6 +50,11 @@ Aceita URLs limpas: `/a/b/c` encontra `a/b/c.html` ou `a/b/c/index.html`. Para
 acrescentar uma página nova, basta criar o arquivo — `servicos.html` fica disponível
 em `/servicos`.
 
+**Cache.** O servidor versiona o CSS e o JS pelo conteúdo: o HTML sai com
+`site.css?v=<hash>`, então cada publicação força o navegador a baixar o arquivo novo,
+e o arquivo em si pode ficar um ano em cache. O HTML é sempre revalidado (`no-cache`
++ ETag). Não é preciso trocar nome de arquivo nem "limpar cache" depois de publicar.
+
 Para atualizar, basta enviar para a `main`:
 
 ```bash

@@ -272,6 +272,33 @@ section{padding:clamp(46px,6vw,86px) 0}
 .after .lg i::before{content:"";width:10px;height:6px;border-radius:2px;background:var(--orange)}
 .after .lg i.b::before{background:var(--blue)}
 
+/* ---------------- PAINÉIS · centro de comando ---------------- */
+.hud{background:#071433}
+.hud::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1.3px);background-size:24px 24px;
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent 88%);mask-image:linear-gradient(180deg,#000,transparent 88%)}
+.hud>.wrap{position:relative;z-index:1}
+.hud .mono,.hud .after .mono{color:var(--blue-light)}
+.hud .panel{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(127,166,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);position:relative;transition:border-color .25s,box-shadow .25s}
+.hud .panel:hover{border-color:rgba(127,166,255,.6);box-shadow:0 0 0 1px rgba(77,139,255,.25),0 30px 60px -36px rgba(22,82,240,.9),inset 0 1px 0 rgba(255,255,255,.09)}
+.hud .panel::before,.hud .panel::after{content:"";position:absolute;width:12px;height:12px;border:1.5px solid rgba(127,166,255,.6);pointer-events:none}
+.hud .panel::before{top:7px;left:7px;border-right:0;border-bottom:0;border-top-left-radius:4px}
+.hud .panel::after{bottom:7px;right:7px;border-left:0;border-top:0;border-bottom-right-radius:4px}
+.hud .panel .pt{color:var(--blue-light);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hud .panel .pt::after{content:"ao vivo";font-size:.55rem;letter-spacing:.14em;color:#5ED9A0;padding-left:11px;
+  background:radial-gradient(circle,#5ED9A0 2.4px,transparent 3px) left center/8px 8px no-repeat}
+.hud .panel .pv{color:#fff;text-shadow:0 0 30px rgba(77,139,255,.55)}
+.hud .panel .pd{color:#5ED9A0}
+.hud .panel .pd.or{color:#FF9A4D}
+.hud .tip{background:#fff;color:var(--ink)}
+.hud .after{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(127,166,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.hud .after h3{color:#fff}
+.hud .after p{color:rgba(255,255,255,.62)}
+.hud .after .lg{color:rgba(255,255,255,.5)}
+.hud .after .lg i::before{background:#FF9A4D}
+.hud .after .lg i.b::before{background:#4D8BFF}
+
 /* ---------------- DIAGNÓSTICO ---------------- */
 .diag{display:grid;gap:28px}
 @media(min-width:960px){.diag{grid-template-columns:1fr 1fr;align-items:center;gap:48px}}

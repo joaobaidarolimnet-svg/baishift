@@ -81,10 +81,42 @@ function grow(node, attr, to, dur) {
   node.setAttribute(attr, to);
 }
 
+/* ---------- tema escuro dos gráficos: gradientes, brilho e halo ---------- */
+var LIGHT = { grid: C.line, muted: C.muted, ink: C.ink, track: C.line, glow: false };
+var DARK  = { grid: "rgba(255,255,255,.09)", muted: "rgba(255,255,255,.55)", ink: "#fff", track: "rgba(255,255,255,.1)", glow: true };
+function pal(o) { return o.dark ? DARK : LIGHT; }
+/* no fundo escuro as cores da marca ganham uma versão mais clara para não afundar */
+function tone(c, o) { return o.dark ? ({ "#1652F0": "#4D8BFF", "#12855A": "#5ED9A0", "#FF7A1A": "#FF9A4D", "#D8402F": "#FF6B6B" }[c] || c) : c; }
+var UID = 0;
+function glow(svg) {
+  var id = "fx" + (++UID), d = E("defs"), f = E("filter", { id: id, x: "-20%", y: "-60%", width: "140%", height: "220%" });
+  f.appendChild(E("feGaussianBlur", { stdDeviation: 2.4, result: "b" }));
+  var m = E("feMerge"); m.appendChild(E("feMergeNode", { in: "b" })); m.appendChild(E("feMergeNode", { in: "SourceGraphic" }));
+  f.appendChild(m); d.appendChild(f); svg.appendChild(d);
+  return "url(#" + id + ")";
+}
+function gradient(svg, color, vertical, a0, a1) {
+  var id = "gr" + (++UID), d = E("defs");
+  var g = E("linearGradient", vertical ? { id: id, x1: 0, y1: 0, x2: 0, y2: 1 } : { id: id, x1: 0, y1: 0, x2: 1, y2: 0 });
+  g.appendChild(E("stop", { offset: "0%", "stop-color": color, "stop-opacity": a0 }));
+  g.appendChild(E("stop", { offset: "100%", "stop-color": color, "stop-opacity": a1 }));
+  d.appendChild(g); svg.appendChild(d);
+  return "url(#" + id + ")";
+}
+function halo(svg, cx, cy, color) {
+  var h = E("circle", { cx: cx, cy: cy, r: 5, fill: color, opacity: .3 });
+  if (!RM) {
+    h.appendChild(E("animate", { attributeName: "r", values: "4;11;4", dur: "2.6s", repeatCount: "indefinite" }));
+    h.appendChild(E("animate", { attributeName: "opacity", values: ".35;0;.35", dur: "2.6s", repeatCount: "indefinite" }));
+  }
+  svg.appendChild(h);
+}
+
 /* ---------- gráfico de linha ---------- */
 function lineChart(host, o) {
-  var W = o.w || 320, H = o.h || (o.small ? 70 : 132), P = o.small ? 4 : 16, BT = o.labels ? 16 : 6;
+  var P0 = pal(o), W = o.w || 320, H = o.h || (o.small ? 70 : 132), P = o.small ? 4 : 16, BT = o.labels ? 16 : 6;
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.alt || "gráfico de linha" });
+  var fx = P0.glow ? glow(svg) : null;
   var all = [];
   o.series.forEach(function (s) { all = all.concat(s.d); });
   var mn = Math.min.apply(null, all), mx = Math.max.apply(null, all), pad = (mx - mn) * .18 || 1;
@@ -92,37 +124,39 @@ function lineChart(host, o) {
   var r = mx - mn, IH = H - P - BT;
   if (!o.small) for (var i = 0; i < 4; i++) {
     var y = P + (IH / 3) * i;
-    svg.appendChild(E("line", { x1: 0, y1: y, x2: W, y2: y, stroke: C.line, "stroke-width": 1 }));
+    svg.appendChild(E("line", { x1: 0, y1: y, x2: W, y2: y, stroke: P0.grid, "stroke-width": 1, "stroke-dasharray": o.dark ? "2 4" : "none" }));
   }
   var X = function (i, n) { return (i / (n - 1)) * (W - 6) + 3; };
   var Y = function (v) { return P + IH - ((v - mn) / r) * IH; };
   var f = o.fmt || function (v) { return br(v); };
 
   o.series.forEach(function (s) {
-    var d = "", n = s.d.length;
+    var c = tone(s.c, o), d = "", n = s.d.length;
     for (var i = 0; i < n; i++) d += (i ? "L" : "M") + X(i, n).toFixed(1) + " " + Y(s.d[i]).toFixed(1);
-    if (!o.small) svg.appendChild(E("path", { d: d + "L" + (W - 3) + " " + (P + IH) + "L3 " + (P + IH) + "Z", fill: s.c, opacity: .09 }));
-    var p = E("path", { d: d, fill: "none", stroke: s.c, "stroke-width": o.small ? 1.8 : 2.2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+    if (!o.small) svg.appendChild(E("path", { d: d + "L" + (W - 3) + " " + (P + IH) + "L3 " + (P + IH) + "Z",
+      fill: o.dark ? gradient(svg, c, true, .38, 0) : c, opacity: o.dark ? 1 : .09 }));
+    var p = E("path", { d: d, fill: "none", stroke: c, "stroke-width": o.small ? 1.8 : 2.2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+    if (fx) p.setAttribute("filter", fx);
     svg.appendChild(p);
     if (!RM) {
       var L = p.getTotalLength();
       p.setAttribute("stroke-dasharray", L); p.setAttribute("stroke-dashoffset", L);
       vis(host, function () { p.style.transition = "stroke-dashoffset 1.3s ease"; p.setAttribute("stroke-dashoffset", 0); });
     }
-    svg.appendChild(E("circle", { cx: X(n - 1, n), cy: Y(s.d[n - 1]), r: o.small ? 2.4 : 3.4, fill: s.c }));
-    /* valores escritos nas pontas da linha */
+    if (o.dark && !o.small) halo(svg, X(n - 1, n), Y(s.d[n - 1]), c);
+    svg.appendChild(E("circle", { cx: X(n - 1, n), cy: Y(s.d[n - 1]), r: o.small ? 2.4 : 3.4, fill: c, stroke: o.dark ? "#071433" : "none", "stroke-width": 1.5 }));
     var fs = o.fs || 7.4;
-    if (o.end) svg.appendChild(T({ x: X(n - 1, n) - 2, y: Y(s.d[n - 1]) - 8, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: s.c }, f(s.d[n - 1])));
-    if (o.start) svg.appendChild(T({ x: X(0, n) + 2, y: Y(s.d[0]) - 8, "text-anchor": "start", "font-family": MONO, "font-size": fs, fill: C.muted }, f(s.d[0])));
+    if (o.end) svg.appendChild(T({ x: X(n - 1, n) - 2, y: Y(s.d[n - 1]) - 9, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: c }, f(s.d[n - 1])));
+    if (o.start) svg.appendChild(T({ x: X(0, n) + 2, y: Y(s.d[0]) - 9, "text-anchor": "start", "font-family": MONO, "font-size": fs, fill: P0.muted }, f(s.d[0])));
   });
   if (o.labels) {
     [0, Math.floor(o.labels.length / 2), o.labels.length - 1].forEach(function (i) {
       svg.appendChild(T({ x: X(i, o.labels.length), y: H - 3, "text-anchor": i === 0 ? "start" : (i === o.labels.length - 1 ? "end" : "middle"),
-        "font-family": MONO, "font-size": 7.6, fill: C.muted }, o.labels[i]));
+        "font-family": MONO, "font-size": 7.6, fill: P0.muted }, o.labels[i]));
     });
   }
   var tip = tipEl(host), n0 = o.series[0].d.length;
-  var cross = E("line", { y1: P, y2: P + IH, stroke: C.blue, "stroke-width": 1, "stroke-dasharray": "3 3", opacity: 0 });
+  var cross = E("line", { y1: P, y2: P + IH, stroke: o.dark ? "rgba(255,255,255,.5)" : C.blue, "stroke-width": 1, "stroke-dasharray": "3 3", opacity: 0 });
   svg.appendChild(cross);
   svg.addEventListener("pointermove", function (ev) {
     var rc = svg.getBoundingClientRect(), x = (ev.clientX - rc.left) / rc.width * W;
@@ -137,19 +171,23 @@ function lineChart(host, o) {
 
 /* ---------- barras agrupadas ---------- */
 function barChart(host, o) {
-  var W = o.w || 320, H = o.h || (o.small ? 70 : 120), P = 6, BT = o.labels ? 14 : 4, IH = H - P - BT;
+  var P0 = pal(o), W = o.w || 320, H = o.h || (o.small ? 70 : 120), P = 6, BT = o.labels ? 14 : 4, IH = H - P - BT;
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.alt || "gráfico de barras" });
   var all = o.a.concat(o.b || []), mx = Math.max.apply(null, all) * 1.14;
   var n = o.a.length, bw = (W - 4) / n, tip = tipEl(host);
+  var ca = tone(o.ca || C.blue, o), cb = tone(o.cb || C.orange, o);
+  var fa = o.dark ? gradient(svg, ca, true, 1, .45) : ca, fb = o.dark ? gradient(svg, cb, true, 1, .45) : cb;
+  if (o.dark) [0, .5, 1].forEach(function (g) { var y = P + IH * (1 - g); svg.appendChild(E("line", { x1: 0, x2: W, y1: y, y2: y, stroke: P0.grid, "stroke-dasharray": "2 4" })); });
   for (var i = 0; i < n; i++) (function (i) {
-    var x = 2 + i * bw, two = o.b && o.b.length, w = two ? bw * .38 : bw * .6, ha = (o.a[i] / mx) * IH;
-    var r1 = E("rect", { x: x + (two ? 1 : bw * .2), y: P + IH, width: w, height: 0, rx: 2, fill: o.ca || C.blue });
+    var x = 2 + i * bw, two = o.b && o.b.length, w = two ? bw * .38 : bw * .6, ha = (o.a[i] / mx) * IH, xa = x + (two ? 1 : bw * .2);
+    if (o.dark) svg.appendChild(E("rect", { x: xa, y: P, width: w, height: IH, rx: 2, fill: P0.track, opacity: .6 }));
+    var r1 = E("rect", { x: xa, y: P + IH, width: w, height: 0, rx: 2, fill: fa });
     svg.appendChild(r1);
     vis(host, function () { grow(r1, "height", ha.toFixed(1), 800); grow(r1, "y", (P + IH - ha).toFixed(1), 800); });
     hoverable(r1, function () { show(tip, svg, W, x + bw * .4, P + IH - ha - 4, (o.ka || "") + " " + br(o.a[i])); }, function () { hide(tip); });
     if (two) {
       var hb = (o.b[i] / mx) * IH;
-      var r2 = E("rect", { x: x + bw * .45, y: P + IH, width: w, height: 0, rx: 2, fill: o.cb || C.orange, opacity: .9 });
+      var r2 = E("rect", { x: x + bw * .45, y: P + IH, width: w, height: 0, rx: 2, fill: fb, opacity: .9 });
       svg.appendChild(r2);
       vis(host, function () { grow(r2, "height", hb.toFixed(1), 800); grow(r2, "y", (P + IH - hb).toFixed(1), 800); });
       hoverable(r2, function () { show(tip, svg, W, x + bw * .65, P + IH - hb - 4, (o.kb || "") + " " + br(o.b[i])); }, function () { hide(tip); });
@@ -157,48 +195,48 @@ function barChart(host, o) {
   })(i);
   /* rótulos nas extremidades: primeiro e último da lista, seja qual for o tamanho dela */
   if (o.labels && o.labels.length) [[0, o.labels[0]], [n - 1, o.labels[o.labels.length - 1]]].forEach(function (pair) {
-    svg.appendChild(T({ x: 2 + pair[0] * bw + bw * .4, y: H - 2, "text-anchor": pair[0] ? "end" : "start", "font-family": MONO, "font-size": 7.4, fill: C.muted }, pair[1]));
+    svg.appendChild(T({ x: 2 + pair[0] * bw + bw * .4, y: H - 2, "text-anchor": pair[0] ? "end" : "start", "font-family": MONO, "font-size": 7.4, fill: P0.muted }, pair[1]));
   });
   host.appendChild(svg);
 }
 
 /* ---------- barras horizontais ---------- */
 function hBar(host, o) {
-  var W = o.w || 200, rh = o.rh || 17, H = o.rows.length * rh + 2, fs = o.fs || 6.6, LW = o.lw || 64, VW = o.vw || 32;
+  var P0 = pal(o), W = o.w || 200, rh = o.rh || 17, H = o.rows.length * rh + 2, fs = o.fs || 6.6, LW = o.lw || 64, VW = o.vw || 32;
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.alt || "comparativo" });
   var mx = o.max || Math.max.apply(null, o.rows.map(function (r) { return r.v; }));
   o.rows.forEach(function (r, i) {
-    var y = i * rh + 2, bh = Math.max(6, Math.round(rh * .42));
-    svg.appendChild(T({ x: 0, y: y + rh / 2 + fs * .35, "font-family": MONO, "font-size": fs, fill: C.muted }, r.k));
-    svg.appendChild(E("rect", { x: LW, y: y + rh / 2 - bh / 2, width: W - LW - VW, height: bh, rx: bh / 2, fill: C.line }));
+    var y = i * rh + 2, bh = Math.max(6, Math.round(rh * .42)), c = tone(r.c || (r.alert ? C.orange : C.blue), o);
+    svg.appendChild(T({ x: 0, y: y + rh / 2 + fs * .35, "font-family": MONO, "font-size": fs, fill: P0.muted }, r.k));
+    svg.appendChild(E("rect", { x: LW, y: y + rh / 2 - bh / 2, width: W - LW - VW, height: bh, rx: bh / 2, fill: P0.track }));
     var w = (r.v / mx) * (W - LW - VW);
-    var bar = E("rect", { x: LW, y: y + rh / 2 - bh / 2, width: 0, height: bh, rx: bh / 2, fill: r.c || (r.alert ? C.orange : C.blue) });
+    var bar = E("rect", { x: LW, y: y + rh / 2 - bh / 2, width: 0, height: bh, rx: bh / 2, fill: o.dark ? gradient(svg, c, false, .55, 1) : c });
     svg.appendChild(bar);
     vis(host, function () { grow(bar, "width", w.toFixed(1), 900); });
-    svg.appendChild(T({ x: W, y: y + rh / 2 + fs * .35, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: r.alert ? C.orange : C.ink }, r.t || (br(r.v) + "%")));
+    svg.appendChild(T({ x: W, y: y + rh / 2 + fs * .35, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: r.alert ? tone(C.orange, o) : P0.ink }, r.t || (br(r.v) + "%")));
   });
   host.appendChild(svg);
 }
 
 /* ---------- barras pareadas (antes/depois, hoje/plano) ---------- */
 function dualBar(host, o) {
-  var narrow = host.clientWidth && host.clientWidth < 480;
+  var P0 = pal(o), narrow = host.clientWidth && host.clientWidth < 480;
   var W = narrow ? Math.min(o.w || 320, 300) : (o.w || 320), rh = o.rh || 30, H = o.rows.length * rh + 4;
   var fs = (o.fs || 7.4) + (narrow ? 1 : 0), LW = o.lw || 92, VW = o.vw || 44;
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": o.alt || "comparativo antes e depois" });
   var mxAll = Math.max.apply(null, o.rows.map(function (r) { return Math.max(r.a, r.b); }));
-  var TW = W - LW - VW, tip = tipEl(host);
+  var TW = W - LW - VW, tip = tipEl(host), ca = tone(o.ca || C.orange, o), cb = tone(o.cb || C.blue, o);
   o.rows.forEach(function (r, i) {
     var y = i * rh + 2, mx = o.max || (o.norm === "row" ? Math.max(r.a, r.b) : mxAll);
-    svg.appendChild(T({ x: 0, y: y + rh / 2 + fs * .35, "font-family": MONO, "font-size": fs, fill: C.ink }, r.k));
-    [[r.a, o.ca || C.orange, r.ta, y + rh * .2, 6], [r.b, o.cb || C.blue, r.tb, y + rh * .55, 8]].forEach(function (s) {
-      var w = (s[0] / mx) * TW;
-      svg.appendChild(E("rect", { x: LW, y: s[3], width: TW, height: s[4], rx: s[4] / 2, fill: C.line, opacity: .7 }));
-      var bar = E("rect", { x: LW, y: s[3], width: 0, height: s[4], rx: s[4] / 2, fill: s[1] });
+    svg.appendChild(T({ x: 0, y: y + rh / 2 + fs * .35, "font-family": MONO, "font-size": fs, fill: P0.ink }, r.k));
+    [[r.a, ca, r.ta, y + rh * .2, 6], [r.b, cb, r.tb, y + rh * .55, 8]].forEach(function (sg) {
+      var w = (sg[0] / mx) * TW;
+      svg.appendChild(E("rect", { x: LW, y: sg[3], width: TW, height: sg[4], rx: sg[4] / 2, fill: P0.track, opacity: o.dark ? 1 : .7 }));
+      var bar = E("rect", { x: LW, y: sg[3], width: 0, height: sg[4], rx: sg[4] / 2, fill: o.dark ? gradient(svg, sg[1], false, .55, 1) : sg[1] });
       svg.appendChild(bar);
       vis(host, function () { grow(bar, "width", w.toFixed(1), 1000); });
-      svg.appendChild(T({ x: W, y: s[3] + s[4] / 2 + fs * .35, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: s[1] }, s[2]));
-      hoverable(bar, function () { show(tip, svg, W, LW + w, s[3] - 2, r.k + " · " + s[2]); }, function () { hide(tip); });
+      svg.appendChild(T({ x: W, y: sg[3] + sg[4] / 2 + fs * .35, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: sg[1] }, sg[2]));
+      hoverable(bar, function () { show(tip, svg, W, LW + w, sg[3] - 2, r.k + " · " + sg[2]); }, function () { hide(tip); });
     });
   });
   host.appendChild(svg);
@@ -262,21 +300,29 @@ function funnel(host, o) {
 
 /* ---------- medidor ---------- */
 function gauge(host, o) {
-  var W = 200, H = 100, cx = W / 2, cy = 80, R = 58;
+  var P0 = pal(o), W = 200, H = 100, cx = W / 2, cy = 80, R = 58, c = tone(o.c || C.blue, o);
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": (o.k || "medidor") + ": " + o.v + "%" });
   function arc(p) { var a = Math.PI * (1 - p); return [cx + Math.cos(a) * R, cy - Math.sin(a) * R]; }
   var e = arc(1);
-  svg.appendChild(E("path", { d: "M" + (cx - R) + " " + cy + " A" + R + " " + R + " 0 0 1 " + e[0] + " " + e[1], fill: "none", stroke: C.line, "stroke-width": 11, "stroke-linecap": "round" }));
+  svg.appendChild(E("path", { d: "M" + (cx - R) + " " + cy + " A" + R + " " + R + " 0 0 1 " + e[0] + " " + e[1], fill: "none", stroke: P0.track, "stroke-width": 11, "stroke-linecap": "round" }));
+  /* marcações de 0 a 100 em volta do arco */
+  if (o.dark) for (var k = 0; k <= 10; k++) {
+    var a = Math.PI * (1 - k / 10), r0 = R + 9, r1 = R + (k % 5 ? 12 : 15);
+    svg.appendChild(E("line", { x1: cx + Math.cos(a) * r0, y1: cy - Math.sin(a) * r0, x2: cx + Math.cos(a) * r1, y2: cy - Math.sin(a) * r1,
+      stroke: k % 5 ? P0.grid : P0.muted, "stroke-width": 1 }));
+  }
   var p = o.v / 100, pe = arc(p);
   /* o arco nunca passa de meia-volta, então large-arc é sempre 0 — com 1 o navegador
      escolhe o outro centro e desenha um arco enorme para fora da caixa */
-  var path = E("path", { d: "M" + (cx - R) + " " + cy + " A" + R + " " + R + " 0 0 1 " + pe[0] + " " + pe[1], fill: "none", stroke: o.c || C.blue, "stroke-width": 11, "stroke-linecap": "round" });
+  var path = E("path", { d: "M" + (cx - R) + " " + cy + " A" + R + " " + R + " 0 0 1 " + pe[0] + " " + pe[1], fill: "none", stroke: c, "stroke-width": 11, "stroke-linecap": "round" });
+  if (P0.glow) path.setAttribute("filter", glow(svg));
   var L = Math.PI * R;
   path.setAttribute("stroke-dasharray", L); path.setAttribute("stroke-dashoffset", L);
   svg.appendChild(path);
   vis(host, function () { if (RM) { path.setAttribute("stroke-dashoffset", 0); return; } path.style.transition = "stroke-dashoffset 1.1s ease"; path.setAttribute("stroke-dashoffset", 0); });
-  svg.appendChild(T({ x: cx, y: cy - 8, "text-anchor": "middle", "font-family": DISP, "font-size": 21, "font-weight": 600, fill: C.ink }, o.v + "%"));
-  svg.appendChild(T({ x: cx, y: cy + 8, "text-anchor": "middle", "font-family": MONO, "font-size": 6.6, fill: C.muted }, o.k || ""));
+  if (o.dark) halo(svg, pe[0], pe[1], c);
+  svg.appendChild(T({ x: cx, y: cy - 8, "text-anchor": "middle", "font-family": DISP, "font-size": 21, "font-weight": 600, fill: P0.ink }, o.v + "%"));
+  svg.appendChild(T({ x: cx, y: cy + 8, "text-anchor": "middle", "font-family": MONO, "font-size": 6.6, fill: P0.muted }, o.k || ""));
   host.appendChild(svg);
 }
 
@@ -646,14 +692,14 @@ try {
   waterfall();
 
   /* --- painéis --- */
-  on("pAtiv", function (h) { barChart(h, { w: 240, h: 82, a: ATIV, ca: C.green, ka: "ativações", labels: M, alt: "ativações por mês" }); });
-  on("pChurn", function (h) { lineChart(h, { w: 240, h: 82, end: true, start: true, alt: "churn nos últimos seis meses", series: [{ d: [2.02, 1.94, 1.88, 1.79, 1.71, 1.62], c: C.blue }], fmt: function (v) { return br(v, 2) + "%"; } }); });
-  on("pInad", function (h) { lineChart(h, { w: 240, h: 82, end: true, start: true, alt: "inadimplência nos últimos seis meses", series: [{ d: [6.9, 6.4, 6.0, 5.6, 5.2, 4.8], c: C.orange }], fmt: function (v) { return br(v, 1) + "%"; } }); });
-  on("pProd", function (h) { hBar(h, { rh: 18, alt: "produtividade por equipe de campo",
+  on("pAtiv", function (h) { barChart(h, { dark: 1, w: 240, h: 82, a: ATIV, ca: C.green, ka: "ativações", labels: M, alt: "ativações por mês" }); });
+  on("pChurn", function (h) { lineChart(h, { dark: 1, w: 240, h: 82, end: true, start: true, alt: "churn nos últimos seis meses", series: [{ d: [2.02, 1.94, 1.88, 1.79, 1.71, 1.62], c: C.blue }], fmt: function (v) { return br(v, 2) + "%"; } }); });
+  on("pInad", function (h) { lineChart(h, { dark: 1, w: 240, h: 82, end: true, start: true, alt: "inadimplência nos últimos seis meses", series: [{ d: [6.9, 6.4, 6.0, 5.6, 5.2, 4.8], c: C.orange }], fmt: function (v) { return br(v, 1) + "%"; } }); });
+  on("pProd", function (h) { hBar(h, { dark: 1, rh: 18, alt: "produtividade por equipe de campo",
     rows: [{ k: "EQUIPE A", v: 96, t: "96%" }, { k: "EQUIPE B", v: 92, t: "92%" }, { k: "EQUIPE C", v: 88, t: "88%" }, { k: "EQUIPE D", v: 74, t: "74%", alert: 1 }] }); });
-  on("pCresc", function (h) { lineChart(h, { w: 240, h: 82, labels: M, end: true, start: true, alt: "receita acumulada em 12 meses", series: [{ d: REC, c: C.blue }], fmt: mil }); });
-  on("pGauge", function (h) { gauge(h, { v: 75, k: "controles no ar", c: C.green }); });
-  on("dAfter", function (h) { dualBar(h, { w: 360, rh: 34, fs: 8, lw: 118, vw: 52, norm: "row", alt: "quatro indicadores antes e depois de seis meses de rito",
+  on("pCresc", function (h) { lineChart(h, { dark: 1, w: 240, h: 82, labels: M, end: true, start: true, alt: "receita acumulada em 12 meses", series: [{ d: REC, c: C.blue }], fmt: mil }); });
+  on("pGauge", function (h) { gauge(h, { dark: 1, v: 75, k: "controles no ar", c: C.green }); });
+  on("dAfter", function (h) { dualBar(h, { dark: 1, w: 360, rh: 34, fs: 8, lw: 118, vw: 52, norm: "row", alt: "quatro indicadores antes e depois de seis meses de rito",
     rows: [{ k: "Inadimplência", a: 6.9, b: 4.8, ta: "6,9%", tb: "4,8%" }, { k: "Churn mensal", a: 2.02, b: 1.62, ta: "2,02%", tb: "1,62%" },
            { k: "Fechamento", a: 20, b: 5, ta: "dia 20", tb: "dia 5" }, { k: "Fila de instalação", a: 38, b: 6, ta: "38", tb: "6" }] }); });
 

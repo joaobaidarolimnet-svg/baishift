@@ -2,13 +2,26 @@
    Sem dependências — usa só o que vem no Node. O Railway injeta a porta em PORT. */
 "use strict";
 
-const http = require("node:http");
-const fs   = require("node:fs");
-const path = require("node:path");
+const http   = require("node:http");
+const fs     = require("node:fs");
+const path   = require("node:path");
+const crypto = require("node:crypto");
 
 
 const RAIZ = __dirname;
 const PORTA = process.env.PORT || 3000;
+
+/* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>", então toda publicação
+   força o navegador a baixar o arquivo novo, e o arquivo em si pode ficar em cache por um ano. */
+const VERSAO = {};
+["assets/css/site.css", "assets/js/site.js"].forEach(f => {
+  try { VERSAO[f] = crypto.createHash("sha1").update(fs.readFileSync(path.join(RAIZ, f))).digest("hex").slice(0, 10); }
+  catch { /* sem o arquivo, a URL fica sem versão */ }
+});
+function versionar(html) {
+  for (const f in VERSAO) html = html.split(f + '"').join(f + "?v=" + VERSAO[f] + '"');
+  return html;
+}
 
 /* arquivos do projeto que não fazem parte do site e não devem ser servidos */
 const FORA = new Set(["server.js", "package.json", "package-lock.json", "readme.md"]);
@@ -33,19 +46,21 @@ const TIPOS = {
   ".md":   "text/plain; charset=utf-8"
 };
 
-/* imagens e folhas de estilo podem ficar muito tempo em cache;
-   o html precisa ser revalidado para que uma publicação nova apareça logo */
-function cache(ext) {
-  if (ext === ".html") return "public, max-age=0, must-revalidate";
+/* html sempre revalidado; css/js com URL versionada podem ficar um ano;
+   o resto (imagens, manifesto) por um dia */
+function cache(ext, versionado) {
+  if (ext === ".html") return "no-cache";
+  if (versionado) return "public, max-age=31536000, immutable";
   if (ext === ".xml" || ext === ".txt" || ext === ".webmanifest") return "public, max-age=3600";
   return "public, max-age=86400";
 }
 
-function cabecalhos(ext, tamanho) {
+function cabecalhos(ext, tamanho, etag, versionado) {
   return {
     "Content-Type": TIPOS[ext] || "application/octet-stream",
     "Content-Length": tamanho,
-    "Cache-Control": cache(ext),
+    "Cache-Control": cache(ext, versionado),
+    "ETag": etag,
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
     "Referrer-Policy": "strict-origin-when-cross-origin"
@@ -91,6 +106,10 @@ function arquivoReal(destino) {
   return null;
 }
 
+function etagDe(info, extra) {
+  return 'W/"' + info.size.toString(16) + "-" + Math.floor(info.mtimeMs).toString(16) + (extra ? "-" + extra : "") + '"';
+}
+
 function enviar(req, res, base, status) {
   const arquivo = arquivoReal(base);
   if (!arquivo) return responder404(req, res);
@@ -100,7 +119,22 @@ function enviar(req, res, base, status) {
   } catch {
     return responder404(req, res);
   }
-  res.writeHead(status, cabecalhos(path.extname(arquivo).toLowerCase(), info.size));
+  const ext = path.extname(arquivo).toLowerCase();
+  const rel = path.relative(RAIZ, arquivo).split(path.sep).join("/");
+  const versionado = rel in VERSAO;
+
+  /* html é pequeno: passa pela memória para receber as URLs versionadas */
+  if (ext === ".html") {
+    const corpo = Buffer.from(versionar(fs.readFileSync(arquivo, "utf8")));
+    const etag = etagDe(info, Object.values(VERSAO).join(""));
+    if (req.headers["if-none-match"] === etag) { res.writeHead(304); return res.end(); }
+    res.writeHead(status, cabecalhos(ext, corpo.length, etag, false));
+    return req.method === "HEAD" ? res.end() : res.end(corpo);
+  }
+
+  const etag = etagDe(info);
+  if (req.headers["if-none-match"] === etag) { res.writeHead(304); return res.end(); }
+  res.writeHead(status, cabecalhos(ext, info.size, etag, versionado));
   if (req.method === "HEAD") return res.end();
   fs.createReadStream(arquivo).pipe(res);
 }
@@ -108,10 +142,9 @@ function enviar(req, res, base, status) {
 function responder404(req, res) {
   const pagina = path.join(RAIZ, "404.html");
   if (fs.existsSync(pagina)) {
-    const info = fs.statSync(pagina);
-    res.writeHead(404, cabecalhos(".html", info.size));
-    if (req.method === "HEAD") return res.end();
-    return fs.createReadStream(pagina).pipe(res);
+    const corpo = Buffer.from(versionar(fs.readFileSync(pagina, "utf8")));
+    res.writeHead(404, cabecalhos(".html", corpo.length, 'W/"404"', false));
+    return req.method === "HEAD" ? res.end() : res.end(corpo);
   }
   res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
   res.end("404");
