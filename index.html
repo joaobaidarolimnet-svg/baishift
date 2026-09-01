@@ -39,12 +39,18 @@
 
 <link rel="stylesheet" href="assets/css/site.css">
 <noscript><style>.rv{opacity:1;transform:none}.navlinks{position:static;opacity:1;visibility:visible;pointer-events:auto;transform:none}</style></noscript>
+
+<script>
+/* Contato. Preencha o WhatsApp só com dígitos, com DDI e DDD (ex.: "5569999999999").
+   Enquanto estiver vazio, os botões de WhatsApp levam ao formulário e o formulário abre o e-mail. */
+window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
+</script>
 </head>
 <body>
 
 <a class="skip" href="#topo">Pular para o conteúdo</a>
 
-<header class="bar">
+<header class="bar on-dark" id="bar">
   <div class="bar-in">
     <a class="brand" href="#topo" aria-label="Baishift — início">
       <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
@@ -53,19 +59,17 @@
       </svg>
       <span>Baishift<small>BAISHIFT.COM.BR</small></span>
     </a>
-
-    <button class="navtoggle" id="navtoggle" type="button"
-            aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks">
+    <button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks">
       <i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i>
     </button>
-
     <nav class="navlinks" id="navlinks" aria-label="Navegação principal">
       <a href="#atuacao">Atuação</a>
+      <a href="#integracao">Integração</a>
       <a href="#metodo">Método</a>
       <a href="#fluxo">Fluxo</a>
       <a href="#paineis">Painéis</a>
       <a href="#diagnostico">Diagnóstico</a>
-      <a href="#solucoes">Outras soluções</a>
+      <a href="#faq">FAQ</a>
       <a class="cta" href="#contato">Falar com a Baishift</a>
     </nav>
   </div>
@@ -80,12 +84,11 @@
     <div>
       <span class="pill mono"><b aria-hidden="true"></b> Gestão · Processos IXC · Controladoria</span>
       <h1>O provedor decidindo <em>com número</em>, não com sensação.</h1>
-      <p class="hero-sub">Consultoria de gestão, processos redesenhados dentro do IXC e o painel
-        que mostra base, caixa, churn e campo no dia em que acontecem — feito por quem opera
-        um provedor.</p>
+      <p class="hero-sub">Consultoria de gestão, processos redesenhados dentro do IXC e o painel que mostra base,
+        caixa, churn e campo no dia em que acontecem — feito por quem opera um provedor.</p>
       <div class="hero-acts">
         <a class="btn btn-1" href="#diagnostico">Começar pelo diagnóstico</a>
-        <a class="btn btn-2" href="#atuacao">Ver como atuo</a>
+        <a class="btn btn-ghost" href="#atuacao">Ver as frentes de atuação</a>
       </div>
       <div class="tags">
         <span>Gestão em ISP</span><span>Processos IXC</span><span>Controladoria</span>
@@ -97,7 +100,7 @@
       <div class="dash-top">
         <span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
         <span class="ttl">Painel do provedor · exemplo</span>
-        <span class="live"><b aria-hidden="true"></b>tempo real</span>
+        <span class="live"><b aria-hidden="true"></b>ao vivo</span>
       </div>
       <div class="kpis">
         <div class="kpi"><div class="lb">Base ativa</div><div class="vl" id="k1">12.480</div><div class="dt">+128 líquidos</div></div>
@@ -121,9 +124,23 @@
           <div class="chart" id="cDonut"></div>
           <div class="chart-h" style="margin-top:12px"><span>Recebimento · dia a dia</span></div>
           <div class="chart" id="cHeat"></div>
+          <div class="chart-h" style="margin-top:12px"><span>Eventos · agora</span></div>
+          <div class="feed" id="feed"></div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="wrap results rv">
+    <div class="res"><div class="n"><span data-count="4680" data-prefix="R$ ">R$ 4.680</span><small>/mês</small></div>
+      <div class="l">de receita já vendida que não chegava ao caixa</div></div>
+    <div class="res"><div class="n"><span data-count="45">45</span><small>contratos</small></div>
+      <div class="l">parados entre a venda e a instalação</div></div>
+    <div class="res"><div class="n">dia <span data-count="5">5</span></div>
+      <div class="l">fechamento auditável, todo mês</div></div>
+    <div class="res"><div class="n"><span data-count="-2.1" data-dec="1">−2,1</span><small>p.p.</small></div>
+      <div class="l">de inadimplência em seis meses de rito</div></div>
+    <div class="res-cap">O que o diagnóstico encontrou no provedor-exemplo desta página · 12 mil assinantes</div>
   </div>
 </div>
 
@@ -131,102 +148,99 @@
 <section class="tint" id="atuacao" aria-labelledby="h-atuacao">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="mono">Onde eu atuo</span><h2 id="h-atuacao">Seis frentes, seis indicadores.</h2></div>
-      <p class="hint">Três de consultoria e três de software. Cada frente entra com o número
-        que ela move — e sai quando esse número está de pé sozinho.</p>
+      <div><span class="mono">Onde a Baishift atua</span><h2 id="h-atuacao">Seis frentes, seis indicadores.</h2></div>
+      <p class="hint">Três de consultoria e três de software. Cada frente entra com o número que ela move —
+        e sai quando esse número está de pé sozinho.</p>
     </div>
-
     <div class="verts">
       <article class="vert rv">
         <div class="vert-head"><span class="num">01</span>
-          <div><h3>Consultoria de gestão em ISP</h3>
-            <p>Indicadores, metas por setor e a reunião que transforma dado em decisão.</p></div></div>
-        <div class="vert-viz">
-          <div class="mini"><span class="vl">Base líquida · 12 meses</span><div class="chart" id="v1a"></div></div>
-          <div class="mini"><span class="vl">Funil comercial do mês</span><div class="chart" id="v1b"></div></div>
-        </div>
+          <div><h3>Consultoria de gestão em ISP</h3><p>Indicadores, metas por setor e a reunião que transforma dado em decisão.</p></div></div>
+        <div class="vert-viz"><div class="mini"><span class="vl">Funil comercial do mês</span><div class="chart" id="v1"></div></div></div>
         <div class="out">ENTREGA · <b>painel de gestão e rito semanal implantado</b></div>
       </article>
-
       <article class="vert rv">
         <div class="vert-head"><span class="num">02</span>
-          <div><h3>Consultoria de processos IXC</h3>
-            <p>Régua de cobrança, ordem de serviço, contrato, cancelamento e fiscal, padronizados.</p></div></div>
-        <div class="vert-viz">
-          <div class="mini"><span class="vl">Padronização por processo</span><div class="chart" id="v2a"></div></div>
-          <div class="mini"><span class="vl">Tempo médio de ciclo</span><div class="chart" id="v2b"></div></div>
-        </div>
+          <div><h3>Consultoria de processos IXC</h3><p>Régua de cobrança, ordem de serviço, contrato, cancelamento e fiscal, padronizados.</p></div></div>
+        <div class="vert-viz"><div class="mini"><span class="vl">Tempo médio de ciclo · dias</span><div class="chart" id="v2"></div></div></div>
         <div class="out">ENTREGA · <b>processo escrito, parametrizado e treinado</b></div>
       </article>
-
       <article class="vert rv">
         <div class="vert-head"><span class="num">03</span>
-          <div><h3>Consultoria em controladoria</h3>
-            <p>Fechamento no prazo, rateio entre CNPJs, custo por assinante e exposição fiscal.</p></div></div>
-        <div class="vert-viz">
-          <div class="mini"><span class="vl">Orçado x realizado</span><div class="chart" id="v3a"></div></div>
-          <div class="mini"><span class="vl">Composição do resultado</span><div class="chart" id="v3b"></div></div>
-        </div>
+          <div><h3>Consultoria em controladoria</h3><p>Fechamento no prazo, rateio entre CNPJs, custo por assinante e exposição fiscal.</p></div></div>
+        <div class="vert-viz"><div class="mini"><span class="vl">Orçado x realizado · R$ mil</span><div class="chart" id="v3"></div></div></div>
         <div class="out">ENTREGA · <b>fechamento auditável até o dia 5</b></div>
       </article>
-
       <article class="vert rv">
         <div class="vert-head"><span class="num">04</span>
-          <div><h3>Software para ISP</h3>
-            <p>Cobrança, despacho de campo, autoatendimento e retenção conversando com IXC e OPA.</p></div></div>
-        <div class="vert-viz">
-          <div class="mini"><span class="vl">Integração das fontes</span><div class="chart" id="v4a"></div></div>
-          <div class="mini"><span class="vl">Rotinas automatizadas</span><div class="chart" id="v4b"></div></div>
-        </div>
+          <div><h3>Software para ISP</h3><p>Cobrança, despacho de campo, autoatendimento e retenção conversando com IXC e OPA.</p></div></div>
+        <div class="vert-viz"><div class="mini"><span class="vl">Rotinas sem toque humano</span><div class="chart" id="v4"></div></div></div>
         <div class="out">MODELO · <b>projeto + mensalidade de sustentação</b></div>
       </article>
-
       <article class="vert rv">
         <div class="vert-head"><span class="num">05</span>
-          <div><h3>Dashboards</h3>
-            <p>A pergunta da diretoria respondida em cinco segundos, no celular, direto do banco.</p></div></div>
-        <div class="vert-viz">
-          <div class="mini"><span class="vl">Do dado à decisão</span><div class="chart" id="v5a"></div></div>
-          <div class="mini"><span class="vl">Cobertura de indicadores</span><div class="chart" id="v5b"></div></div>
-        </div>
+          <div><h3>Dashboards</h3><p>A pergunta da diretoria respondida em cinco segundos, no celular, direto do banco.</p></div></div>
+        <div class="vert-viz"><div class="mini"><span class="vl">Cobertura de indicadores por área</span><div class="chart" id="v5"></div></div></div>
         <div class="out">MODELO · <b>implantação + assinatura mensal</b></div>
       </article>
-
       <article class="vert rv">
         <div class="vert-head"><span class="num">06</span>
-          <div><h3>Software para outros segmentos</h3>
-            <p>Fora do provedor: escritório, marcenaria, comércio. O método é o mesmo.</p></div></div>
-        <div class="vert-viz">
-          <div class="mini"><span class="vl">Etapas do projeto</span><div class="chart" id="v6a"></div></div>
-          <div class="mini"><span class="vl">Horas manuais eliminadas</span><div class="chart" id="v6b"></div></div>
-        </div>
+          <div><h3>Software para outros segmentos</h3><p>Fora do provedor: escritório, marcenaria, comércio. O método é o mesmo.</p></div></div>
+        <div class="vert-viz"><div class="mini"><span class="vl">Horas manuais eliminadas · por mês</span><div class="chart" id="v6"></div></div></div>
         <div class="out">MODELO · <b>escopo fechado por etapa</b></div>
       </article>
     </div>
   </div>
 </section>
 
+<!-- ===================== INTEGRAÇÃO ===================== -->
+<section id="integracao" aria-labelledby="h-integ">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="mono">Integração</span><h2 id="h-integ">Tudo que o provedor já tem, falando a mesma língua.</h2></div>
+      <p class="hint">Os dados saem de onde já estão — IXC, OPA, banco, planilha — e chegam prontos no painel
+        e no celular da diretoria. Sem redigitar nada.</p>
+    </div>
+    <div class="integ">
+      <div class="rv">
+        <div class="stage"><div id="integ"></div></div>
+        <div class="chips">
+          <span>IXC Soft</span><span>OPA Suite</span><span>Banco de dados do ERP</span><span>APIs</span>
+          <span>Boletos e PIX</span><span>Planilhas</span><span>Painel no celular</span>
+        </div>
+      </div>
+      <div class="rv">
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="sh"><span>Diretoria</span><b>ao vivo</b></div>
+            <div class="kp"><div class="lb">Base ativa</div><div class="vl">12.480 <small>+128</small></div></div>
+            <div class="kp"><div class="lb">Caixa hoje</div><div class="vl">R$ 41,2 mil <small>+8,4%</small></div></div>
+            <div class="kp"><div class="lb">Inadimplência</div><div class="vl">4,8% <small class="o">meta 3,5%</small></div></div>
+            <div class="kp ch"><div class="lb">Ativações · 7 dias</div><div class="chart" id="phChart"></div></div>
+          </div>
+        </div>
+        <p class="phone-cap">A pergunta da diretoria, no celular</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== MÉTODO ===================== -->
-<section id="metodo" aria-labelledby="h-metodo">
+<section class="tint" id="metodo" aria-labelledby="h-metodo">
   <div class="wrap">
     <div class="sec-head rv">
       <div><span class="mono">Como funciona</span><h2 id="h-metodo">Quatro etapas, do diagnóstico à rotina.</h2></div>
-      <p class="hint">Cada etapa tem entrega própria e preço próprio. Você decide subir a
-        próxima depois de ver o resultado da anterior.</p>
+      <p class="hint">Cada etapa tem entrega própria e preço próprio. Você decide subir a próxima depois de ver o resultado da anterior.</p>
     </div>
     <div class="flowline">
       <div class="stepc rv"><span class="n">ETAPA 01</span><h4>Diagnóstico</h4>
-        <p>Leitura da operação com os números reais do IXC: carteira, caixa, campo e fiscal.</p>
-        <div class="chart" id="m1"></div></div>
+        <p>Leitura da operação com os números reais do IXC: carteira, caixa, campo e fiscal.</p><div class="chart" id="m1"></div></div>
       <div class="stepc rv"><span class="n">ETAPA 02</span><h4>Estruturação</h4>
-        <p>Processo escrito, plano de contas, rotina de fechamento e controles definidos.</p>
-        <div class="chart" id="m2"></div></div>
+        <p>Processo escrito, plano de contas, rotina de fechamento e controles definidos.</p><div class="chart" id="m2"></div></div>
       <div class="stepc rv"><span class="n">ETAPA 03</span><h4>Implantação</h4>
-        <p>A regra desce para dentro do sistema e os painéis entram no ar por área.</p>
-        <div class="chart" id="m3"></div></div>
+        <p>A regra desce para dentro do sistema e os painéis entram no ar por área.</p><div class="chart" id="m3"></div></div>
       <div class="stepc rv"><span class="n">ETAPA 04</span><h4>Acompanhamento</h4>
-        <p>Reunião de resultado, cobrança do plano de ação e ajuste contínuo.</p>
-        <div class="chart" id="m4"></div></div>
+        <p>Reunião de resultado, cobrança do plano de ação e ajuste contínuo.</p><div class="chart" id="m4"></div></div>
     </div>
   </div>
 </section>
@@ -235,44 +249,44 @@
 <section class="band" id="fluxo" aria-labelledby="h-fluxo">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="mono">Fluxo de processos</span>
-        <h2 id="h-fluxo">Onde o dinheiro para, em movimento.</h2></div>
-      <p class="hint">O mesmo processo que o provedor jura que funciona, medido ponta a ponta.
-        Volume, tempo e perda em cada etapa.</p>
+      <div><span class="mono">Fluxo de processos</span><h2 id="h-fluxo">Onde o dinheiro para, em movimento.</h2></div>
+      <p class="hint">O mesmo processo que o provedor jura que funciona, medido ponta a ponta. Volume, tempo e perda em cada etapa.</p>
     </div>
-
     <div class="flowstage rv">
       <div class="cap"><i aria-hidden="true"></i><b>Fluxo ao vivo</b> · do pedido ao caixa · setembro</div>
       <div id="procflow"></div>
     </div>
-
-    <div class="leakbox rv">
-      <b class="t">O que o fluxo mostra em trinta segundos</b>
-      <p>A venda entrega <strong>214 contratos</strong> e o caixa recebe de <strong>162</strong>.
-        Os 45 que somem entre a viabilidade e a instalação já estavam vendidos: a
-        <strong>R$ 104</strong> de mensalidade, são <strong>R$ 4.680 por mês</strong> que o
-        provedor conquistou e nunca viu entrar. Nenhum relatório de área aponta isso, porque a
-        perda não está dentro de nenhuma área — está entre elas.</p>
+    <div class="leak-grid">
+      <div class="wfbox rv">
+        <div class="cap"><b>Cascata</b> · contratos que somem entre a venda e o caixa</div>
+        <div id="wf"></div>
+      </div>
+      <div class="leakbox rv">
+        <b class="t">O que o fluxo mostra em trinta segundos</b>
+        <p>A venda entrega <strong>214 contratos</strong> e o caixa recebe de <strong>162</strong>. Os 45 que somem
+          entre a viabilidade e a instalação já estavam vendidos. Nenhum relatório de área aponta isso, porque a
+          perda não está dentro de nenhuma área — está entre elas.</p>
+        <div class="sum">
+          <div>contratos parados<b>45</b></div>
+          <div>mensalidade média<b>R$ 104</b></div>
+          <div>receita que não entra<b>R$ 4.680/mês</b></div>
+        </div>
+      </div>
     </div>
 
     <div class="sec-head rv" style="margin-top:52px">
       <div><span class="mono">Rito de decisão</span><h2>O painel só serve se virar reunião.</h2></div>
-      <p class="hint">A consultoria de gestão entrega a agenda: quem senta, com qual número e
-        qual decisão precisa sair dali.</p>
+      <p class="hint">A consultoria de gestão entrega a agenda: quem senta, com qual número e qual decisão precisa sair dali.</p>
     </div>
     <div class="ritos">
       <div class="rito rv"><span class="wd">Segunda</span><h4>Mesa comercial</h4>
-        <p>Vendas da semana, funil por vendedor, motivo de perda e fila de instalação.</p>
-        <span class="dec">decide: para onde vai a equipe de campo</span></div>
+        <p>Vendas da semana, funil por vendedor, motivo de perda e fila de instalação.</p><span class="dec">decide: para onde vai a equipe de campo</span></div>
       <div class="rito rv"><span class="wd">Quarta</span><h4>Mesa de operação</h4>
-        <p>Ordens abertas, prazo estourado, retrabalho e produtividade por equipe.</p>
-        <span class="dec">decide: o que reforçar e o que reprogramar</span></div>
+        <p>Ordens abertas, prazo estourado, retrabalho e produtividade por equipe.</p><span class="dec">decide: o que reforçar e o que reprogramar</span></div>
       <div class="rito rv"><span class="wd">Sexta</span><h4>Mesa de caixa</h4>
-        <p>Entradas, saídas, inadimplência da semana e acordos vencidos.</p>
-        <span class="dec">decide: régua de cobrança e liberação de despesa</span></div>
+        <p>Entradas, saídas, inadimplência da semana e acordos vencidos.</p><span class="dec">decide: régua de cobrança e liberação de despesa</span></div>
       <div class="rito rv"><span class="wd">Dia 5</span><h4>Fechamento</h4>
-        <p>Resultado por CNPJ, custo por assinante, margem e exposição fiscal.</p>
-        <span class="dec">decide: preço, investimento e meta do mês</span></div>
+        <p>Resultado por CNPJ, custo por assinante, margem e exposição fiscal.</p><span class="dec">decide: preço, investimento e meta do mês</span></div>
     </div>
   </div>
 </section>
@@ -281,24 +295,31 @@
 <section class="tint" id="paineis" aria-labelledby="h-paineis">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="mono">Acompanhamento em tempo real</span>
-        <h2 id="h-paineis">O que a diretoria enxerga todo dia.</h2></div>
-      <p class="hint">Exemplos dos painéis entregues. Passe o dedo ou o mouse em qualquer
-        ponto para ver o número.</p>
+      <div><span class="mono">Acompanhamento em tempo real</span><h2 id="h-paineis">O que a diretoria enxerga todo dia.</h2></div>
+      <p class="hint">Exemplos dos painéis entregues. Passe o dedo ou o mouse em qualquer ponto para ver o número.</p>
     </div>
     <div class="panels">
-      <div class="panel rv"><span class="pt">Ativações · 14 dias</span><div class="pv">214</div>
+      <div class="panel rv"><span class="pt">Ativações · 14 dias</span><div class="pv"><span data-count="214">214</span></div>
         <div class="pd">+9,7% vs. período anterior</div><div class="chart" id="pAtiv"></div></div>
-      <div class="panel rv"><span class="pt">Churn · 6 meses</span><div class="pv">1,62%</div>
+      <div class="panel rv"><span class="pt">Churn · 6 meses</span><div class="pv"><span data-count="1.62" data-dec="2" data-suffix="%">1,62%</span></div>
         <div class="pd">−0,4 p.p. no semestre</div><div class="chart" id="pChurn"></div></div>
-      <div class="panel rv"><span class="pt">Inadimplência</span><div class="pv">4,8%</div>
+      <div class="panel rv"><span class="pt">Inadimplência</span><div class="pv"><span data-count="4.8" data-dec="1" data-suffix="%">4,8%</span></div>
         <div class="pd or">meta 3,5%</div><div class="chart" id="pInad"></div></div>
-      <div class="panel rv"><span class="pt">Produtividade de campo</span><div class="pv">92%</div>
+      <div class="panel rv"><span class="pt">Produtividade de campo</span><div class="pv"><span data-count="92" data-suffix="%">92%</span></div>
         <div class="pd">meta 85%</div><div class="chart" id="pProd"></div></div>
-      <div class="panel rv"><span class="pt">Receita acumulada</span><div class="pv">+31,5%</div>
+      <div class="panel rv"><span class="pt">Receita acumulada</span><div class="pv"><span data-count="31.5" data-dec="1" data-prefix="+" data-suffix="%">+31,5%</span></div>
         <div class="pd">12 meses</div><div class="chart" id="pCresc"></div></div>
-      <div class="panel rv"><span class="pt">Controles implantados</span><div class="pv">75%</div>
+      <div class="panel rv"><span class="pt">Controles implantados</span><div class="pv"><span data-count="75" data-suffix="%">75%</span></div>
         <div class="pd or">12 em plano de ação</div><div class="chart" id="pGauge"></div></div>
+    </div>
+    <div class="after rv">
+      <div>
+        <span class="mono" style="color:var(--blue)">Antes e depois · exemplo</span>
+        <h3>Seis meses de rito, os mesmos quatro números.</h3>
+        <p>Os indicadores que mais mudam quando o processo passa a ser medido toda semana — no provedor-exemplo, de março a setembro.</p>
+        <div class="lg"><i>antes</i><i class="b">depois</i></div>
+      </div>
+      <div class="chart" id="dAfter"></div>
     </div>
   </div>
 </section>
@@ -309,13 +330,20 @@
     <div class="rv">
       <span class="mono" style="color:var(--blue);display:block;margin-bottom:10px">Ponto de partida</span>
       <h2 id="h-diag" style="font-size:clamp(1.6rem,2.8vw,2.3rem)">Diagnóstico de gestão do provedor</h2>
-      <p style="margin-top:14px;color:var(--muted);max-width:48ch">Quarenta e cinco minutos de
-        conversa e duas semanas lendo os números. De lá sai a lista do que resolver e em que
-        ordem — sem compromisso de contratar nada.</p>
-      <div class="chart" id="dRadar" style="margin-top:18px;max-width:440px"></div>
-      <a class="btn btn-1" style="margin-top:12px" href="#contato">Agendar o diagnóstico</a>
+      <p style="margin-top:14px;color:var(--muted);max-width:48ch">Quarenta e cinco minutos de conversa e duas semanas lendo os
+        números. De lá sai a lista do que resolver e em que ordem — sem compromisso de contratar nada.</p>
+      <div class="matur">
+        <div class="vl"><span>Maturidade por área · exemplo</span><span><i>hoje</i> &nbsp; <i class="b">depois do plano</i></span></div>
+        <div class="chart" id="dMat"></div>
+      </div>
     </div>
-    <div class="deliver rv">
+    <div class="offer rv">
+      <div class="oh"><h3>Diagnóstico de gestão</h3><span class="badge">sem compromisso</span></div>
+      <div class="meta">
+        <div><b>45 min</b>de conversa</div>
+        <div><b>2 semanas</b>lendo os números do IXC</div>
+        <div><b>8 entregas</b>em um plano priorizado</div>
+      </div>
       <h4>O que você recebe</h4>
       <ol>
         <li>Mapa dos processos atuais no IXC</li>
@@ -327,6 +355,12 @@
         <li>Priorização das ações por retorno</li>
         <li>Plano com cronograma e responsável</li>
       </ol>
+      <div class="acts">
+        <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="#contato" href="#contato">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+          <span>Agendar pelo WhatsApp</span></a>
+        <a class="alt" href="#contato">ou envie uma mensagem</a>
+      </div>
     </div>
   </div>
 </section>
@@ -335,23 +369,31 @@
 <section class="tint" id="modelos" aria-labelledby="h-modelos">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="mono">Modelos de contratação</span>
-        <h2 id="h-modelos">Escolha o formato que o provedor comporta.</h2></div>
+      <div><span class="mono">Modelos de contratação</span><h2 id="h-modelos">Escolha o formato que o provedor comporta.</h2></div>
+      <p class="hint">Quatro formatos, um ponto de partida: o diagnóstico define escopo, prazo e valor de cada um.</p>
     </div>
     <div class="cards">
       <div class="card rv"><span class="tagm">Escopo fechado</span><h3>Projeto pontual</h3>
-        <p>Diagnóstico, redesenho de um processo, parametrização do IXC ou construção dos painéis.</p></div>
+        <p>Um gargalo específico, resolvido com começo, meio e fim.</p>
+        <ul class="inc"><li>Diagnóstico de gestão</li><li>Redesenho de um processo</li><li>Parametrização do IXC</li><li>Construção dos painéis</li></ul>
+        <div class="for"><b>Para quem</b> já sabe onde o processo trava.</div></div>
       <div class="card rv"><span class="tagm">Recorrente</span><h3>Acompanhamento mensal</h3>
-        <p>Fechamento, indicadores, reunião de resultado e cobrança do plano de ação.</p></div>
+        <p>O rito de decisão rodando todo mês, com a Baishift na mesa.</p>
+        <ul class="inc"><li>Fechamento do mês</li><li>Indicadores por setor</li><li>Reunião de resultado</li><li>Cobrança do plano de ação</li></ul>
+        <div class="for"><b>Para quem</b> quer o número virando decisão sem depender de ninguém de dentro.</div></div>
       <div class="card rv"><span class="tagm">Recorrente</span><h3>Controladoria terceirizada</h3>
-        <p>Conciliação, recebimentos, pagamentos e relatórios rodando comigo.</p></div>
+        <p>O financeiro rodando com a Baishift, sem montar equipe interna.</p>
+        <ul class="inc"><li>Conciliação bancária</li><li>Recebimentos e cobrança</li><li>Pagamentos</li><li>Relatórios gerenciais</li></ul>
+        <div class="for"><b>Para quem</b> ainda fecha o mês na planilha paralela.</div></div>
       <div class="card rv"><span class="tagm">Sob medida</span><h3>Software e automação</h3>
-        <p>Ferramenta desenvolvida, dados integrados e rotina manual eliminada.</p></div>
+        <p>A rotina manual que custa caro vira ferramenta integrada ao IXC.</p>
+        <ul class="inc"><li>Levantamento na operação</li><li>Ferramenta desenvolvida</li><li>Dados integrados</li><li>Sustentação mensal</li></ul>
+        <div class="for"><b>Para quem</b> já sabe qual rotina está engolindo horas.</div></div>
     </div>
+    <p class="models-note">Escopo, prazo e valor são definidos a partir do diagnóstico · retorno em até dois dias úteis</p>
 
     <div class="sec-head rv" style="margin-top:52px">
-      <div><span class="mono">Honestidade poupa reunião</span>
-        <h2>Para quem serve — e para quem não serve.</h2></div>
+      <div><span class="mono">Honestidade poupa reunião</span><h2>Para quem serve — e para quem não serve.</h2></div>
     </div>
     <div class="fit">
       <div class="rv"><h4>Serve bem</h4><ul class="yes">
@@ -368,39 +410,54 @@
   </div>
 </section>
 
-<!-- ===================== OUTRAS SOLUÇÕES ===================== -->
-<section id="solucoes" aria-labelledby="h-sol">
+<!-- ===================== POR QUE A BAISHIFT ===================== -->
+<section id="porque" aria-labelledby="h-porque">
   <div class="wrap">
     <div class="sec-head rv">
-      <div><span class="mono">Fora do provedor</span><h2 id="h-sol">Outras soluções da casa.</h2></div>
-      <p class="hint">Produtos próprios, com marca e atendimento separados. Ficam aqui para quem
-        procura — o provedor continua sendo o foco do trabalho.</p>
+      <div><span class="mono">Por que a Baishift</span><h2 id="h-porque">Consultoria de quem vive o problema todo dia.</h2></div>
+      <p class="hint">Não é método de manual. É o que funciona num provedor de verdade, com o sistema que o provedor já usa.</p>
     </div>
-    <div class="sols">
-      <article class="sol rv" style="--ac:#F5A300">
-        <span class="mk" aria-hidden="true">S</span>
-        <span class="who">Eletricista · Pedreiro · Encanador · Jardineiro</span>
-        <h3>Severino</h3>
-        <p>Assistente de IA que organiza agenda, orçamento, cobrança e recebimento do
-          profissional autônomo. Ele fala, o Severino anota.</p>
-        <span class="st">em desenvolvimento <a href="#contato">entrar na lista →</a></span>
-      </article>
-      <article class="sol rv" style="--ac:#C0563A">
-        <span class="mk" aria-hidden="true">§</span>
-        <span class="who">1ª e 2ª fase do Exame de Ordem</span>
-        <h3>Aprova · Ordem</h3>
-        <p>Banco de questões com explicação em linguagem clara, mapa de matéria por peso na
-          prova e revisão espaçada para quem estuda trabalhando.</p>
-        <span class="st">em preparação <a href="#contato">entrar na lista →</a></span>
-      </article>
-      <article class="sol rv" style="--ac:#12855A">
-        <span class="mk" aria-hidden="true">Σ</span>
-        <span class="who">Exame de Suficiência do contador</span>
-        <h3>Aprova · Suficiência</h3>
-        <p>Questões das últimas edições, simulado cronometrado no formato do exame e exemplos
-          tirados de operação real de empresa.</p>
-        <span class="st">em preparação <a href="#contato">entrar na lista →</a></span>
-      </article>
+    <div class="why">
+      <div class="pillar rv">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-8"/><circle cx="12" cy="11" r="2"/><path d="M8.5 7.5a5 5 0 0 1 7 0M6 4.8a8.6 8.6 0 0 1 12 0"/></svg></div>
+        <h3>Opera um provedor</h3>
+        <p>As recomendações vêm de quem fecha o mês, despacha equipe e cobra inadimplente — não de quem só leu sobre isso.</p>
+      </div>
+      <div class="pillar rv">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8M12 18v3"/></svg></div>
+        <h3>Trabalha dentro do IXC</h3>
+        <p>O processo é desenhado e parametrizado no sistema que já está na operação. Ninguém precisa trocar de ERP para começar a medir.</p>
+      </div>
+      <div class="pillar rv">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
+        <h3>Entra com número, sai com número</h3>
+        <p>Cada frente tem o indicador que ela move. Quando esse indicador fica de pé sozinho, a Baishift sai — sem criar dependência.</p>
+      </div>
+    </div>
+    <!-- Quando houver nome, foto e provedor de quem está à frente da Baishift, este é o lugar de um card
+         "Quem está por trás": foto, nome, provedor que opera e uma frase. Sem esse conteúdo, a seção fica assim. -->
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="tint" id="faq" aria-labelledby="h-faq">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="mono">Perguntas frequentes</span><h2 id="h-faq">O que todo provedor pergunta antes de começar.</h2></div>
+    </div>
+    <div class="faq rv">
+      <details><summary>Quanto tempo leva o diagnóstico?</summary>
+        <p>Quarenta e cinco minutos de conversa com a diretoria e duas semanas lendo os números reais do IXC. No fim, você recebe a lista do que resolver, em que ordem e com que retorno esperado.</p></details>
+      <details><summary>Preciso contratar alguma coisa depois do diagnóstico?</summary>
+        <p>Não. O diagnóstico é sem compromisso. Cada etapa seguinte tem entrega e preço próprios, e você decide subir a próxima só depois de ver o resultado da anterior.</p></details>
+      <details><summary>Para qual tamanho de provedor faz sentido?</summary>
+        <p>Provedores de 2 mil a 50 mil assinantes que já sentem o processo travar: fila de instalação, cobrança atrasada, fechamento na planilha paralela. Abaixo disso o processo costuma caber na cabeça do dono; acima, a estrutura já é outra.</p></details>
+      <details><summary>Preciso liberar acesso aos meus dados?</summary>
+        <p>Sim. O trabalho é feito com os números reais do IXC — carteira, caixa, campo e fiscal. Sem acesso aos dados não há diagnóstico, só opinião.</p></details>
+      <details><summary>Vou precisar trocar de sistema?</summary>
+        <p>Não. Os processos são redesenhados e parametrizados dentro do IXC, e o software conversa com o IXC e o OPA que já estão na operação. Quem quer trocar de ERP em trinta dias não é o perfil.</p></details>
+      <details><summary>Como funciona a contratação?</summary>
+        <p>Quatro formatos: projeto pontual com escopo fechado, acompanhamento mensal, controladoria terceirizada ou software sob medida. Depois da primeira conversa, a Baishift retorna com o escopo, o prazo e o formato que faz sentido para o seu provedor.</p></details>
     </div>
   </div>
 </section>
@@ -410,76 +467,120 @@
 <footer id="contato">
   <div class="wrap">
     <div class="foot-grid">
-      <div>
+      <div class="rv">
         <span class="mono" style="color:#8FB4FF;display:block;margin-bottom:14px">Vamos começar pelo diagnóstico</span>
         <h2>Primeiro os números aparecem. Depois eles <em>melhoram</em>.</h2>
-        <p style="margin-top:16px;color:rgba(255,255,255,.72);max-width:44ch">Conte como a gestão
-          do provedor funciona hoje. Retorno com o escopo, o prazo e o formato de contratação.</p>
-        <a class="btn btn-1" style="margin-top:20px;background:var(--orange)"
-           href="mailto:contato@baishift.com.br?subject=Diagn%C3%B3stico%20de%20gest%C3%A3o%20do%20provedor">Enviar mensagem</a>
-        <!-- Para incluir o WhatsApp, duplique o botão acima com:
-             href="https://wa.me/55DDDNUMERO?text=Quero%20falar%20sobre%20o%20diagn%C3%B3stico" -->
+        <p style="margin-top:16px;color:rgba(255,255,255,.72);max-width:44ch">Conte como a gestão do provedor funciona hoje.
+          A Baishift retorna com o escopo, o prazo e o formato de contratação.</p>
+        <div class="contact-acts">
+          <a class="btn btn-wa" data-whatsapp data-fallback="Enviar por e-mail" data-fallback-href="mailto:contato@baishift.com.br?subject=Diagn%C3%B3stico%20de%20gest%C3%A3o%20do%20provedor" href="#contato">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+            <span>Chamar no WhatsApp</span></a>
+          <a class="alt" href="mailto:contato@baishift.com.br">contato@baishift.com.br</a>
+        </div>
+        <div class="areas">
+          <div><b>Gestão em ISP</b><span>Indicadores e rito de decisão</span></div>
+          <div><b>Processos IXC</b><span>Padronização e parametrização</span></div>
+          <div><b>Controladoria</b><span>Fechamento, rateio, custo</span></div>
+          <div><b>Dashboards</b><span>Base, caixa, churn, campo</span></div>
+          <div><b>Software para ISP</b><span>Cobrança, campo, autoatendimento</span></div>
+          <div><b>Sob medida</b><span>Outros segmentos</span></div>
+        </div>
       </div>
-      <div class="areas">
-        <div><b>Gestão em ISP</b><span>Indicadores e rito de decisão</span></div>
-        <div><b>Processos IXC</b><span>Padronização e parametrização</span></div>
-        <div><b>Controladoria</b><span>Fechamento, rateio, custo</span></div>
-        <div><b>Dashboards</b><span>Base, caixa, churn, campo</span></div>
-        <div><b>Software para ISP</b><span>Cobrança, campo, autoatendimento</span></div>
-        <div><b>Sob medida</b><span>Outros segmentos</span></div>
-      </div>
+      <form class="form rv" id="lead" novalidate>
+        <h3>Agendar o diagnóstico</h3>
+        <p class="fh">Cinco campos. A Baishift responde em até dois dias úteis.</p>
+        <div class="fgrid">
+          <label>Seu nome<input name="nome" type="text" autocomplete="name" required placeholder="Como quer ser chamado"></label>
+          <label>Provedor<input name="provedor" type="text" autocomplete="organization" required placeholder="Nome do provedor"></label>
+          <label>Cidade / UF<input name="cidade" type="text" autocomplete="address-level2" placeholder="Ex.: Rolim de Moura / RO"></label>
+          <label>Assinantes
+            <select name="assinantes" required>
+              <option value="" disabled selected>Faixa</option>
+              <option>até 2 mil</option><option>2 a 5 mil</option><option>5 a 15 mil</option><option>15 a 50 mil</option><option>mais de 50 mil</option>
+            </select></label>
+          <label class="full">Sistema de gestão
+            <select name="sistema" required>
+              <option value="" disabled selected>Qual ERP o provedor usa</option>
+              <option>IXC Soft</option><option>IXC Soft + OPA Suite</option><option>Outro sistema</option>
+            </select></label>
+          <label class="full">Como a gestão funciona hoje<textarea name="msg" placeholder="Onde o processo trava, o que você quer enxergar e ainda não enxerga"></textarea></label>
+        </div>
+        <div class="send">
+          <button class="btn btn-1" type="submit">Enviar</button>
+          <span class="note" id="fnote">Abre o seu e-mail com a mensagem pronta para enviar.</span>
+        </div>
+        <div class="ok" id="fok" hidden>Mensagem preparada. Se a janela não abriu, escreva para contato@baishift.com.br.</div>
+      </form>
     </div>
+
+    <div class="sols-mini rv">
+      <span class="lb">Fora do provedor · outras soluções da casa</span>
+      <ul>
+        <li style="--ac:#F5A300"><span class="mk" aria-hidden="true">S</span><div><b>Severino</b>Assistente de IA para o profissional autônomo: agenda, orçamento e cobrança. <a href="#contato">Entrar na lista</a><small>em desenvolvimento</small></div></li>
+        <li style="--ac:#C0563A"><span class="mk" aria-hidden="true">§</span><div><b>Aprova · Ordem</b>Questões comentadas e revisão espaçada para as duas fases do Exame de Ordem. <a href="#contato">Entrar na lista</a><small>em preparação</small></div></li>
+        <li style="--ac:#12855A"><span class="mk" aria-hidden="true">Σ</span><div><b>Aprova · Suficiência</b>Simulados no formato do Exame de Suficiência do contador. <a href="#contato">Entrar na lista</a><small>em preparação</small></div></li>
+      </ul>
+    </div>
+
     <div class="foot-end">
       <span>Baishift © <span id="yr">2026</span> · Rolim de Moura, RO</span>
       <span><a href="mailto:contato@baishift.com.br">contato@baishift.com.br</a></span>
       <span><a href="#topo">Voltar ao topo ↑</a></span>
     </div>
-    <p style="margin:18px 0 0;font-family:'IBM Plex Mono',monospace;font-size:.6rem;
-              letter-spacing:.06em;color:rgba(255,255,255,.32);max-width:80ch">
-      Os painéis desta página usam dados ilustrativos de um provedor de porte médio, para
-      demonstrar o formato das entregas.</p>
+    <p class="foot-note">Os painéis, o fluxo e os resultados desta página usam dados ilustrativos de um provedor de porte médio,
+      para demonstrar o formato das entregas.</p>
   </div>
 </footer>
+
+<a class="wa" data-whatsapp data-fallback="Falar com a Baishift" data-fallback-href="#contato" href="#contato" aria-label="Falar com a Baishift">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+  <span>Falar no WhatsApp</span>
+</a>
 
 <script src="assets/js/site.js" defer></script>
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "@id": "https://baishift.com.br/#organizacao",
-  "name": "Baishift",
-  "url": "https://baishift.com.br/",
-  "email": "contato@baishift.com.br",
-  "description": "Consultoria de gestão em ISP, processos no IXC, controladoria, dashboards e software sob medida para provedores de internet.",
-  "image": "https://baishift.com.br/assets/img/og.png",
-  "logo": "https://baishift.com.br/assets/img/favicon.svg",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Rolim de Moura",
-    "addressRegion": "RO",
-    "addressCountry": "BR"
-  },
-  "areaServed": { "@type": "Country", "name": "Brasil" },
-  "knowsAbout": [
-    "Gestão de provedor de internet",
-    "IXC Soft",
-    "Controladoria",
-    "Business intelligence",
-    "Automação de processos"
-  ],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Frentes de atuação",
-    "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de gestão em ISP", "description": "Indicadores, metas por setor e a reunião que transforma dado em decisão." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de processos IXC", "description": "Régua de cobrança, ordem de serviço, contrato, cancelamento e fiscal, padronizados." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria em controladoria", "description": "Fechamento no prazo, rateio entre CNPJs, custo por assinante e exposição fiscal." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software para ISP", "description": "Cobrança, despacho de campo, autoatendimento e retenção integrados ao IXC e ao OPA." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Dashboards", "description": "Painéis de base, caixa, churn e campo direto do banco de dados." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software para outros segmentos", "description": "Sistemas sob medida fora do setor de provedores." } }
-    ]
-  }
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://baishift.com.br/#organizacao",
+      "name": "Baishift",
+      "url": "https://baishift.com.br/",
+      "email": "contato@baishift.com.br",
+      "description": "Consultoria de gestão em ISP, processos no IXC, controladoria, dashboards e software sob medida para provedores de internet.",
+      "image": "https://baishift.com.br/assets/img/og.png",
+      "logo": "https://baishift.com.br/assets/img/favicon.svg",
+      "address": { "@type": "PostalAddress", "addressLocality": "Rolim de Moura", "addressRegion": "RO", "addressCountry": "BR" },
+      "areaServed": { "@type": "Country", "name": "Brasil" },
+      "knowsAbout": ["Gestão de provedor de internet", "IXC Soft", "Controladoria", "Business intelligence", "Automação de processos"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog", "name": "Frentes de atuação",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de gestão em ISP", "description": "Indicadores, metas por setor e a reunião que transforma dado em decisão." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de processos IXC", "description": "Régua de cobrança, ordem de serviço, contrato, cancelamento e fiscal, padronizados." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria em controladoria", "description": "Fechamento no prazo, rateio entre CNPJs, custo por assinante e exposição fiscal." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software para ISP", "description": "Cobrança, despacho de campo, autoatendimento e retenção integrados ao IXC e ao OPA." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Dashboards", "description": "Painéis de base, caixa, churn e campo direto do banco de dados." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software para outros segmentos", "description": "Sistemas sob medida fora do setor de provedores." } }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://baishift.com.br/#faq",
+      "mainEntity": [
+        { "@type": "Question", "name": "Quanto tempo leva o diagnóstico?", "acceptedAnswer": { "@type": "Answer", "text": "Quarenta e cinco minutos de conversa com a diretoria e duas semanas lendo os números reais do IXC. No fim, você recebe a lista do que resolver, em que ordem e com que retorno esperado." } },
+        { "@type": "Question", "name": "Preciso contratar alguma coisa depois do diagnóstico?", "acceptedAnswer": { "@type": "Answer", "text": "Não. O diagnóstico é sem compromisso. Cada etapa seguinte tem entrega e preço próprios, e você decide subir a próxima só depois de ver o resultado da anterior." } },
+        { "@type": "Question", "name": "Para qual tamanho de provedor faz sentido?", "acceptedAnswer": { "@type": "Answer", "text": "Provedores de 2 mil a 50 mil assinantes que já sentem o processo travar: fila de instalação, cobrança atrasada, fechamento na planilha paralela." } },
+        { "@type": "Question", "name": "Preciso liberar acesso aos meus dados?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O trabalho é feito com os números reais do IXC — carteira, caixa, campo e fiscal. Sem acesso aos dados não há diagnóstico, só opinião." } },
+        { "@type": "Question", "name": "Vou precisar trocar de sistema?", "acceptedAnswer": { "@type": "Answer", "text": "Não. Os processos são redesenhados e parametrizados dentro do IXC, e o software conversa com o IXC e o OPA que já estão na operação." } },
+        { "@type": "Question", "name": "Como funciona a contratação?", "acceptedAnswer": { "@type": "Answer", "text": "Quatro formatos: projeto pontual com escopo fechado, acompanhamento mensal, controladoria terceirizada ou software sob medida. Depois da primeira conversa, a Baishift retorna com o escopo, o prazo e o formato que faz sentido para o seu provedor." } }
+      ]
+    }
+  ]
 }
 </script>
 

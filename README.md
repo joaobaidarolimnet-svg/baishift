@@ -94,6 +94,23 @@ certificado ficar emitido.
 Se o domínio final for diferente de `baishift.com.br`, troque também as URLs absolutas
 em `index.html` (canonical, `og:*`, JSON-LD), `robots.txt` e `sitemap.xml`.
 
+## Contato: WhatsApp e formulário
+
+Os botões de WhatsApp e o formulário do rodapé leem uma configuração no `<head>` do
+`index.html`:
+
+```html
+window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
+```
+
+- **Com o número preenchido** (só dígitos, com DDI e DDD — ex.: `5569999999999`): todos os
+  botões viram links `wa.me` com mensagem pronta, e o formulário abre o WhatsApp com os
+  campos preenchidos.
+- **Vazio**: os botões de WhatsApp levam ao formulário, e o formulário abre o e-mail do
+  visitante com a mensagem pronta. Nada fica quebrado enquanto o número não existe.
+
+O formulário não depende de servidor: monta a mensagem e entrega no canal configurado.
+
 ## Manutenção
 
 **Números dos painéis.** Todos os dados de demonstração ficam no bloco
@@ -101,7 +118,20 @@ em `index.html` (canonical, `og:*`, JSON-LD), `robots.txt` e `sitemap.xml`.
 avisa a nota no rodapé da página. Para trocar um gráfico, mude o array correspondente
 (`REC`, `DES`, `ATIV`, `CANC`) ou o objeto passado na chamada `on("id", ...)`.
 
-**Fluxo do pedido ao caixa.** Editável no array `STEPS`, no mesmo arquivo.
+**Fluxo do pedido ao caixa e cascata.** Editáveis no array `STEPS` (fluxo) e no array
+`data` dentro de `waterfall()` — os dois precisam contar a mesma história (214 → 162).
+A faixa de resultados do hero e o quadro "O que o fluxo mostra" usam os mesmos números.
+
+**Integração.** Fontes e saídas do diagrama ficam nos arrays `S` e `O` dentro de
+`integration()`, em `site.js`. Os chips abaixo do diagrama são HTML puro.
+
+**Feed de eventos do painel.** Lista `EV` dentro de `feed()`.
+
+**FAQ.** As perguntas estão duas vezes: no HTML (`<details>`) e no JSON-LD `FAQPage`
+no fim do `index.html`. Ao mudar uma, mude a outra.
+
+**Quem está por trás.** A seção "Por que a Baishift" tem um comentário marcando onde
+entra o card com nome, foto e provedor de quem está à frente da empresa.
 
 **Cores e tipografia.** Variáveis CSS no `:root` de `assets/css/site.css`.
 
@@ -124,3 +154,4 @@ Requer o Chrome rodando com `--remote-debugging-port=9333` e o servidor local no
   elemento sai da tela.
 - Sem JavaScript, o conteúdo continua visível (`<noscript>` neutraliza as revelações).
 - Uma falha em qualquer gráfico não derruba o restante da página.
+- Contadores, feed de eventos e pacotes animados param com a aba em segundo plano.
