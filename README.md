@@ -33,16 +33,41 @@ python3 -m http.server 8899
 
 ## Publicar
 
-Basta subir a raiz do projeto. Não há compilação.
+O site está no ar pelo **GitHub Pages**, servido a partir da branch `main` na raiz:
 
-- **Cloudflare Pages / Netlify / Vercel** — conecte o repositório, deixe o comando de
-  build vazio e o diretório de publicação como `/`.
-- **GitHub Pages** — publique a branch na raiz e aponte o domínio em Settings › Pages.
-- **Hospedagem tradicional (cPanel, FTP)** — copie todos os arquivos para `public_html`.
+- **Endereço atual:** https://joaobaidarolimnet-svg.github.io/baishift/
+- **Repositório:** https://github.com/joaobaidarolimnet-svg/baishift
 
-Depois de publicar, confirme que o domínio responde em HTTPS e que
-`https://baishift.com.br/sitemap.xml` abre. Em seguida cadastre o site no
-[Google Search Console](https://search.google.com/search-console).
+Para atualizar, basta enviar para a `main` — o Pages republica sozinho em um ou dois minutos:
+
+```bash
+git add -A && git commit -m "descrição da mudança" && git push
+```
+
+Os caminhos dos arquivos são relativos, então o site funciona tanto em subpasta
+(endereço provisório) quanto na raiz do domínio próprio.
+
+### Ligar o domínio baishift.com.br
+
+O DNS do domínio está na **Locaweb**. No painel de zona DNS, crie:
+
+| Tipo | Nome | Valor |
+|---|---|---|
+| A | `@` (raiz) | `185.199.108.153` |
+| A | `@` (raiz) | `185.199.109.153` |
+| A | `@` (raiz) | `185.199.110.153` |
+| A | `@` (raiz) | `185.199.111.153` |
+| CNAME | `www` | `joaobaidarolimnet-svg.github.io.` |
+
+Depois que os registros propagarem, ative o domínio no GitHub:
+
+```bash
+gh api repos/joaobaidarolimnet-svg/baishift/pages -X PUT -f cname=baishift.com.br
+echo "baishift.com.br" > CNAME && git add CNAME && git commit -m "Domínio próprio" && git push
+```
+
+Aguarde o GitHub emitir o certificado (alguns minutos) e marque **Enforce HTTPS** em
+Settings › Pages. A partir daí o endereço `.github.io` passa a redirecionar para o domínio.
 
 ### O que trocar antes de ir ao ar
 
