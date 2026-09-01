@@ -76,11 +76,27 @@ function resolver(pedido) {
   return destino;
 }
 
-function enviar(req, res, arquivo, status) {
+/* URLs limpas: /a/b/c encontra a/b/c.html ou a/b/c/index.html.
+   Assim um endereço sem extensão e sem barra no fim funciona. */
+function arquivoReal(destino) {
+  const tentativas = [destino];
+  if (!path.extname(destino)) {
+    tentativas.push(destino + ".html", path.join(destino, "index.html"));
+  }
+  for (const t of tentativas) {
+    try {
+      if (fs.statSync(t).isFile()) return t;
+    } catch { /* segue para a próxima tentativa */ }
+  }
+  return null;
+}
+
+function enviar(req, res, base, status) {
+  const arquivo = arquivoReal(base);
+  if (!arquivo) return responder404(req, res);
   let info;
   try {
     info = fs.statSync(arquivo);
-    if (info.isDirectory()) return responder404(req, res);
   } catch {
     return responder404(req, res);
   }

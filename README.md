@@ -35,9 +35,9 @@ python3 -m http.server 8899
 
 O site está no ar no **Railway**, que lê do GitHub e republica sozinho a cada push.
 
-- **Endereço atual:** https://site-production-d676.up.railway.app
+- **Endereço atual:** https://app-production-db06.up.railway.app
 - **Repositório:** https://github.com/joaobaidarolimnet-svg/baishift
-- **Projeto Railway:** `baishift` › serviço `site`
+- **Projeto Railway:** `baishift` › serviço `app`
 
 O Railway executa um processo em vez de servir arquivos parados, então o site é
 entregue por `server.js` — um servidor estático em Node, sem nenhuma dependência.
@@ -45,6 +45,10 @@ Ele resolve caminhos apenas dentro da pasta do site (barrando `../`, inclusive
 percent-encoded, e qualquer trecho oculto como `.git/`), devolve o `404.html` com
 status 404 e não serve os arquivos de projeto (`server.js`, `package.json`,
 `README.md`, `tools/`, `dist/`).
+
+Aceita URLs limpas: `/a/b/c` encontra `a/b/c.html` ou `a/b/c/index.html`. Para
+acrescentar uma página nova, basta criar o arquivo — `servicos.html` fica disponível
+em `/servicos`.
 
 Para atualizar, basta enviar para a `main`:
 
