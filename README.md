@@ -33,41 +33,51 @@ python3 -m http.server 8899
 
 ## Publicar
 
-O site está no ar pelo **GitHub Pages**, servido a partir da branch `main` na raiz:
+O site está no ar no **Railway**, que lê do GitHub e republica sozinho a cada push.
 
-- **Endereço atual:** https://joaobaidarolimnet-svg.github.io/baishift/
+- **Endereço atual:** https://site-production-d676.up.railway.app
 - **Repositório:** https://github.com/joaobaidarolimnet-svg/baishift
+- **Projeto Railway:** `baishift` › serviço `site`
 
-Para atualizar, basta enviar para a `main` — o Pages republica sozinho em um ou dois minutos:
+O Railway executa um processo em vez de servir arquivos parados, então o site é
+entregue por `server.js` — um servidor estático em Node, sem nenhuma dependência.
+Ele resolve caminhos apenas dentro da pasta do site (barrando `../`, inclusive
+percent-encoded, e qualquer trecho oculto como `.git/`), devolve o `404.html` com
+status 404 e não serve os arquivos de projeto (`server.js`, `package.json`,
+`README.md`, `tools/`, `dist/`).
+
+Para atualizar, basta enviar para a `main`:
 
 ```bash
 git add -A && git commit -m "descrição da mudança" && git push
 ```
 
-Os caminhos dos arquivos são relativos, então o site funciona tanto em subpasta
-(endereço provisório) quanto na raiz do domínio próprio.
+Rodar o servidor de produção localmente:
+
+```bash
+PORT=8900 npm start     # abra http://localhost:8900
+```
 
 ### Ligar o domínio baishift.com.br
 
-O DNS do domínio está na **Locaweb**. No painel de zona DNS, crie:
+O DNS do domínio está na **Locaweb**. No Railway, adicione o domínio ao serviço:
+
+```bash
+railway domain baishift.com.br
+railway domain status <id>      # mostra o registro exato a criar
+```
+
+O Railway devolve um destino `CNAME`. Como `baishift.com.br` é domínio raiz (apex) e
+a Locaweb não faz CNAME na raiz, o caminho usual é:
 
 | Tipo | Nome | Valor |
 |---|---|---|
-| A | `@` (raiz) | `185.199.108.153` |
-| A | `@` (raiz) | `185.199.109.153` |
-| A | `@` (raiz) | `185.199.110.153` |
-| A | `@` (raiz) | `185.199.111.153` |
-| CNAME | `www` | `joaobaidarolimnet-svg.github.io.` |
+| CNAME | `www` | (o destino que o Railway informar) |
+| — | `@` (raiz) | redirecionamento da Locaweb de `baishift.com.br` para `www.baishift.com.br` |
 
-Depois que os registros propagarem, ative o domínio no GitHub:
-
-```bash
-gh api repos/joaobaidarolimnet-svg/baishift/pages -X PUT -f cname=baishift.com.br
-echo "baishift.com.br" > CNAME && git add CNAME && git commit -m "Domínio próprio" && git push
-```
-
-Aguarde o GitHub emitir o certificado (alguns minutos) e marque **Enforce HTTPS** em
-Settings › Pages. A partir daí o endereço `.github.io` passa a redirecionar para o domínio.
+Se preferir o domínio raiz direto, é possível colocar a Cloudflare na frente (CNAME
+achatado na raiz). Depois de propagar, confira com `railway domain status <id>` até o
+certificado ficar emitido.
 
 ### O que trocar antes de ir ao ar
 

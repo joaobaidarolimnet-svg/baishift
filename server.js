@@ -10,6 +10,10 @@ const path = require("node:path");
 const RAIZ = __dirname;
 const PORTA = process.env.PORT || 3000;
 
+/* arquivos do projeto que não fazem parte do site e não devem ser servidos */
+const FORA = new Set(["server.js", "package.json", "package-lock.json", "readme.md"]);
+const PASTAS_FORA = new Set(["tools", "dist", "node_modules"]);
+
 const TIPOS = {
   ".html": "text/html; charset=utf-8",
   ".css":  "text/css; charset=utf-8",
@@ -66,6 +70,8 @@ function resolver(pedido) {
 
   const trechos = path.relative(RAIZ, destino).split(path.sep);
   if (trechos.some(t => t.startsWith("."))) return null;
+  if (PASTAS_FORA.has(trechos[0])) return null;
+  if (trechos.length === 1 && FORA.has(trechos[0].toLowerCase())) return null;
 
   return destino;
 }
