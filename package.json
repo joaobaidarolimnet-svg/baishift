@@ -1,0 +1,13 @@
+{
+  "name": "baishift-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site institucional da Baishift",
+  "scripts": {
+    "start": "node server.js",
+    "build:single": "node tools/build-single.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
