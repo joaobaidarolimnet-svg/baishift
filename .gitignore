@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+*.log
+
+# artefatos gerados
+dist/
+tools/*.png
+tools/icon-[0-9]*.html

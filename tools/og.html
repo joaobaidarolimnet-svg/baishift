@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:#0A1B3D;color:#fff;font-family:"Inter",system-ui,sans-serif;position:relative}
+  .glow{position:absolute;inset:-30% -10% auto -14%;height:760px;
+    background:radial-gradient(46% 60% at 26% 4%,rgba(22,82,240,.55),transparent 66%)}
+  .glow2{position:absolute;right:-12%;bottom:-34%;width:620px;height:620px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,122,26,.20),transparent 62%)}
+  .in{position:relative;padding:66px 74px;height:100%;display:flex;flex-direction:column}
+  .brand{display:flex;align-items:center;gap:16px}
+  .brand svg{width:54px;height:54px;display:block}
+  .brand .n{font-family:"Sora",sans-serif;font-weight:700;font-size:34px;letter-spacing:-.03em;line-height:1}
+  .brand .d{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;
+    color:rgba(255,255,255,.5);margin-top:5px}
+  h1{font-family:"Sora",sans-serif;font-weight:600;font-size:64px;line-height:1.06;
+    letter-spacing:-.028em;margin-top:auto;max-width:19ch}
+  h1 em{font-style:normal;color:#6C9BFF}
+  p{margin-top:24px;font-size:23px;line-height:1.45;color:rgba(255,255,255,.68);max-width:44ch}
+  .tags{display:flex;gap:10px;margin-top:38px;flex-wrap:wrap}
+  .tags span{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;color:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.22);
+    border-radius:99px;padding:9px 17px}
+  .rule{position:absolute;left:0;right:0;bottom:0;height:7px;
+    background:linear-gradient(90deg,#1652F0 0 62%,#FF7A1A 62% 100%)}
+</style></head>
+<body>
+  <div class="glow"></div><div class="glow2"></div>
+  <div class="in">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1652F0"/>
+        <path d="M16 7.2 24.8 16.6h-4.3V23a1.6 1.6 0 0 1-1.6 1.6h-5.8A1.6 1.6 0 0 1 11.5 23v-6.4H7.2z" fill="#fff"/></svg>
+      <div><div class="n">Baishift</div><div class="d">BAISHIFT.COM.BR</div></div>
+    </div>
+    <h1>O provedor decidindo <em>com número</em>, não com sensação.</h1>
+    <p>Consultoria de gestão, processos no IXC, controladoria e os painéis —
+       feito por quem opera um provedor.</p>
+    <div class="tags">
+      <span>Gestão em ISP</span><span>Processos IXC</span><span>Controladoria</span><span>Dashboards</span>
+    </div>
+  </div>
+  <div class="rule"></div>
+</body></html>
