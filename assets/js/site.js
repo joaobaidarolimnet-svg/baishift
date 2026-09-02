@@ -289,34 +289,27 @@ function grad(svg, stops, attrs) {
   stops.forEach(function (st) { g.appendChild(E("stop", st[2] ? { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] } : { offset: st[0], "stop-color": st[1] })); });
   d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
 }
-/* o emblema: monograma B com duas setas subindo + wordmark BAISHIFT, em unidades 1500×360 */
+/* a logo oficial (versão fundo escuro), em unidades 1500×360 */
 function emblema(svg, s, ox, oy) {
-  var NAVY = "#12388A", OR = "#F26A1B";
+  var NAVY = "#0B1440", OR = "#FF6A2A";
   var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
-  g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "#fff", stroke: NAVY, "stroke-width": 4 }));
-  /* monograma */
-  var m = E("g", { transform: "translate(70 30)" });
-  m.appendChild(E("path", { d: "M112,92 H168 A44,44 0 0 1 168,180 H112", fill: "none", stroke: NAVY, "stroke-width": 36 }));
-  m.appendChild(E("path", { d: "M112,180 H180 A51,51 0 0 1 180,282 H112", fill: "none", stroke: NAVY, "stroke-width": 36 }));
-  m.appendChild(E("rect", { x: 76, y: 60, width: 36, height: 240, fill: NAVY }));
-  m.appendChild(E("path", { d: "M50,66 L94,4 L138,66 Z", fill: NAVY }));
-  m.appendChild(E("path", { d: "M37,122 V262 Q37,292 67,292 H80", fill: "none", stroke: OR, "stroke-width": 30, "stroke-linejoin": "round" }));
-  m.appendChild(E("path", { d: "M4,124 L37,78 L70,124 Z", fill: OR }));
-  /* trilhas de circuito dentro das setas, com pulsos subindo */
-  function trilha(d, ringX, ringY, ringFill, delay) {
-    m.appendChild(E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": 4, "stroke-linecap": "round", "stroke-linejoin": "round" }));
-    var pulse = E("path", { d: d, fill: "none", stroke: "#BFD7FF", "stroke-width": 4, "stroke-linecap": "round", "stroke-dasharray": "18 200" });
-    if (!RM) pulse.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 0, to: -218, dur: "2.6s", begin: delay + "s", repeatCount: "indefinite" }));
-    m.appendChild(pulse);
-    m.appendChild(E("circle", { cx: ringX, cy: ringY, r: 8, fill: ringFill, stroke: "#fff", "stroke-width": 4 }));
+  g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: NAVY }));
+  /* B · [AI] · SHIFT */
+  var F = { "font-family": DISP, "font-weight": 800, "font-size": 172, "letter-spacing": 6 };
+  g.appendChild(T(Object.assign({ x: 236, y: 244, fill: "#fff" }, F), "B"));
+  g.appendChild(E("rect", { x: 384, y: 96, width: 216, height: 168, rx: 30, fill: "none", stroke: "#fff", "stroke-width": 12 }));
+  g.appendChild(T(Object.assign({ x: 492, y: 244, "text-anchor": "middle", fill: OR }, F, { "letter-spacing": 2 }), "AI"));
+  g.appendChild(T(Object.assign({ x: 636, y: 244, fill: "#fff" }, F), "SHIFT"));
+  /* seta vazada com chevron subindo */
+  var a = E("g", { transform: "translate(1226 104)", fill: "none", stroke: OR, "stroke-width": 12, "stroke-linejoin": "round", "stroke-linecap": "round" });
+  a.appendChild(E("path", { d: "M45,36 L8,76 H28 V134 H62 V76 H82 Z" }));
+  var chev = E("path", { d: "M12,30 L45,-2 L78,30" });
+  if (!RM) {
+    chev.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", values: "0 6;0 -8;0 6", dur: "2.4s", repeatCount: "indefinite" }));
+    chev.appendChild(E("animate", { attributeName: "opacity", values: ".35;1;.35", dur: "2.4s", repeatCount: "indefinite" }));
   }
-  trilha("M94,296 V232 L88,224 V204 M94,188 V150", 94, 196, NAVY, 0);
-  trilha("M37,284 V210 M37,192 V150", 37, 201, OR, 1.3);
-  g.appendChild(m);
-  /* wordmark */
-  var w = T({ x: 430, y: 238, "font-family": DISP, "font-weight": 800, "font-size": 150, fill: NAVY, "letter-spacing": 8 }, "");
-  var t1 = E("tspan"); t1.textContent = "B"; var t2 = E("tspan", { fill: OR }); t2.textContent = "AI"; var t3 = E("tspan"); t3.textContent = "SHIFT";
-  w.appendChild(t1); w.appendChild(t2); w.appendChild(t3); g.appendChild(w);
+  a.appendChild(chev);
+  g.appendChild(a);
   svg.appendChild(g);
   var P = function (x, y) { return [ox + x * s, oy + y * s]; };
   return { rings: [P(16, 105), P(16, 155), P(16, 205), P(16, 255)], tips: [P(1484, 180), P(1484, 180)] };
