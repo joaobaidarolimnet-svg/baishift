@@ -298,20 +298,7 @@ function emblema(svg, s, ox, oy) {
   img.setAttribute("href", src);
   img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", src);
   g.appendChild(img);
-  /* a logo processando: um feixe de luz varre o cartão da esquerda para a direita
-     e um filete de luz corre pela borda */
-  var clipId = "clip" + (++UID), defs = E("defs"), cp = E("clipPath", { id: clipId });
-  cp.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40 })); defs.appendChild(cp); svg.appendChild(defs);
-  /* o feixe tem forma de seta ">" apontando no sentido do fluxo, com borda suave e núcleo mais claro */
-  var sweepG = E("g", { "clip-path": "url(#" + clipId + ")" }), mover = E("g");
-  function chev(t, d) { var y0 = -90, y1 = 450, ym = 180; return [0, y0, d, ym, 0, y1, t, y1, d + t, ym, t, y0].join(","); }
-  /* seta larga e transparente: um degradê que clareia no meio e some nas bordas, desfocado */
-  var gid = "sweep" + (++UID), lg = E("linearGradient", { id: gid, x1: 0, y1: 0, x2: 1, y2: 0 });
-  [["0%", "#FFFFFF", 0], ["50%", "#DDE9FF", .2], ["100%", "#FFFFFF", 0]].forEach(function (st) { lg.appendChild(E("stop", { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] })); });
-  defs.appendChild(lg);
-  mover.appendChild(E("polygon", { points: chev(300, 170), fill: "url(#" + gid + ")", filter: filtro(svg, 12, "so") }));
-  if (!RM) mover.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", from: "-520 0", to: "1720 0", dur: "4.2s", repeatCount: "indefinite" }));
-  sweepG.appendChild(mover); g.appendChild(sweepG);
+  /* filete de luz percorrendo a borda do cartão */
   var run = E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "none", stroke: "#9FC0FF", "stroke-width": 6, "stroke-linecap": "round", "stroke-dasharray": "300 3400", opacity: 1, filter: filtro(svg, 4) });
   if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 0, to: -3680, dur: "4.2s", repeatCount: "indefinite" }));
   g.appendChild(run);
