@@ -298,14 +298,14 @@ function emblema(svg, s, ox, oy) {
   img.setAttribute("href", src);
   img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", src);
   g.appendChild(img);
-  /* luz correndo pela borda do cartão em fluxo contínuo: brilho de base mais largo e
-     quatro cometas igualmente espaçados (cauda difusa, corpo, cabeça), sem intervalo */
-  var PER = 3523, SEG = PER / 4, LMAX = SEG * .78, soft = filtro(svg, 9, "so"), gl = filtro(svg, 3.5);
+  /* um único feixe de luz correndo pela borda do cartão, sem parar: brilho de base largo e
+     um cometa longo (cauda difusa, corpo, cabeça) cuja frente quase encontra a cauda */
+  var PER = 3523, SEG = PER, LMAX = PER * .92, soft = filtro(svg, 9, "so"), gl = filtro(svg, 3.5);
   g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "none", stroke: "#4D8BFF", "stroke-width": 12, opacity: .28, filter: soft }));
-  [[LMAX, 22, "#7FA6FF", .3, soft], [SEG * .5, 9, "#BFD7FF", .6, gl], [SEG * .2, 5, "#FFFFFF", .95, gl]].forEach(function (c) {
+  [[LMAX, 22, "#7FA6FF", .3, soft], [PER * .6, 9, "#BFD7FF", .6, gl], [PER * .28, 5, "#FFFFFF", .95, gl]].forEach(function (c) {
     var r = E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "none", stroke: c[2], "stroke-width": c[1], "stroke-linecap": "round", "stroke-dasharray": c[0] + " " + (SEG - c[0]), opacity: c[3], filter: c[4] });
     var lag = LMAX - c[0];
-    if (!RM) r.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: -lag, to: -(SEG + lag), dur: "2.4s", repeatCount: "indefinite" }));
+    if (!RM) r.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: -lag, to: -(SEG + lag), dur: "6s", repeatCount: "indefinite" }));
     else r.setAttribute("stroke-dashoffset", -lag);
     g.appendChild(r);
   });
