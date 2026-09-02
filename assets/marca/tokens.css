@@ -1,0 +1,16 @@
+:root{
+  --navy:#142F7A;
+  --navy-deep:#0E2258;
+  --navy-light:#2A4FA8;
+  --orange:#EF562E;
+  --orange-light:#FF7A3D;
+  --orange-deep:#C93F1C;
+  --mist:#F4F7FC;
+  --line:#DDE5F3;
+  --muted:#5B6E93;
+  --white:#FFFFFF;
+  --font-display:"Sora",system-ui,sans-serif;
+  --font-body:"Inter",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  --radius:14px;
+}

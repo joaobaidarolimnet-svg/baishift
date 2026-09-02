@@ -18,7 +18,7 @@ outros/*.html           landing pages de Severino, Aprova · Ordem e Aprova · S
 404.html                página de erro
 assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages)
 assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, formulários
-assets/marca/           kit oficial da marca (logos, ícones, favicons e o guia marca-baishift.html)
+assets/marca/           kit oficial da marca V2 (logos, ícones, favicons, social, papelaria; guia em identidade-baishift.html)
 assets/img/             favicon e ícones do app (copiados do kit) e imagem de compartilhamento
 server.js               servidor estático (Railway): URLs limpas, cache versionado, 404
 robots.txt · sitemap.xml · site.webmanifest · favicon.ico
@@ -150,12 +150,12 @@ números da frente 01 e o quadro "O que o processo mostra" precisam contar a mes
 **FAQ.** As perguntas estão duas vezes: no HTML (`<details>`) e no JSON-LD `FAQPage`
 no fim do `index.html`. Ao mudar uma, mude a outra.
 
-**Marca.** O kit oficial está em `assets/marca/` (guia em `marca-baishift.html`). O
+**Marca.** O kit oficial (V2, seta divisa + triângulo vazado) está em `assets/marca/` (guia em `identidade-baishift.html`, regras em `LEIA-ME.md`, cores em `tokens.css`). O
 cabeçalho usa `baishift-principal.svg` sobre fundo claro e `baishift-branco.svg` sobre
 o hero escuro (troca automática pela classe `on-dark` da barra); o rodapé e o diagrama
 usam a versão branca. Regras do guia: AI sempre laranja e dentro da caixa, versão
 branca sobre fundo escuro, mínimo de 140 px de largura, sem sombra ou inclinação.
-Favicon e ícones do app são cópias de `03-favicon/` e `02-icone/`.
+Favicon, ícones do app (inclusive o maskable) e a imagem de compartilhamento são cópias de `03-favicon/`, `02-icone/` e `04-social/`.
 
 **Cores e tipografia.** Variáveis CSS no `:root` de `assets/css/site.css`.
 

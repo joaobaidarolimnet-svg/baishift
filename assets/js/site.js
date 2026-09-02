@@ -293,7 +293,7 @@ function grad(svg, stops, attrs) {
 function emblema(svg, s, ox, oy) {
   var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
   g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "#0B1440" }));
-  var img = E("image", { x: 200, y: 42, width: 1100, height: 283.5, preserveAspectRatio: "xMidYMid meet" });
+  var img = E("image", { x: 200, y: 74, width: 1100, height: 211.3, preserveAspectRatio: "xMidYMid meet" });
   var src = (document.querySelector(".brand .lg-white") || {}).getAttribute ? document.querySelector(".brand .lg-white").getAttribute("src") : "assets/marca/01-logo/baishift-branco.svg";
   img.setAttribute("href", src);
   img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", src);

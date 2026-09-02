@@ -50,7 +50,7 @@ const PRODUTOS = [
   }
 ];
 
-const brand = `<a class="brand" href="/" aria-label="Baishift — início"><img class="lg lg-navy" src="/assets/marca/01-logo/baishift-principal.svg" alt="Baishift" width="916" height="236"><img class="lg lg-white" src="/assets/marca/01-logo/baishift-branco.svg" alt="" aria-hidden="true" width="916" height="236"></a>`;
+const brand = `<a class="brand" href="/" aria-label="Baishift — início"><img class="lg lg-navy" src="/assets/marca/01-logo/baishift-principal.svg" alt="Baishift" width="911" height="175"><img class="lg lg-white" src="/assets/marca/01-logo/baishift-branco.svg" alt="" aria-hidden="true" width="911" height="175"></a>`;
 
 const page = p => `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -60,7 +60,7 @@ const page = p => `<!DOCTYPE html>
 <title>${p.nome} — Baishift</title>
 <meta name="description" content="${p.desc}">
 <meta name="robots" content="index, follow">
-<meta name="theme-color" content="#0A1B3D">
+<meta name="theme-color" content="#142F7A">
 <link rel="canonical" href="https://baishift.com.br/outros/${p.slug}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Baishift">
