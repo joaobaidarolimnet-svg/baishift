@@ -266,7 +266,7 @@ function gauge(host, o) {
   host.appendChild(svg);
 }
 
-/* ---------- 01 · caminho dos dados: fontes → emblema Baishift → decisão ---------- */
+/* ---------- 01 · caminho dos dados: fontes → infinito BaiShift → decisão ---------- */
 var stopPath = null;
 function sparkle(svg, x, y, size, color, dur, delay) {
   var k = size, q = size * .28;
@@ -278,6 +278,15 @@ function sparkle(svg, x, y, size, color, dur, delay) {
   }
   svg.appendChild(p);
 }
+function blur(svg, sd) {
+  var id = "bl" + (++UID), d = E("defs"), f = E("filter", { id: id, x: "-30%", y: "-60%", width: "160%", height: "220%" });
+  f.appendChild(E("feGaussianBlur", { stdDeviation: sd })); d.appendChild(f); svg.appendChild(d); return "url(#" + id + ")";
+}
+function lgrad(svg, stops) {
+  var id = "lg" + (++UID), d = E("defs"), g = E("linearGradient", { id: id, x1: 0, y1: 0, x2: 1, y2: 0 });
+  stops.forEach(function (st) { g.appendChild(E("stop", { offset: st[0], "stop-color": st[1] })); });
+  d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
+}
 function dataPath() {
   var host = el("datapath"); if (!host) return;
   if (stopPath) { stopPath(); stopPath = null; }
@@ -285,73 +294,110 @@ function dataPath() {
   var W = host.clientWidth || 900, narrow = W < 720;
   var S = [{ k: "ERP", n: "ERP", s: "IXC Soft · contratos, OS, fiscal" }, { k: "Omnichannel", n: "Omnichannel", s: "OPA Suite · atendimento" },
            { k: "Recebimentos", n: "Recebim.", s: "boletos, PIX, carteira" }, { k: "Pagamentos", n: "Pagam.", s: "fornecedores, folha, link" }];
-  var O = [{ k: "Painel da diretoria", n: "Painel", s: "base, caixa, churn, campo", c: C.green },
-           { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: C.green },
-           { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
-           { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
-  var NW = narrow ? Math.max(96, Math.min(128, (W - 150) / 2)) : Math.min(230, (W - 300) / 2), NH = narrow ? 42 : 50, G = narrow ? 10 : 14;
-  var rows = 4, H = rows * (NH + G) - G + 16, cx = W / 2, cy = H / 2, xr = W - NW;
-  /* o símbolo da mudança é o próprio núcleo: duas trilhas que trocam de lugar e seguem em frente */
-  var sw = narrow ? 96 : 184, sh = sw * .46, lw = narrow ? 3.6 : 6, sx = cx - sw / 2, symTop = cy - sh / 2 - (narrow ? 20 : 30);
-  var laneY = [symTop, symTop + sh];
+  var O = [{ k: "Painel da diretoria", n: "Painel", s: "base, caixa, churn, campo", c: "#5ED9A0" },
+           { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: "#5ED9A0" },
+           { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: "#FF9A4D" },
+           { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: "#5ED9A0" }];
+  var NW = narrow ? Math.max(96, Math.min(128, (W - 150) / 2)) : Math.min(230, (W - 340) / 2), NH = narrow ? 42 : 50, G = narrow ? 10 : 14;
+  var rows = 4, H = Math.max(rows * (NH + G) - G + 16, narrow ? 232 : 300), cx = W / 2, cy = H / 2, xr = W - NW;
+  /* geometria do infinito: a = meia largura dos lobos, h = meia altura */
+  var a = narrow ? 44 : 118, hh = a * .6, lw = narrow ? 4.5 : 10, ey = cy - (narrow ? 16 : 26), AX = narrow ? 1.32 : 1.42, AY = -1.0;
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
   var movers = [];
   function yAt(i) { return cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
   function node(x, y, d, accent) {
     var g = E("g");
-    g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "#fff", stroke: C.line, "stroke-width": 1.2 }));
+    g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "rgba(255,255,255,.06)", stroke: "rgba(127,166,255,.28)", "stroke-width": 1 }));
     g.appendChild(E("rect", { x: x, y: y + 9, width: 3, height: NH - 18, rx: 1.5, fill: accent }));
-    g.appendChild(T({ x: x + 12, y: y + (narrow ? 17 : 21), "font-family": DISP, "font-size": narrow ? 9.5 : 12, "font-weight": 600, fill: C.ink }, narrow ? d.n : d.k));
-    g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: C.muted }, d.s));
+    g.appendChild(T({ x: x + 12, y: y + (narrow ? 17 : 21), "font-family": DISP, "font-size": narrow ? 9.5 : 12, "font-weight": 600, fill: "#fff" }, narrow ? d.n : d.k));
+    g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: "rgba(255,255,255,.55)" }, d.s));
     svg.appendChild(g);
   }
-  /* as fontes entram pelas duas trilhas; as saídas partem das duas setas */
-  function port(i, left) { return left ? [sx - 4, laneY[i < 2 ? 0 : 1]] : [sx + sw + 4, laneY[i < 2 ? 0 : 1]]; }
+  /* as fontes entram pela borda esquerda do lobo azul; as saídas partem da seta e do lobo laranja */
+  var tip = [cx + a * AX, ey + hh * AY];
+  function port(i, left) {
+    if (left) return [cx - a - 2, ey + (i - 1.5) * hh * .36];
+    if (narrow) return [cx + a + 3, ey + (i - 1.5) * hh * .4];
+    return i < 2 ? [tip[0] + 6, tip[1] + (i - .5) * 10] : [cx + a + 3, ey + (i - 2.5) * hh * .5 + hh * .35];
+  }
   function wire(x0, y0, x1, y1, color, off) {
-    var mx = (x0 + x1) / 2, p = E("path", { d: "M" + x0 + "," + y0 + " C" + mx + "," + y0 + " " + mx + "," + y1 + " " + x1 + "," + y1, fill: "none", stroke: color, "stroke-width": 1.4, opacity: .38 });
+    var mx = (x0 + x1) / 2, p = E("path", { d: "M" + x0 + "," + y0 + " C" + mx + "," + y0 + " " + mx + "," + y1 + " " + x1 + "," + y1, fill: "none", stroke: color, "stroke-width": 1.3, opacity: .45 });
     svg.appendChild(p);
     var dot = E("circle", { r: 3, fill: color }); svg.appendChild(dot);
     movers.push({ p: p, dot: dot, len: p.getTotalLength(), off: off });
   }
-  S.forEach(function (s, i) { var y = yAt(i), pt = port(i, true); wire(NW, y + NH / 2, pt[0], pt[1], C.blue, i * 640); node(0, y, s, C.blue); });
+  S.forEach(function (s, i) { var y = yAt(i), pt = port(i, true); wire(NW, y + NH / 2, pt[0], pt[1], "#4D8BFF", i * 640); node(0, y, s, "#4D8BFF"); });
   O.forEach(function (o, i) { var y = yAt(i), pt = port(i, false); wire(pt[0], pt[1], xr, y + NH / 2, o.c, 1900 + i * 700); node(xr, y, o, o.c); });
 
-  /* ---- símbolo ---- */
-  var fx = glow(svg);
-  svg.appendChild(E("ellipse", { cx: cx, cy: symTop + sh / 2, rx: sw * .64, ry: sh * 1.0, fill: C.blue, opacity: .05 }));
-  var sg = E("g", { transform: "translate(" + sx + " " + symTop + ")" }), ah = lw * 2.3, al = lw * 2.4, xEnd = sw - al;
-  /* curva em S com tangentes horizontais nas pontas: entra reto, cruza suave, sai reto na seta */
-  function trilha(deCima) {
-    var y0 = deCima ? 0 : sh, y1 = deCima ? sh : 0, a = sw * .24, b = sw * .76;
-    return "M0," + y0 + " H" + a + " C" + (sw * .53) + "," + y0 + " " + (sw * .47) + "," + y1 + " " + b + "," + y1 + " H" + xEnd;
+  /* ---- infinito neon ---- */
+  var fx = glow(svg), soft = blur(svg, narrow ? 5 : 9), gBlue = lgrad(svg, [["0%", "#1652F0"], ["60%", "#4D8BFF"], ["100%", "#7FD3FF"]]), gOr = lgrad(svg, [["0%", "#FF7A1A"], ["60%", "#FF9A4D"], ["100%", "#FFD29A"]]);
+  var g = E("g", { transform: "translate(" + cx + " " + ey + ")" });
+  function A(v) { return (v * a).toFixed(1); } function Hh(v) { return (v * hh).toFixed(1); }
+  var loopL = "M0,0 C" + A(-.62) + "," + Hh(-.98) + " " + A(-1) + "," + Hh(-.66) + " " + A(-1) + ",0 C" + A(-1) + "," + Hh(.66) + " " + A(-.62) + "," + Hh(.98) + " 0,0Z";
+  var loopR = "M0,0 C" + A(.62) + "," + Hh(.98) + " " + A(1) + "," + Hh(.66) + " " + A(1) + ",0 C" + A(1) + "," + Hh(-.66) + " " + A(.62) + "," + Hh(-.98) + " 0,0Z";
+  var arrow = "M" + A(1) + "," + Hh(.05) + " C" + A(1.06) + "," + Hh(-.5) + " " + A(1.14) + "," + Hh(-.86) + " " + A(AX) + "," + Hh(AY);
+  function tubo(d, grad, glowColor, cometDelay) {
+    g.appendChild(E("path", { d: d, fill: "none", stroke: glowColor, "stroke-width": lw * 2.8, "stroke-linecap": "round", opacity: .32, filter: soft }));
+    g.appendChild(E("path", { d: d, fill: "none", stroke: grad, "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", filter: fx }));
+    g.appendChild(E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw * .22, "stroke-linecap": "round", opacity: .55, transform: "translate(0 " + (-lw * .22) + ")" }));
+    var run = E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw * .5, "stroke-linecap": "round", "stroke-dasharray": "26 600", opacity: .95, filter: fx });
+    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 626, to: 0, dur: "3.2s", begin: cometDelay + "s", repeatCount: "indefinite" }));
+    g.appendChild(run);
   }
-  function grad(c0, c1) { return gradient(svg, c0, false, 1, 1).replace(/\)$/, ")") && (function () {
-    var id = "tr" + (++UID), d = E("defs"), g = E("linearGradient", { id: id, x1: 0, y1: 0, x2: 1, y2: 0 });
-    g.appendChild(E("stop", { offset: "0%", "stop-color": c0 })); g.appendChild(E("stop", { offset: "100%", "stop-color": c1 }));
-    d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")"; })(); }
-  /* azul por baixo, laranja por cima: o contorno claro da laranja "corta" a azul no cruzamento */
-  [[true, C.blue, "#4D8BFF"], [false, C.orange, "#FFB166"]].forEach(function (c) {
-    var d = trilha(c[0]), ye = c[0] ? sh : 0;
-    sg.appendChild(E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw + 5, "stroke-linecap": "round", "stroke-linejoin": "round" }));
-    sg.appendChild(E("path", { d: d, fill: "none", stroke: grad(c[1], c[2]), "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round" }));
-    /* cometa de luz percorrendo a trilha */
-    var run = E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw * .45, "stroke-linecap": "round", "stroke-dasharray": "22 360", opacity: .95, filter: fx });
-    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 382, to: 0, dur: "2.4s", begin: (c[0] ? 0 : 1.2) + "s", repeatCount: "indefinite" }));
-    sg.appendChild(run);
-    /* seta colada na ponta, do tamanho do traço */
-    sg.appendChild(E("path", { d: "M" + (xEnd - 1) + "," + (ye - ah) + " L" + sw + "," + ye + " L" + (xEnd - 1) + "," + (ye + ah) + " Q" + (xEnd + al * .3) + "," + ye + " " + (xEnd - 1) + "," + (ye - ah) + "Z", fill: c[2], filter: fx }));
-  });
-  svg.appendChild(sg);
-  /* o nome, com o "ai" em destaque, e a descrição */
-  var fs = narrow ? 18 : 30, wy = symTop + sh + (narrow ? 30 : 48);
-  var wm = T({ x: cx, y: wy, "text-anchor": "middle", "font-family": DISP, "font-size": fs, "font-weight": 700, fill: C.ink, "letter-spacing": -.6 }, "");
-  var tb = E("tspan"); tb.textContent = "B"; var ta = E("tspan", { fill: C.orange }); ta.textContent = "ai"; var ts2 = E("tspan"); ts2.textContent = "Shift";
+  tubo(loopL, gBlue, "#1652F0", 0);
+  tubo(loopR, gOr, "#FF7A1A", 1.1);
+  tubo(arrow, gOr, "#FF7A1A", 2.2);
+  /* ponta da seta, alinhada com a tangente final */
+  var ang = Math.atan2(AY * hh + .86 * hh, AX * a - 1.14 * a) * 180 / Math.PI, ah = lw * 1.9;
+  g.appendChild(E("path", { d: "M" + (-ah * 1.5) + "," + (-ah) + " L0,0 L" + (-ah * 1.5) + "," + ah + " Q" + (-ah * .8) + ",0 " + (-ah * 1.5) + "," + (-ah) + "Z", fill: "#FFD29A",
+    transform: "translate(" + A(AX) + " " + Hh(AY) + ") rotate(" + ang.toFixed(1) + ")", filter: fx }));
+  /* rastros de dados entrando pela esquerda */
+  if (!narrow) {
+    var rnd = seeded(31);
+    for (var k = 0; k < 7; k++) {
+      var yy = (k - 3) * hh * .3, len = 40 + rnd() * 70, x1 = -a - 14 - rnd() * 24, x0 = x1 - len, col = k % 3 === 1 ? "#FF9A4D" : "#4D8BFF";
+      var ln = E("line", { x1: x0, y1: yy, x2: x1, y2: yy, stroke: col, "stroke-width": k % 2 ? 2 : 3, "stroke-linecap": "round", opacity: .75, "stroke-dasharray": (len * .55).toFixed(0) + " " + (len * 1.2).toFixed(0), filter: fx });
+      if (!RM) ln.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: (len * 1.75).toFixed(0), to: 0, dur: (1.4 + rnd()) + "s", repeatCount: "indefinite" }));
+      g.appendChild(ln);
+      var pd = E("circle", { cx: x1 + 6, cy: yy, r: k % 2 ? 2.4 : 3.2, fill: col, filter: fx });
+      if (!RM) pd.appendChild(E("animate", { attributeName: "opacity", values: "1;.2;1", dur: (1.2 + rnd()) + "s", repeatCount: "indefinite" }));
+      g.appendChild(pd);
+    }
+    /* partículas saindo pela seta */
+    for (var q = 0; q < 5; q++) {
+      var px = AX * a + 6 + q * 9, py = AY * hh + (q - 2) * 7, pc = E("circle", { cx: px, cy: py, r: q % 2 ? 2 : 2.8, fill: q % 2 ? "#FFD29A" : "#FF9A4D", filter: fx });
+      if (!RM) { pc.appendChild(E("animate", { attributeName: "cx", from: px, to: px + 34, dur: (1.6 + q * .3) + "s", repeatCount: "indefinite" })); pc.appendChild(E("animate", { attributeName: "opacity", values: "1;0", dur: (1.6 + q * .3) + "s", repeatCount: "indefinite" })); }
+      g.appendChild(pc);
+    }
+  }
+  /* orbe de IA no cruzamento */
+  var R = narrow ? 14 : 27, coreId = "orb" + (++UID), ringId = "orr" + (++UID), defs = E("defs");
+  var rg = E("radialGradient", { id: coreId, cx: "40%", cy: "35%", r: "75%" });
+  rg.appendChild(E("stop", { offset: "0%", "stop-color": "#1E3F8F" })); rg.appendChild(E("stop", { offset: "100%", "stop-color": "#061233" }));
+  var rl = E("linearGradient", { id: ringId, x1: 0, y1: 0, x2: 1, y2: 1 });
+  rl.appendChild(E("stop", { offset: "0%", "stop-color": "#7FD3FF" })); rl.appendChild(E("stop", { offset: "100%", "stop-color": "#FF9A4D" }));
+  defs.appendChild(rg); defs.appendChild(rl); svg.appendChild(defs);
+  var halo2 = E("circle", { cx: 0, cy: 0, r: R * 1.6, fill: "#4D8BFF", opacity: .22, filter: soft });
+  if (!RM) halo2.appendChild(E("animate", { attributeName: "opacity", values: ".15;.35;.15", dur: "2.8s", repeatCount: "indefinite" }));
+  g.appendChild(halo2);
+  g.appendChild(E("circle", { cx: 0, cy: 0, r: R, fill: "url(#" + coreId + ")" }));
+  g.appendChild(E("circle", { cx: 0, cy: 0, r: R, fill: "none", stroke: "url(#" + ringId + ")", "stroke-width": narrow ? 1.6 : 2.4, filter: fx }));
+  /* rede neural discreta atrás do IA */
+  var net = [[-.55, -.5], [.5, -.55], [-.6, .35], [.55, .45], [0, .05]];
+  net.forEach(function (p1, i1) { net.forEach(function (p2, i2) { if (i2 > i1 && (i1 === 4 || i2 === 4 || (i1 + i2) % 2)) g.appendChild(E("line", { x1: p1[0] * R, y1: p1[1] * R, x2: p2[0] * R, y2: p2[1] * R, stroke: "#4D8BFF", "stroke-width": .8, opacity: .45 })); }); });
+  net.forEach(function (p) { g.appendChild(E("circle", { cx: p[0] * R, cy: p[1] * R, r: narrow ? 1.2 : 1.8, fill: "#7FD3FF", opacity: .8 })); });
+  var ia = T({ x: 0, y: R * .36, "text-anchor": "middle", "font-family": DISP, "font-size": narrow ? 11 : 21, "font-weight": 700, fill: "#fff", filter: fx }, "IA");
+  g.appendChild(ia);
+  svg.appendChild(g);
+  /* faíscas de IA */
+  sparkle(svg, cx + R * 1.15, ey - R * 1.25, narrow ? 6 : 11, "#FFB166", 2.2, 0);
+  sparkle(svg, cx + R * 1.75, ey - R * .55, narrow ? 3.2 : 5, "#fff", 1.7, .6);
+  /* o nome e a descrição */
+  var fs = narrow ? 18 : 30, wy = ey + hh + (narrow ? 26 : 44);
+  var wm = T({ x: cx, y: wy, "text-anchor": "middle", "font-family": DISP, "font-size": fs, "font-weight": 700, fill: "#fff", "letter-spacing": -.6 }, "");
+  var tb = E("tspan"); tb.textContent = "B"; var ta = E("tspan", { fill: "#FFB166" }); ta.textContent = "ai"; var ts2 = E("tspan"); ts2.textContent = "Shift";
   wm.appendChild(tb); wm.appendChild(ta); wm.appendChild(ts2); svg.appendChild(wm);
-  svg.appendChild(T({ x: cx, y: wy + (narrow ? 14 : 20), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6.2 : 8, fill: C.muted, "letter-spacing": narrow ? 1.2 : 1.6 }, narrow ? "ANÁLISE COM IA" : "GESTÃO · ANÁLISE COM IA"));
-  /* faíscas de inteligência artificial */
-  sparkle(svg, sx + sw + (narrow ? 8 : 12), symTop - (narrow ? 10 : 14), narrow ? 6 : 10, C.orange, 2.4, 0);
-  sparkle(svg, cx - fs * 1.1, wy - fs * .95, narrow ? 3.4 : 4.6, C.orange, 1.6, .4);
-  sparkle(svg, sx - (narrow ? 8 : 12), symTop + sh + (narrow ? 8 : 12), narrow ? 3.2 : 4.5, "#7FA6FF", 2.9, 1.3);
+  svg.appendChild(T({ x: cx, y: wy + (narrow ? 14 : 20), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6.2 : 8, fill: "#8FB4FF", "letter-spacing": narrow ? 1.2 : 1.6 }, narrow ? "ANÁLISE COM IA" : "GESTÃO · ANÁLISE COM IA"));
   host.appendChild(svg);
   stopPath = rafLoop(host, function (ts) {
     movers.forEach(function (m) { var pt = m.p.getPointAtLength(((ts + m.off) / 16) % m.len); m.dot.setAttribute("cx", pt.x); m.dot.setAttribute("cy", pt.y); });

@@ -182,6 +182,9 @@ section{padding:clamp(52px,6.5vw,96px) 0}
 .stage .cap{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-family:var(--mono);font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
 .stage .cap b{color:var(--green);letter-spacing:.06em}
 .stage .cap i{width:7px;height:7px;border-radius:50%;background:var(--green);font-style:normal;animation:pulse 2.6s infinite;flex:none}
+.stage.dark{background:radial-gradient(60% 80% at 50% 50%,#0E2457,var(--deep) 70%);border-color:rgba(127,166,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 40px 80px -50px rgba(22,82,240,.7)}
+.stage.dark .cap{color:rgba(255,255,255,.5)}
+.stage.dark .cap b{color:#5ED9A0}
 .entrega{margin-top:18px;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
 .entrega b{color:var(--green);font-weight:500}
 
