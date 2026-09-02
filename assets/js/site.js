@@ -289,13 +289,14 @@ function grad(svg, stops, attrs) {
   stops.forEach(function (st) { g.appendChild(E("stop", st[2] ? { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] } : { offset: st[0], "stop-color": st[1] })); });
   d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
 }
-/* o emblema limpo, em unidades de projeto 1660×340; devolve os pontos de encaixe em coordenadas do svg */
+/* o emblema limpo, em unidades de projeto 1580×340; devolve os pontos de encaixe em coordenadas do svg */
 function emblema(svg, s, ox, oy) {
   var U = "userSpaceOnUse";
   var glow = filtro(svg, 3), soft = filtro(svg, 10, "so");
   var bfill = grad(svg, [["0%", "#3D7BFF"], ["45%", "#1F5CF5"], ["100%", "#0B2B9A"]]);
   var sfill = grad(svg, [["0%", "#0A1630"], ["60%", "#10245A"], ["100%", "#1E43B5"]]);
-  var afill = grad(svg, [["0%", "#0B2B9A"], ["100%", "#3D7BFF"]], { gradientUnits: U, x1: 1350, y1: 260, x2: 1620, y2: 40 });
+  var afill = grad(svg, [["0%", "#3D7BFF"], ["100%", "#0B2B9A"]], { gradientUnits: U, x1: 1420, y1: 0, x2: 1540, y2: 0 });
+  var fr = grad(svg, [["0%", "#0F2456"], ["100%", "#1F5CF5"]], { x1: 0, y1: 0, x2: 1, y2: 0 });
   var trace = grad(svg, [["0%", "#1F5CF5"], ["100%", "#1F5CF5", 0]], { gradientUnits: U, x1: 40, y1: 0, x2: 250, y2: 0 });
   var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
   /* circuito entrando pela esquerda */
@@ -329,31 +330,27 @@ function emblema(svg, s, ox, oy) {
   var gs = E("g", { transform: "skewX(-12)" });
   gs.appendChild(T({ x: 830, y: 292, "font-family": DISP, "font-weight": 800, "font-size": 252, fill: sfill, "letter-spacing": -8 }, "Shift"));
   g.appendChild(gs);
-  /* seta subindo à direita */
+  /* seta delicada apontando para a direita, com a cauda se dissolvendo em pixels */
   var arr = E("g");
-  arr.appendChild(E("path", { d: "M1360,262 L1560,62", fill: "none", stroke: afill, "stroke-width": 30, "stroke-linecap": "round" }));
-  var comet = E("path", { d: "M1360,262 L1560,62", fill: "none", stroke: "#BFD7FF", "stroke-width": 12, "stroke-linecap": "round", "stroke-dasharray": "40 400", opacity: .9 });
-  if (!RM) comet.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 440, to: 0, dur: "2.6s", repeatCount: "indefinite" }));
-  arr.appendChild(comet);
-  arr.appendChild(E("path", { d: "M1522,22 L1638,10 L1626,126 Z", fill: afill }));
-  /* pixels dissolvendo e circuito curto junto à seta */
   var rnd = seeded(23);
-  for (var k = 0; k < 18; k++) {
-    var x = 1350 + rnd() * 150, y = 150 + rnd() * 120, sz = 7 + rnd() * 16, r = E("rect", { x: x, y: y, width: sz, height: sz, rx: sz * .18, fill: rnd() > .5 ? "#1F5CF5" : "#0F2456", opacity: .35 + rnd() * .6 });
+  for (var k = 0; k < 22; k++) {
+    var x = 1318 + rnd() * 96, y = 96 + rnd() * 150, sz = 6 + rnd() * 15, tone3 = rnd();
+    var r = E("rect", { x: x, y: y, width: sz, height: sz, rx: sz * .16, fill: tone3 > .6 ? "#1F5CF5" : (tone3 > .3 ? "#0F2456" : "#9AA6BF"), opacity: .3 + rnd() * .6 });
     if (!RM) r.appendChild(E("animate", { attributeName: "opacity", values: ".15;.95;.15", dur: (1.8 + rnd() * 2.2) + "s", begin: (rnd() * 2) + "s", repeatCount: "indefinite" }));
     arr.appendChild(r);
   }
-  var c2 = E("g", { fill: "none", stroke: "#1F5CF5", "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round" });
-  [[1360, 300, [[1400, 300], [1430, 270], [1460, 270]]], [1400, 320, [[1440, 320], [1480, 280]]]].forEach(function (t) {
-    c2.appendChild(E("path", { d: "M" + t[0] + "," + t[1] + " " + t[2].map(function (p) { return "L" + p[0] + "," + p[1]; }).join(" ") }));
-    c2.appendChild(E("circle", { cx: t[0], cy: t[1], r: 8, fill: "#fff", "stroke-width": 5 }));
-    var e = t[2][t[2].length - 1]; c2.appendChild(E("circle", { cx: e[0], cy: e[1], r: 4, fill: "#1F5CF5", stroke: "none" }));
-  });
-  arr.appendChild(c2);
+  var chev = E("g", { transform: "translate(1420 172)" });
+  var chevD = "M0,-62 L112,0 L0,62 Q34,0 0,-62 Z";
+  chev.appendChild(E("path", { d: chevD, fill: afill, stroke: afill, "stroke-width": 10, "stroke-linejoin": "round" }));
+  chev.appendChild(E("path", { d: "M14,-40 L86,0 L14,40 Q36,0 14,-40 Z", fill: "#fff", opacity: .12 }));
+  if (!RM) chev.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", values: "1420 172;1428 172;1420 172", dur: "2.8s", repeatCount: "indefinite" }));
+  arr.appendChild(chev);
   g.appendChild(arr);
+  /* moldura em volta da logo inteira */
+  g.appendChild(E("rect", { x: 14, y: 16, width: 1552, height: 308, rx: 44, fill: "none", stroke: fr, "stroke-width": 4 }));
   svg.appendChild(g);
   var P = function (x, y) { return [ox + x * s, oy + y * s]; };
-  return { rings: rings.map(function (r) { return P(r[0] - 14, r[1]); }), tips: [P(1638, 12), P(1638, 12)] };
+  return { rings: rings.map(function (r) { return P(r[0] - 14, r[1]); }), tips: [P(1540, 172), P(1540, 172)] };
 }
 function dataPath() {
   var host = el("datapath"); if (!host) return;
@@ -367,7 +364,7 @@ function dataPath() {
            { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
            { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
   var rows = 4, NH = narrow ? 42 : 50, G = narrow ? 10 : 14, NW, H, s, ox, oy, svg, movers = [];
-  var EW = 1660, EH = 340;
+  var EW = 1580, EH = 340;
   if (narrow) { NW = (W - 12) / 2; s = W / EW; H = EH * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
   else { NW = Math.min(210, (W - 380) / 2); s = (W - 2 * NW - 90) / EW; H = Math.max(rows * (NH + G) - G + 16, EH * s + 10); ox = NW + 45; oy = (H - EH * s) / 2; }
   var cy = H / 2, xr = W - NW;
@@ -399,12 +396,12 @@ function dataPath() {
   }
   S.forEach(function (d, i) {
     var y = yAt(i), r = anc.rings[i];
-    if (!narrow) wire(NW, y + NH / 2, r[0], r[1], C.blue, i * 640);
+    if (!narrow) wire(NW, y + NH / 2, ox + 14 * s, r[1], C.blue, i * 640);
     node(0, y, d, C.blue);
   });
   O.forEach(function (d, i) {
     var y = yAt(i), t = anc.tips[0];
-    if (!narrow) wire(t[0], t[1], xr, y + NH / 2, d.c, 1900 + i * 700);
+    if (!narrow) wire(ox + 1566 * s, t[1] + (i - 1.5) * 10 * s, xr, y + NH / 2, d.c, 1900 + i * 700);
     node(xr, y, d, d.c);
   });
   host.appendChild(svg);
