@@ -266,26 +266,121 @@ function gauge(host, o) {
   host.appendChild(svg);
 }
 
-/* ---------- 01 · caminho dos dados: fontes → infinito BaiShift → decisão ---------- */
+/* ---------- 01 · caminho dos dados: fontes → emblema BaiShift → decisão ---------- */
 var stopPath = null;
-function sparkle(svg, x, y, size, color, dur, delay) {
-  var k = size, q = size * .28;
+function sparkle(svg, x, y, size, color, dur, delay, host) {
+  var k = size, q = size * .26;
   var p = E("path", { d: "M0," + (-k) + " L" + q + "," + (-q) + " L" + k + ",0 L" + q + "," + q + " L0," + k + " L" + (-q) + "," + q + " L" + (-k) + ",0 L" + (-q) + "," + (-q) + "Z",
     fill: color, transform: "translate(" + x + " " + y + ")", opacity: .9 });
   if (!RM) {
-    p.appendChild(E("animate", { attributeName: "opacity", values: ".15;1;.15", dur: dur + "s", begin: delay + "s", repeatCount: "indefinite" }));
-    p.appendChild(E("animateTransform", { attributeName: "transform", type: "rotate", from: "0 0 0", to: "90 0 0", dur: (dur * 2) + "s", repeatCount: "indefinite", additive: "sum" }));
+    p.appendChild(E("animate", { attributeName: "opacity", values: ".25;1;.25", dur: dur + "s", begin: delay + "s", repeatCount: "indefinite" }));
+    p.appendChild(E("animateTransform", { attributeName: "transform", type: "rotate", from: "0 0 0", to: "90 0 0", dur: (dur * 2.5) + "s", repeatCount: "indefinite", additive: "sum" }));
   }
-  svg.appendChild(p);
+  (host || svg).appendChild(p);
 }
-function blur(svg, sd) {
-  var id = "bl" + (++UID), d = E("defs"), f = E("filter", { id: id, x: "-30%", y: "-60%", width: "160%", height: "220%" });
-  f.appendChild(E("feGaussianBlur", { stdDeviation: sd })); d.appendChild(f); svg.appendChild(d); return "url(#" + id + ")";
+function filtro(svg, sd, forte) {
+  var id = "f" + (++UID), d = E("defs"), f = E("filter", { id: id, x: "-40%", y: "-60%", width: "180%", height: "220%" });
+  f.appendChild(E("feGaussianBlur", { stdDeviation: sd, result: "b" }));
+  if (forte !== "so") { var m = E("feMerge"); m.appendChild(E("feMergeNode", { in: "b" })); if (forte) m.appendChild(E("feMergeNode", { in: "b" })); m.appendChild(E("feMergeNode", { in: "SourceGraphic" })); f.appendChild(m); }
+  d.appendChild(f); svg.appendChild(d); return "url(#" + id + ")";
 }
-function lgrad(svg, stops) {
-  var id = "lg" + (++UID), d = E("defs"), g = E("linearGradient", { id: id, x1: 0, y1: 0, x2: 1, y2: 0 });
-  stops.forEach(function (st) { g.appendChild(E("stop", { offset: st[0], "stop-color": st[1] })); });
+function grad(svg, stops, attrs) {
+  var id = "g" + (++UID), d = E("defs"), g = E("linearGradient", Object.assign({ id: id }, attrs || { x1: 0, y1: 0, x2: 0, y2: 1 }));
+  stops.forEach(function (st) { g.appendChild(E("stop", st[2] ? { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] } : { offset: st[0], "stop-color": st[1] })); });
   d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
+}
+/* o emblema aprovado, em unidades de projeto 1400×600; devolve os pontos de encaixe já em coordenadas do svg */
+function emblema(svg, s, ox, oy) {
+  var U = "userSpaceOnUse";
+  var glow = filtro(svg, 5), glow2 = filtro(svg, 9, true), haze = filtro(svg, 28, "so"), soft = filtro(svg, 14, "so");
+  var bfill = grad(svg, [["0%", "#6FA8FF"], ["55%", "#1F5CF5"], ["100%", "#0B36B8"]]);
+  var band = grad(svg, [["0%", "#0B36B8", .2], ["45%", "#1F5CF5"], ["100%", "#4D9BFF"]], { gradientUnits: U, x1: 120, y1: 0, x2: 700, y2: 0 });
+  var orange = grad(svg, [["0%", "#FF9A3D"], ["55%", "#FF5A1F"], ["100%", "#E8261A"]], { gradientUnits: U, x1: 640, y1: 0, x2: 1120, y2: 0 });
+  var blue2 = grad(svg, [["0%", "#4D9BFF"], ["60%", "#1F5CF5"], ["100%", "#0B36B8"]], { gradientUnits: U, x1: 640, y1: 0, x2: 1120, y2: 0 });
+  var ift = grad(svg, [["0%", "#FFB05A"], ["50%", "#FF5A1F"], ["100%", "#D9221A"]]);
+  var ring = grad(svg, [["0%", "#FFB05A"], ["100%", "#FF4A1F"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
+  /* névoas */
+  g.appendChild(E("ellipse", { cx: 420, cy: 330, rx: 420, ry: 150, fill: "#1F5CF5", opacity: .32, filter: haze }));
+  g.appendChild(E("ellipse", { cx: 1060, cy: 190, rx: 260, ry: 120, fill: "#FF4A1F", opacity: .28, filter: haze }));
+  g.appendChild(E("ellipse", { cx: 1040, cy: 470, rx: 240, ry: 90, fill: "#1F5CF5", opacity: .26, filter: haze }));
+  /* circuito entrando pela esquerda, com pulsos correndo */
+  var circ = E("g", { fill: "none", stroke: "#3D8BFF", "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round", filter: glow });
+  var traces = [[40, 170, [[150, 170], [190, 205], [330, 205], [330, 240]]], [40, 215, [[120, 215], [160, 250], [290, 250]]], [40, 262, [[230, 262], [262, 292], [300, 292]]],
+                [40, 438, [[230, 438], [262, 408], [300, 408]]], [40, 485, [[120, 485], [160, 450], [290, 450]]], [40, 530, [[150, 530], [190, 495], [330, 495], [330, 460]]]];
+  traces.forEach(function (t, i) {
+    var d = "M" + t[0] + "," + t[1] + " " + t[2].map(function (p) { return "L" + p[0] + "," + p[1]; }).join(" ");
+    circ.appendChild(E("path", { d: d }));
+    var pulse = E("path", { d: d, stroke: "#DCEBFF", "stroke-width": 5, "stroke-dasharray": "34 420" });
+    if (!RM) pulse.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 454, to: 0, dur: (2.1 + i * .27) + "s", begin: (i * .35) + "s", repeatCount: "indefinite" }));
+    circ.appendChild(pulse);
+    circ.appendChild(E("circle", { cx: t[0], cy: t[1], r: 11, fill: "#040A1F", "stroke-width": 5 }));
+    circ.appendChild(E("circle", { cx: t[0], cy: t[1], r: 3.5, fill: "#7FB8FF", stroke: "none" }));
+    var e = t[2][t[2].length - 1]; circ.appendChild(E("circle", { cx: e[0], cy: e[1], r: 5, fill: "#7FB8FF", stroke: "none" }));
+  });
+  g.appendChild(circ);
+  /* faixas e setas */
+  var W = 44, bandas = E("g");
+  var bandL1 = "M130,300 C420,300 470,346 640,346", bandL2 = "M130,392 C420,392 470,346 640,346";
+  var arrO = "M640,346 C760,346 820,250 940,214 L1010,196", arrB = "M640,346 C760,346 820,442 940,478 L1010,496";
+  function tube(d, gr, core, glowC, w, cometDelay) {
+    bandas.appendChild(E("path", { d: d, fill: "none", stroke: glowC, "stroke-width": w * 2.2, "stroke-linecap": "round", opacity: .35, filter: soft }));
+    bandas.appendChild(E("path", { d: d, fill: "none", stroke: gr, "stroke-width": w, "stroke-linecap": "round", "stroke-linejoin": "round", filter: glow }));
+    bandas.appendChild(E("path", { d: d, fill: "none", stroke: core, "stroke-width": w * .16, "stroke-linecap": "round", opacity: .85, transform: "translate(0 " + (-w * .22) + ")" }));
+    var run = E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": w * .34, "stroke-linecap": "round", "stroke-dasharray": "48 900", opacity: .95, filter: glow });
+    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 948, to: 0, dur: "3s", begin: cometDelay + "s", repeatCount: "indefinite" }));
+    bandas.appendChild(run);
+  }
+  tube(bandL1, band, "#BFE0FF", "#1F5CF5", W, 0); tube(bandL2, band, "#BFE0FF", "#1F5CF5", W, 1.5);
+  tube(arrB, blue2, "#BFE0FF", "#1F5CF5", W, 1.1); tube(arrO, orange, "#FFE0B0", "#FF4A1F", W, 2.6);
+  function head(x, y, ang, fill, glowC) {
+    bandas.appendChild(E("path", { d: "M-70,-46 L20,0 L-70,46 Q-40,0 -70,-46Z", fill: glowC, opacity: .45, transform: "translate(" + x + " " + y + ") rotate(" + ang + ")", filter: soft }));
+    bandas.appendChild(E("path", { d: "M-70,-46 L20,0 L-70,46 Q-40,0 -70,-46Z", fill: fill, transform: "translate(" + x + " " + y + ") rotate(" + ang + ")", filter: glow }));
+  }
+  head(1030, 191, -15, orange, "#FF4A1F"); head(1030, 501, 15, blue2, "#1F5CF5");
+  bandas.appendChild(E("path", { d: "M700,338 C790,330 840,262 930,226", fill: "none", stroke: "#fff", "stroke-width": 5, "stroke-linecap": "round", opacity: .85, filter: glow }));
+  bandas.appendChild(E("path", { d: "M700,354 C790,362 840,430 930,466", fill: "none", stroke: "#BFE0FF", "stroke-width": 4, "stroke-linecap": "round", opacity: .6, filter: glow }));
+  g.appendChild(bandas);
+  /* B tridimensional */
+  var gb = E("g", { transform: "skewX(-9)" });
+  gb.appendChild(T({ x: 322, y: 424, "font-family": DISP, "font-weight": 800, "font-size": 284, fill: "#1F5CF5", opacity: .55, filter: soft }, "B"));
+  gb.appendChild(T({ x: 322, y: 424, "font-family": DISP, "font-weight": 800, "font-size": 284, fill: "#061B5C", transform: "translate(10 10)" }, "B"));
+  gb.appendChild(T({ x: 322, y: 424, "font-family": DISP, "font-weight": 800, "font-size": 284, fill: bfill }, "B"));
+  g.appendChild(gb);
+  /* badge AI */
+  var badge = E("g");
+  badge.appendChild(E("rect", { x: 545, y: 248, width: 196, height: 196, rx: 34, fill: "#FF6A2A", opacity: .55, filter: soft }));
+  badge.appendChild(E("rect", { x: 548, y: 251, width: 190, height: 190, rx: 32, fill: "#061236" }));
+  var rg = E("rect", { x: 548, y: 251, width: 190, height: 190, rx: 32, fill: "none", stroke: ring, "stroke-width": 4, filter: glow });
+  if (!RM) rg.appendChild(E("animate", { attributeName: "opacity", values: ".7;1;.7", dur: "2.4s", repeatCount: "indefinite" }));
+  badge.appendChild(rg);
+  var chip = E("g", { stroke: "#2C5BD6", "stroke-width": 1.6, fill: "none", opacity: .55 });
+  [[566, 270, 600, 270], [566, 270, 566, 300], [720, 270, 690, 270], [720, 270, 720, 300], [566, 422, 600, 422], [566, 422, 566, 392], [720, 422, 690, 422], [720, 422, 720, 392], [600, 270, 600, 282], [690, 422, 690, 410]]
+    .forEach(function (l) { chip.appendChild(E("line", { x1: l[0], y1: l[1], x2: l[2], y2: l[3] })); });
+  [[600, 282], [690, 410], [566, 300], [720, 392]].forEach(function (c) { chip.appendChild(E("circle", { cx: c[0], cy: c[1], r: 2.6, fill: "#4D8BFF", stroke: "none" })); });
+  badge.appendChild(chip);
+  var gai = E("g", { transform: "skewX(-9)" });
+  gai.appendChild(T({ x: 700, y: 390, "text-anchor": "middle", "font-family": DISP, "font-weight": 800, "font-size": 86, fill: "#fff", filter: glow, "letter-spacing": -2 }, "AI"));
+  badge.appendChild(gai);
+  sparkle(svg, 712, 296, 20, "#fff", 2.2, .3, badge);
+  g.appendChild(badge);
+  /* Shift */
+  var gs = E("g", { transform: "skewX(-9)" });
+  gs.appendChild(T({ x: 820, y: 418, "font-family": DISP, "font-weight": 800, "font-size": 236, fill: "#0F2456", stroke: "#3D6FFF", "stroke-width": 2, "letter-spacing": -8, filter: glow }, "Sh"));
+  gs.appendChild(T({ x: 1126, y: 418, "font-family": DISP, "font-weight": 800, "font-size": 236, fill: ift, "letter-spacing": -8, filter: glow2 }, "ift"));
+  g.appendChild(gs);
+  /* faíscas e pixels */
+  sparkle(svg, 1150, 120, 58, "#FF7A2A", 2.6, 0, g); sparkle(svg, 1200, 200, 20, "#FFB05A", 1.9, .8, g); sparkle(svg, 1108, 84, 12, "#FFD29A", 1.6, 1.3, g);
+  var rnd = seeded(17), px = E("g");
+  for (var k = 0; k < 16; k++) {
+    var x = 1180 + rnd() * 190, y = 430 + rnd() * 140, sz = 8 + rnd() * 20, blue = rnd() > .42, r = E("rect", { x: x, y: y, width: sz, height: sz, rx: sz * .2, fill: blue ? "#2E7BFF" : "#FF6A2A", opacity: .55 + rnd() * .45, filter: glow });
+    if (!RM) { r.appendChild(E("animate", { attributeName: "opacity", values: ".2;1;.2", dur: (1.6 + rnd() * 2) + "s", begin: (rnd() * 2) + "s", repeatCount: "indefinite" })); }
+    px.appendChild(r);
+  }
+  g.appendChild(px);
+  svg.appendChild(g);
+  var P = function (x, y) { return [ox + x * s, oy + y * s]; };
+  return { rings: [P(40, 215), P(40, 262), P(40, 438), P(40, 485)], tips: [P(1052, 186), P(1052, 506)] };
 }
 function dataPath() {
   var host = el("datapath"); if (!host) return;
@@ -298,13 +393,13 @@ function dataPath() {
            { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: "#5ED9A0" },
            { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: "#FF9A4D" },
            { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: "#5ED9A0" }];
-  var NW = narrow ? Math.max(96, Math.min(128, (W - 150) / 2)) : Math.min(230, (W - 340) / 2), NH = narrow ? 42 : 50, G = narrow ? 10 : 14;
-  var rows = 4, H = Math.max(rows * (NH + G) - G + 16, narrow ? 232 : 300), cx = W / 2, cy = H / 2, xr = W - NW;
-  /* geometria do infinito: a = meia largura dos lobos, h = meia altura */
-  var a = narrow ? 44 : 118, hh = a * .6, lw = narrow ? 4.5 : 10, ey = cy - (narrow ? 16 : 26), AX = narrow ? 1.32 : 1.42, AY = -1.0;
-  var svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
-  var movers = [];
-  function yAt(i) { return cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
+  var rows = 4, NH = narrow ? 42 : 50, G = narrow ? 10 : 14, NW, H, s, ox, oy, svg, movers = [];
+  if (narrow) { NW = (W - 12) / 2; s = W / 1400; H = 600 * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
+  else { NW = Math.min(210, (W - 380) / 2); s = (W - 2 * NW - 80) / 1400; H = Math.max(rows * (NH + G) - G + 16, 600 * s + 10); ox = NW + 40; oy = (H - 600 * s) / 2; }
+  var cy = H / 2, xr = W - NW;
+  svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
+  var anc = emblema(svg, s, ox, oy);
+  function yAt(i) { return narrow ? 600 * s + 34 + i * (NH + G) : cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
   function node(x, y, d, accent) {
     var g = E("g");
     g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "rgba(255,255,255,.06)", stroke: "rgba(127,166,255,.28)", "stroke-width": 1 }));
@@ -313,91 +408,31 @@ function dataPath() {
     g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: "rgba(255,255,255,.55)" }, d.s));
     svg.appendChild(g);
   }
-  /* as fontes entram pela borda esquerda do lobo azul; as saídas partem da seta e do lobo laranja */
-  var tip = [cx + a * AX, ey + hh * AY];
-  function port(i, left) {
-    if (left) return [cx - a - 2, ey + (i - 1.5) * hh * .36];
-    if (narrow) return [cx + a + 3, ey + (i - 1.5) * hh * .4];
-    return i < 2 ? [tip[0] + 6, tip[1] + (i - .5) * 10] : [cx + a + 3, ey + (i - 2.5) * hh * .5 + hh * .35];
-  }
-  function wire(x0, y0, x1, y1, color, off) {
-    var mx = (x0 + x1) / 2, p = E("path", { d: "M" + x0 + "," + y0 + " C" + mx + "," + y0 + " " + mx + "," + y1 + " " + x1 + "," + y1, fill: "none", stroke: color, "stroke-width": 1.3, opacity: .45 });
-    svg.appendChild(p);
+  function wire(x0, y0, x1, y1, color, off, vertical) {
+    var d = vertical ? "M" + x0 + "," + y0 + " C" + x0 + "," + ((y0 + y1) / 2) + " " + x1 + "," + ((y0 + y1) / 2) + " " + x1 + "," + y1
+                     : "M" + x0 + "," + y0 + " C" + ((x0 + x1) / 2) + "," + y0 + " " + ((x0 + x1) / 2) + "," + y1 + " " + x1 + "," + y1;
+    var p = E("path", { d: d, fill: "none", stroke: color, "stroke-width": 1.3, opacity: .45 }); svg.appendChild(p);
     var dot = E("circle", { r: 3, fill: color }); svg.appendChild(dot);
     movers.push({ p: p, dot: dot, len: p.getTotalLength(), off: off });
   }
-  S.forEach(function (s, i) { var y = yAt(i), pt = port(i, true); wire(NW, y + NH / 2, pt[0], pt[1], "#4D8BFF", i * 640); node(0, y, s, "#4D8BFF"); });
-  O.forEach(function (o, i) { var y = yAt(i), pt = port(i, false); wire(pt[0], pt[1], xr, y + NH / 2, o.c, 1900 + i * 700); node(xr, y, o, o.c); });
-
-  /* ---- infinito neon ---- */
-  var fx = glow(svg), soft = blur(svg, narrow ? 5 : 9), gBlue = lgrad(svg, [["0%", "#1652F0"], ["60%", "#4D8BFF"], ["100%", "#7FD3FF"]]), gOr = lgrad(svg, [["0%", "#FF7A1A"], ["60%", "#FF9A4D"], ["100%", "#FFD29A"]]);
-  var g = E("g", { transform: "translate(" + cx + " " + ey + ")" });
-  function A(v) { return (v * a).toFixed(1); } function Hh(v) { return (v * hh).toFixed(1); }
-  var loopL = "M0,0 C" + A(-.62) + "," + Hh(-.98) + " " + A(-1) + "," + Hh(-.66) + " " + A(-1) + ",0 C" + A(-1) + "," + Hh(.66) + " " + A(-.62) + "," + Hh(.98) + " 0,0Z";
-  var loopR = "M0,0 C" + A(.62) + "," + Hh(.98) + " " + A(1) + "," + Hh(.66) + " " + A(1) + ",0 C" + A(1) + "," + Hh(-.66) + " " + A(.62) + "," + Hh(-.98) + " 0,0Z";
-  var arrow = "M" + A(1) + "," + Hh(.05) + " C" + A(1.06) + "," + Hh(-.5) + " " + A(1.14) + "," + Hh(-.86) + " " + A(AX) + "," + Hh(AY);
-  function tubo(d, grad, glowColor, cometDelay) {
-    g.appendChild(E("path", { d: d, fill: "none", stroke: glowColor, "stroke-width": lw * 2.8, "stroke-linecap": "round", opacity: .32, filter: soft }));
-    g.appendChild(E("path", { d: d, fill: "none", stroke: grad, "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", filter: fx }));
-    g.appendChild(E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw * .22, "stroke-linecap": "round", opacity: .55, transform: "translate(0 " + (-lw * .22) + ")" }));
-    var run = E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw * .5, "stroke-linecap": "round", "stroke-dasharray": "26 600", opacity: .95, filter: fx });
-    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 626, to: 0, dur: "3.2s", begin: cometDelay + "s", repeatCount: "indefinite" }));
-    g.appendChild(run);
+  if (narrow) {
+    /* no celular os fios cruzariam os cards: cada coluna ganha um rótulo e um conector curto animado */
+    var hy = 600 * s + 22;
+    [[NW * .5, "#4D8BFF", "ENTRA · FONTES", 0], [xr + NW * .5, "#5ED9A0", "SAI · DECISÃO", 900]].forEach(function (c) {
+      wire(c[0], 600 * s * .84, c[0], hy - 10, c[1], c[3], true);
+      svg.appendChild(T({ x: c[0], y: hy + 1, "text-anchor": "middle", "font-family": MONO, "font-size": 7, "letter-spacing": 1.4, fill: c[1] }, c[2]));
+    });
   }
-  tubo(loopL, gBlue, "#1652F0", 0);
-  tubo(loopR, gOr, "#FF7A1A", 1.1);
-  tubo(arrow, gOr, "#FF7A1A", 2.2);
-  /* ponta da seta, alinhada com a tangente final */
-  var ang = Math.atan2(AY * hh + .86 * hh, AX * a - 1.14 * a) * 180 / Math.PI, ah = lw * 1.9;
-  g.appendChild(E("path", { d: "M" + (-ah * 1.5) + "," + (-ah) + " L0,0 L" + (-ah * 1.5) + "," + ah + " Q" + (-ah * .8) + ",0 " + (-ah * 1.5) + "," + (-ah) + "Z", fill: "#FFD29A",
-    transform: "translate(" + A(AX) + " " + Hh(AY) + ") rotate(" + ang.toFixed(1) + ")", filter: fx }));
-  /* rastros de dados entrando pela esquerda */
-  if (!narrow) {
-    var rnd = seeded(31);
-    for (var k = 0; k < 7; k++) {
-      var yy = (k - 3) * hh * .3, len = 40 + rnd() * 70, x1 = -a - 14 - rnd() * 24, x0 = x1 - len, col = k % 3 === 1 ? "#FF9A4D" : "#4D8BFF";
-      var ln = E("line", { x1: x0, y1: yy, x2: x1, y2: yy, stroke: col, "stroke-width": k % 2 ? 2 : 3, "stroke-linecap": "round", opacity: .75, "stroke-dasharray": (len * .55).toFixed(0) + " " + (len * 1.2).toFixed(0), filter: fx });
-      if (!RM) ln.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: (len * 1.75).toFixed(0), to: 0, dur: (1.4 + rnd()) + "s", repeatCount: "indefinite" }));
-      g.appendChild(ln);
-      var pd = E("circle", { cx: x1 + 6, cy: yy, r: k % 2 ? 2.4 : 3.2, fill: col, filter: fx });
-      if (!RM) pd.appendChild(E("animate", { attributeName: "opacity", values: "1;.2;1", dur: (1.2 + rnd()) + "s", repeatCount: "indefinite" }));
-      g.appendChild(pd);
-    }
-    /* partículas saindo pela seta */
-    for (var q = 0; q < 5; q++) {
-      var px = AX * a + 6 + q * 9, py = AY * hh + (q - 2) * 7, pc = E("circle", { cx: px, cy: py, r: q % 2 ? 2 : 2.8, fill: q % 2 ? "#FFD29A" : "#FF9A4D", filter: fx });
-      if (!RM) { pc.appendChild(E("animate", { attributeName: "cx", from: px, to: px + 34, dur: (1.6 + q * .3) + "s", repeatCount: "indefinite" })); pc.appendChild(E("animate", { attributeName: "opacity", values: "1;0", dur: (1.6 + q * .3) + "s", repeatCount: "indefinite" })); }
-      g.appendChild(pc);
-    }
-  }
-  /* orbe de IA no cruzamento */
-  var R = narrow ? 14 : 27, coreId = "orb" + (++UID), ringId = "orr" + (++UID), defs = E("defs");
-  var rg = E("radialGradient", { id: coreId, cx: "40%", cy: "35%", r: "75%" });
-  rg.appendChild(E("stop", { offset: "0%", "stop-color": "#1E3F8F" })); rg.appendChild(E("stop", { offset: "100%", "stop-color": "#061233" }));
-  var rl = E("linearGradient", { id: ringId, x1: 0, y1: 0, x2: 1, y2: 1 });
-  rl.appendChild(E("stop", { offset: "0%", "stop-color": "#7FD3FF" })); rl.appendChild(E("stop", { offset: "100%", "stop-color": "#FF9A4D" }));
-  defs.appendChild(rg); defs.appendChild(rl); svg.appendChild(defs);
-  var halo2 = E("circle", { cx: 0, cy: 0, r: R * 1.6, fill: "#4D8BFF", opacity: .22, filter: soft });
-  if (!RM) halo2.appendChild(E("animate", { attributeName: "opacity", values: ".15;.35;.15", dur: "2.8s", repeatCount: "indefinite" }));
-  g.appendChild(halo2);
-  g.appendChild(E("circle", { cx: 0, cy: 0, r: R, fill: "url(#" + coreId + ")" }));
-  g.appendChild(E("circle", { cx: 0, cy: 0, r: R, fill: "none", stroke: "url(#" + ringId + ")", "stroke-width": narrow ? 1.6 : 2.4, filter: fx }));
-  /* rede neural discreta atrás do IA */
-  var net = [[-.55, -.5], [.5, -.55], [-.6, .35], [.55, .45], [0, .05]];
-  net.forEach(function (p1, i1) { net.forEach(function (p2, i2) { if (i2 > i1 && (i1 === 4 || i2 === 4 || (i1 + i2) % 2)) g.appendChild(E("line", { x1: p1[0] * R, y1: p1[1] * R, x2: p2[0] * R, y2: p2[1] * R, stroke: "#4D8BFF", "stroke-width": .8, opacity: .45 })); }); });
-  net.forEach(function (p) { g.appendChild(E("circle", { cx: p[0] * R, cy: p[1] * R, r: narrow ? 1.2 : 1.8, fill: "#7FD3FF", opacity: .8 })); });
-  var ia = T({ x: 0, y: R * .36, "text-anchor": "middle", "font-family": DISP, "font-size": narrow ? 11 : 21, "font-weight": 700, fill: "#fff", filter: fx }, "IA");
-  g.appendChild(ia);
-  svg.appendChild(g);
-  /* faíscas de IA */
-  sparkle(svg, cx + R * 1.15, ey - R * 1.25, narrow ? 6 : 11, "#FFB166", 2.2, 0);
-  sparkle(svg, cx + R * 1.75, ey - R * .55, narrow ? 3.2 : 5, "#fff", 1.7, .6);
-  /* o nome e a descrição */
-  var fs = narrow ? 18 : 30, wy = ey + hh + (narrow ? 26 : 44);
-  var wm = T({ x: cx, y: wy, "text-anchor": "middle", "font-family": DISP, "font-size": fs, "font-weight": 700, fill: "#fff", "letter-spacing": -.6 }, "");
-  var tb = E("tspan"); tb.textContent = "B"; var ta = E("tspan", { fill: "#FFB166" }); ta.textContent = "ai"; var ts2 = E("tspan"); ts2.textContent = "Shift";
-  wm.appendChild(tb); wm.appendChild(ta); wm.appendChild(ts2); svg.appendChild(wm);
-  svg.appendChild(T({ x: cx, y: wy + (narrow ? 14 : 20), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6.2 : 8, fill: "#8FB4FF", "letter-spacing": narrow ? 1.2 : 1.6 }, narrow ? "ANÁLISE COM IA" : "GESTÃO · ANÁLISE COM IA"));
+  S.forEach(function (d, i) {
+    var y = yAt(i), r = anc.rings[i];
+    if (!narrow) wire(NW, y + NH / 2, r[0] - 12 * s, r[1], "#4D8BFF", i * 640);
+    node(0, y, d, "#4D8BFF");
+  });
+  O.forEach(function (d, i) {
+    var y = yAt(i), t = anc.tips[i < 2 ? 0 : 1];
+    if (!narrow) wire(t[0] + 4 * s, t[1] + (i % 2 - .5) * 8, xr, y + NH / 2, d.c, 1900 + i * 700);
+    node(xr, y, d, d.c);
+  });
   host.appendChild(svg);
   stopPath = rafLoop(host, function (ts) {
     movers.forEach(function (m) { var pt = m.p.getPointAtLength(((ts + m.off) / 16) % m.len); m.dot.setAttribute("cx", pt.x); m.dot.setAttribute("cy", pt.y); });
