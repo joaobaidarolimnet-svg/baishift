@@ -292,7 +292,7 @@ function dataPath() {
   var NW = narrow ? Math.max(96, Math.min(128, (W - 150) / 2)) : Math.min(230, (W - 300) / 2), NH = narrow ? 42 : 50, G = narrow ? 10 : 14;
   var rows = 4, H = rows * (NH + G) - G + 16, cx = W / 2, cy = H / 2, xr = W - NW;
   /* o símbolo da mudança é o próprio núcleo: duas trilhas que trocam de lugar e seguem em frente */
-  var sw = narrow ? 92 : 168, sh = sw * .44, lw = narrow ? 4 : 6.5, sx = cx - sw / 2, symTop = cy - sh / 2 - (narrow ? 20 : 30);
+  var sw = narrow ? 96 : 184, sh = sw * .46, lw = narrow ? 3.6 : 6, sx = cx - sw / 2, symTop = cy - sh / 2 - (narrow ? 20 : 30);
   var laneY = [symTop, symTop + sh];
   var svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
   var movers = [];
@@ -318,20 +318,28 @@ function dataPath() {
 
   /* ---- símbolo ---- */
   var fx = glow(svg);
-  svg.appendChild(E("ellipse", { cx: cx, cy: symTop + sh / 2, rx: sw * .62, ry: sh * .95, fill: C.blue, opacity: .05 }));
-  var sg = E("g", { transform: "translate(" + sx + " " + symTop + ")" });
+  svg.appendChild(E("ellipse", { cx: cx, cy: symTop + sh / 2, rx: sw * .64, ry: sh * 1.0, fill: C.blue, opacity: .05 }));
+  var sg = E("g", { transform: "translate(" + sx + " " + symTop + ")" }), ah = lw * 2.3, al = lw * 2.4, xEnd = sw - al;
+  /* curva em S com tangentes horizontais nas pontas: entra reto, cruza suave, sai reto na seta */
   function trilha(deCima) {
-    var y0 = deCima ? 0 : sh, y1 = deCima ? sh : 0, x1 = sw * .2, x2 = sw * .74;
-    return "M0," + y0 + " H" + x1 + " C" + (sw * .47) + "," + y0 + " " + (sw * .47) + "," + y1 + " " + x2 + "," + y1 + " H" + (sw - lw * 2.2);
+    var y0 = deCima ? 0 : sh, y1 = deCima ? sh : 0, a = sw * .24, b = sw * .76;
+    return "M0," + y0 + " H" + a + " C" + (sw * .53) + "," + y0 + " " + (sw * .47) + "," + y1 + " " + b + "," + y1 + " H" + xEnd;
   }
-  [[true, C.blue, "#7FA6FF"], [false, C.orange, "#FFB166"]].forEach(function (c) {
-    var d = trilha(c[0]);
-    sg.appendChild(E("path", { d: d, fill: "none", stroke: c[1], "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: .9 }));
-    var run = E("path", { d: d, fill: "none", stroke: c[2], "stroke-width": lw * .42, "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": "10 14", filter: fx });
-    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 96, to: 0, dur: "1.8s", repeatCount: "indefinite" }));
+  function grad(c0, c1) { return gradient(svg, c0, false, 1, 1).replace(/\)$/, ")") && (function () {
+    var id = "tr" + (++UID), d = E("defs"), g = E("linearGradient", { id: id, x1: 0, y1: 0, x2: 1, y2: 0 });
+    g.appendChild(E("stop", { offset: "0%", "stop-color": c0 })); g.appendChild(E("stop", { offset: "100%", "stop-color": c1 }));
+    d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")"; })(); }
+  /* azul por baixo, laranja por cima: o contorno claro da laranja "corta" a azul no cruzamento */
+  [[true, C.blue, "#4D8BFF"], [false, C.orange, "#FFB166"]].forEach(function (c) {
+    var d = trilha(c[0]), ye = c[0] ? sh : 0;
+    sg.appendChild(E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw + 5, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    sg.appendChild(E("path", { d: d, fill: "none", stroke: grad(c[1], c[2]), "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    /* cometa de luz percorrendo a trilha */
+    var run = E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": lw * .45, "stroke-linecap": "round", "stroke-dasharray": "22 360", opacity: .95, filter: fx });
+    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 382, to: 0, dur: "2.4s", begin: (c[0] ? 0 : 1.2) + "s", repeatCount: "indefinite" }));
     sg.appendChild(run);
-    var ye = c[0] ? sh : 0, ah = lw * 1.9;
-    sg.appendChild(E("path", { d: "M" + (sw - ah * 1.6) + "," + (ye - ah) + " L" + sw + "," + ye + " L" + (sw - ah * 1.6) + "," + (ye + ah) + "Z", fill: c[1], filter: fx }));
+    /* seta colada na ponta, do tamanho do traço */
+    sg.appendChild(E("path", { d: "M" + (xEnd - 1) + "," + (ye - ah) + " L" + sw + "," + ye + " L" + (xEnd - 1) + "," + (ye + ah) + " Q" + (xEnd + al * .3) + "," + ye + " " + (xEnd - 1) + "," + (ye - ah) + "Z", fill: c[2], filter: fx }));
   });
   svg.appendChild(sg);
   /* o nome, com o "ai" em destaque, e a descrição */
