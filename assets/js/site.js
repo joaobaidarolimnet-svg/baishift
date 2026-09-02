@@ -289,98 +289,71 @@ function grad(svg, stops, attrs) {
   stops.forEach(function (st) { g.appendChild(E("stop", st[2] ? { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] } : { offset: st[0], "stop-color": st[1] })); });
   d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
 }
-/* o emblema aprovado, em unidades de projeto 1400×600; devolve os pontos de encaixe já em coordenadas do svg */
+/* o emblema limpo, em unidades de projeto 1660×340; devolve os pontos de encaixe em coordenadas do svg */
 function emblema(svg, s, ox, oy) {
   var U = "userSpaceOnUse";
-  var glow = filtro(svg, 5), glow2 = filtro(svg, 9, true), haze = filtro(svg, 28, "so"), soft = filtro(svg, 14, "so");
-  var bfill = grad(svg, [["0%", "#6FA8FF"], ["55%", "#1F5CF5"], ["100%", "#0B36B8"]]);
-  var band = grad(svg, [["0%", "#0B36B8", .2], ["45%", "#1F5CF5"], ["100%", "#4D9BFF"]], { gradientUnits: U, x1: 120, y1: 0, x2: 700, y2: 0 });
-  var orange = grad(svg, [["0%", "#FF9A3D"], ["55%", "#FF5A1F"], ["100%", "#E8261A"]], { gradientUnits: U, x1: 640, y1: 0, x2: 1120, y2: 0 });
-  var blue2 = grad(svg, [["0%", "#4D9BFF"], ["60%", "#1F5CF5"], ["100%", "#0B36B8"]], { gradientUnits: U, x1: 640, y1: 0, x2: 1120, y2: 0 });
-  var ift = grad(svg, [["0%", "#FFB05A"], ["50%", "#FF5A1F"], ["100%", "#D9221A"]]);
-  var ring = grad(svg, [["0%", "#FFB05A"], ["100%", "#FF4A1F"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+  var glow = filtro(svg, 3), soft = filtro(svg, 10, "so");
+  var bfill = grad(svg, [["0%", "#3D7BFF"], ["45%", "#1F5CF5"], ["100%", "#0B2B9A"]]);
+  var sfill = grad(svg, [["0%", "#0A1630"], ["60%", "#10245A"], ["100%", "#1E43B5"]]);
+  var afill = grad(svg, [["0%", "#0B2B9A"], ["100%", "#3D7BFF"]], { gradientUnits: U, x1: 1350, y1: 260, x2: 1620, y2: 40 });
+  var trace = grad(svg, [["0%", "#1F5CF5"], ["100%", "#1F5CF5", 0]], { gradientUnits: U, x1: 40, y1: 0, x2: 250, y2: 0 });
   var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
-  /* névoas */
-  g.appendChild(E("ellipse", { cx: 420, cy: 330, rx: 420, ry: 150, fill: "#1F5CF5", opacity: .32, filter: haze }));
-  g.appendChild(E("ellipse", { cx: 1060, cy: 190, rx: 260, ry: 120, fill: "#FF4A1F", opacity: .28, filter: haze }));
-  g.appendChild(E("ellipse", { cx: 1040, cy: 470, rx: 240, ry: 90, fill: "#1F5CF5", opacity: .26, filter: haze }));
-  /* circuito entrando pela esquerda, com pulsos correndo */
-  var circ = E("g", { fill: "none", stroke: "#3D8BFF", "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round", filter: glow });
-  var traces = [[40, 170, [[150, 170], [190, 205], [330, 205], [330, 240]]], [40, 215, [[120, 215], [160, 250], [290, 250]]], [40, 262, [[230, 262], [262, 292], [300, 292]]],
-                [40, 438, [[230, 438], [262, 408], [300, 408]]], [40, 485, [[120, 485], [160, 450], [290, 450]]], [40, 530, [[150, 530], [190, 495], [330, 495], [330, 460]]]];
+  /* circuito entrando pela esquerda */
+  var circ = E("g", { fill: "none", stroke: trace, "stroke-width": 6, "stroke-linecap": "round", "stroke-linejoin": "round" });
+  var traces = [[90, 100, [[150, 100], [180, 122], [250, 122]]], [40, 160, [[110, 160], [140, 138], [250, 138]]], [60, 210, [[120, 210], [150, 188], [250, 188]]], [110, 250, [[160, 250], [190, 228], [250, 228]]]];
+  var rings = [];
   traces.forEach(function (t, i) {
     var d = "M" + t[0] + "," + t[1] + " " + t[2].map(function (p) { return "L" + p[0] + "," + p[1]; }).join(" ");
     circ.appendChild(E("path", { d: d }));
-    var pulse = E("path", { d: d, stroke: "#DCEBFF", "stroke-width": 5, "stroke-dasharray": "34 420" });
-    if (!RM) pulse.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 454, to: 0, dur: (2.1 + i * .27) + "s", begin: (i * .35) + "s", repeatCount: "indefinite" }));
+    var pulse = E("path", { d: d, stroke: "#7FB0FF", "stroke-width": 6, "stroke-dasharray": "26 300" });
+    if (!RM) pulse.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 326, to: 0, dur: (2.4 + i * .3) + "s", begin: (i * .4) + "s", repeatCount: "indefinite" }));
     circ.appendChild(pulse);
-    circ.appendChild(E("circle", { cx: t[0], cy: t[1], r: 11, fill: "#040A1F", "stroke-width": 5 }));
-    circ.appendChild(E("circle", { cx: t[0], cy: t[1], r: 3.5, fill: "#7FB8FF", stroke: "none" }));
-    var e = t[2][t[2].length - 1]; circ.appendChild(E("circle", { cx: e[0], cy: e[1], r: 5, fill: "#7FB8FF", stroke: "none" }));
+    circ.appendChild(E("circle", { cx: t[0], cy: t[1], r: 11, fill: "#fff", stroke: "#1F5CF5", "stroke-width": 6 }));
+    rings.push([t[0], t[1]]);
   });
   g.appendChild(circ);
-  /* faixas e setas */
-  var W = 44, bandas = E("g");
-  var bandL1 = "M130,300 C420,300 470,346 640,346", bandL2 = "M130,392 C420,392 470,346 640,346";
-  var arrO = "M640,346 C760,346 820,250 940,214 L1010,196", arrB = "M640,346 C760,346 820,442 940,478 L1010,496";
-  function tube(d, gr, core, glowC, w, cometDelay) {
-    bandas.appendChild(E("path", { d: d, fill: "none", stroke: glowC, "stroke-width": w * 2.2, "stroke-linecap": "round", opacity: .35, filter: soft }));
-    bandas.appendChild(E("path", { d: d, fill: "none", stroke: gr, "stroke-width": w, "stroke-linecap": "round", "stroke-linejoin": "round", filter: glow }));
-    bandas.appendChild(E("path", { d: d, fill: "none", stroke: core, "stroke-width": w * .16, "stroke-linecap": "round", opacity: .85, transform: "translate(0 " + (-w * .22) + ")" }));
-    var run = E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": w * .34, "stroke-linecap": "round", "stroke-dasharray": "48 900", opacity: .95, filter: glow });
-    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 948, to: 0, dur: "3s", begin: cometDelay + "s", repeatCount: "indefinite" }));
-    bandas.appendChild(run);
-  }
-  tube(bandL1, band, "#BFE0FF", "#1F5CF5", W, 0); tube(bandL2, band, "#BFE0FF", "#1F5CF5", W, 1.5);
-  tube(arrB, blue2, "#BFE0FF", "#1F5CF5", W, 1.1); tube(arrO, orange, "#FFE0B0", "#FF4A1F", W, 2.6);
-  function head(x, y, ang, fill, glowC) {
-    bandas.appendChild(E("path", { d: "M-70,-46 L20,0 L-70,46 Q-40,0 -70,-46Z", fill: glowC, opacity: .45, transform: "translate(" + x + " " + y + ") rotate(" + ang + ")", filter: soft }));
-    bandas.appendChild(E("path", { d: "M-70,-46 L20,0 L-70,46 Q-40,0 -70,-46Z", fill: fill, transform: "translate(" + x + " " + y + ") rotate(" + ang + ")", filter: glow }));
-  }
-  head(1030, 191, -15, orange, "#FF4A1F"); head(1030, 501, 15, blue2, "#1F5CF5");
-  bandas.appendChild(E("path", { d: "M700,338 C790,330 840,262 930,226", fill: "none", stroke: "#fff", "stroke-width": 5, "stroke-linecap": "round", opacity: .85, filter: glow }));
-  bandas.appendChild(E("path", { d: "M700,354 C790,362 840,430 930,466", fill: "none", stroke: "#BFE0FF", "stroke-width": 4, "stroke-linecap": "round", opacity: .6, filter: glow }));
-  g.appendChild(bandas);
-  /* B tridimensional */
-  var gb = E("g", { transform: "skewX(-9)" });
-  gb.appendChild(T({ x: 322, y: 424, "font-family": DISP, "font-weight": 800, "font-size": 284, fill: "#1F5CF5", opacity: .55, filter: soft }, "B"));
-  gb.appendChild(T({ x: 322, y: 424, "font-family": DISP, "font-weight": 800, "font-size": 284, fill: "#061B5C", transform: "translate(10 10)" }, "B"));
-  gb.appendChild(T({ x: 322, y: 424, "font-family": DISP, "font-weight": 800, "font-size": 284, fill: bfill }, "B"));
+  /* B */
+  var gb = E("g", { transform: "skewX(-12)" });
+  gb.appendChild(T({ x: 292, y: 292, "font-family": DISP, "font-weight": 800, "font-size": 300, fill: bfill, "letter-spacing": -6 }, "B"));
   g.appendChild(gb);
   /* badge AI */
   var badge = E("g");
-  badge.appendChild(E("rect", { x: 545, y: 248, width: 196, height: 196, rx: 34, fill: "#FF6A2A", opacity: .55, filter: soft }));
-  badge.appendChild(E("rect", { x: 548, y: 251, width: 190, height: 190, rx: 32, fill: "#061236" }));
-  var rg = E("rect", { x: 548, y: 251, width: 190, height: 190, rx: 32, fill: "none", stroke: ring, "stroke-width": 4, filter: glow });
-  if (!RM) rg.appendChild(E("animate", { attributeName: "opacity", values: ".7;1;.7", dur: "2.4s", repeatCount: "indefinite" }));
-  badge.appendChild(rg);
-  var chip = E("g", { stroke: "#2C5BD6", "stroke-width": 1.6, fill: "none", opacity: .55 });
-  [[566, 270, 600, 270], [566, 270, 566, 300], [720, 270, 690, 270], [720, 270, 720, 300], [566, 422, 600, 422], [566, 422, 566, 392], [720, 422, 690, 422], [720, 422, 720, 392], [600, 270, 600, 282], [690, 422, 690, 410]]
-    .forEach(function (l) { chip.appendChild(E("line", { x1: l[0], y1: l[1], x2: l[2], y2: l[3] })); });
-  [[600, 282], [690, 410], [566, 300], [720, 392]].forEach(function (c) { chip.appendChild(E("circle", { cx: c[0], cy: c[1], r: 2.6, fill: "#4D8BFF", stroke: "none" })); });
-  badge.appendChild(chip);
-  var gai = E("g", { transform: "skewX(-9)" });
-  gai.appendChild(T({ x: 700, y: 390, "text-anchor": "middle", "font-family": DISP, "font-weight": 800, "font-size": 86, fill: "#fff", filter: glow, "letter-spacing": -2 }, "AI"));
+  badge.appendChild(E("rect", { x: 520, y: 52, width: 236, height: 236, rx: 42, fill: "#1F5CF5", opacity: .25, filter: soft }));
+  badge.appendChild(E("rect", { x: 520, y: 52, width: 236, height: 236, rx: 42, fill: "#070F26" }));
+  badge.appendChild(E("rect", { x: 523, y: 55, width: 230, height: 230, rx: 40, fill: "none", stroke: "#2F6BFF", "stroke-width": 3, opacity: .9 }));
+  var gai = E("g", { transform: "skewX(-12)" });
+  gai.appendChild(T({ x: 664, y: 214, "text-anchor": "middle", "font-family": DISP, "font-weight": 800, "font-size": 118, fill: "#fff", "letter-spacing": -3 }, "AI"));
   badge.appendChild(gai);
-  sparkle(svg, 712, 296, 20, "#fff", 2.2, .3, badge);
   g.appendChild(badge);
   /* Shift */
-  var gs = E("g", { transform: "skewX(-9)" });
-  gs.appendChild(T({ x: 820, y: 418, "font-family": DISP, "font-weight": 800, "font-size": 236, fill: "#0F2456", stroke: "#3D6FFF", "stroke-width": 2, "letter-spacing": -8, filter: glow }, "Sh"));
-  gs.appendChild(T({ x: 1126, y: 418, "font-family": DISP, "font-weight": 800, "font-size": 236, fill: ift, "letter-spacing": -8, filter: glow2 }, "ift"));
+  var gs = E("g", { transform: "skewX(-12)" });
+  gs.appendChild(T({ x: 830, y: 292, "font-family": DISP, "font-weight": 800, "font-size": 252, fill: sfill, "letter-spacing": -8 }, "Shift"));
   g.appendChild(gs);
-  /* faíscas e pixels */
-  sparkle(svg, 1150, 120, 58, "#FF7A2A", 2.6, 0, g); sparkle(svg, 1200, 200, 20, "#FFB05A", 1.9, .8, g); sparkle(svg, 1108, 84, 12, "#FFD29A", 1.6, 1.3, g);
-  var rnd = seeded(17), px = E("g");
-  for (var k = 0; k < 16; k++) {
-    var x = 1180 + rnd() * 190, y = 430 + rnd() * 140, sz = 8 + rnd() * 20, blue = rnd() > .42, r = E("rect", { x: x, y: y, width: sz, height: sz, rx: sz * .2, fill: blue ? "#2E7BFF" : "#FF6A2A", opacity: .55 + rnd() * .45, filter: glow });
-    if (!RM) { r.appendChild(E("animate", { attributeName: "opacity", values: ".2;1;.2", dur: (1.6 + rnd() * 2) + "s", begin: (rnd() * 2) + "s", repeatCount: "indefinite" })); }
-    px.appendChild(r);
+  /* seta subindo à direita */
+  var arr = E("g");
+  arr.appendChild(E("path", { d: "M1360,262 L1560,62", fill: "none", stroke: afill, "stroke-width": 30, "stroke-linecap": "round" }));
+  var comet = E("path", { d: "M1360,262 L1560,62", fill: "none", stroke: "#BFD7FF", "stroke-width": 12, "stroke-linecap": "round", "stroke-dasharray": "40 400", opacity: .9 });
+  if (!RM) comet.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 440, to: 0, dur: "2.6s", repeatCount: "indefinite" }));
+  arr.appendChild(comet);
+  arr.appendChild(E("path", { d: "M1522,22 L1638,10 L1626,126 Z", fill: afill }));
+  /* pixels dissolvendo e circuito curto junto à seta */
+  var rnd = seeded(23);
+  for (var k = 0; k < 18; k++) {
+    var x = 1350 + rnd() * 150, y = 150 + rnd() * 120, sz = 7 + rnd() * 16, r = E("rect", { x: x, y: y, width: sz, height: sz, rx: sz * .18, fill: rnd() > .5 ? "#1F5CF5" : "#0F2456", opacity: .35 + rnd() * .6 });
+    if (!RM) r.appendChild(E("animate", { attributeName: "opacity", values: ".15;.95;.15", dur: (1.8 + rnd() * 2.2) + "s", begin: (rnd() * 2) + "s", repeatCount: "indefinite" }));
+    arr.appendChild(r);
   }
-  g.appendChild(px);
+  var c2 = E("g", { fill: "none", stroke: "#1F5CF5", "stroke-width": 5, "stroke-linecap": "round", "stroke-linejoin": "round" });
+  [[1360, 300, [[1400, 300], [1430, 270], [1460, 270]]], [1400, 320, [[1440, 320], [1480, 280]]]].forEach(function (t) {
+    c2.appendChild(E("path", { d: "M" + t[0] + "," + t[1] + " " + t[2].map(function (p) { return "L" + p[0] + "," + p[1]; }).join(" ") }));
+    c2.appendChild(E("circle", { cx: t[0], cy: t[1], r: 8, fill: "#fff", "stroke-width": 5 }));
+    var e = t[2][t[2].length - 1]; c2.appendChild(E("circle", { cx: e[0], cy: e[1], r: 4, fill: "#1F5CF5", stroke: "none" }));
+  });
+  arr.appendChild(c2);
+  g.appendChild(arr);
   svg.appendChild(g);
   var P = function (x, y) { return [ox + x * s, oy + y * s]; };
-  return { rings: [P(40, 215), P(40, 262), P(40, 438), P(40, 485)], tips: [P(1052, 186), P(1052, 506)] };
+  return { rings: rings.map(function (r) { return P(r[0] - 14, r[1]); }), tips: [P(1638, 12), P(1638, 12)] };
 }
 function dataPath() {
   var host = el("datapath"); if (!host) return;
@@ -389,23 +362,24 @@ function dataPath() {
   var W = host.clientWidth || 900, narrow = W < 720;
   var S = [{ k: "ERP", n: "ERP", s: "IXC Soft · contratos, OS, fiscal" }, { k: "Omnichannel", n: "Omnichannel", s: "OPA Suite · atendimento" },
            { k: "Recebimentos", n: "Recebim.", s: "boletos, PIX, carteira" }, { k: "Pagamentos", n: "Pagam.", s: "fornecedores, folha, link" }];
-  var O = [{ k: "Painel da diretoria", n: "Painel", s: "base, caixa, churn, campo", c: "#5ED9A0" },
-           { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: "#5ED9A0" },
-           { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: "#FF9A4D" },
-           { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: "#5ED9A0" }];
+  var O = [{ k: "Painel da diretoria", n: "Painel", s: "base, caixa, churn, campo", c: C.green },
+           { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: C.green },
+           { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
+           { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
   var rows = 4, NH = narrow ? 42 : 50, G = narrow ? 10 : 14, NW, H, s, ox, oy, svg, movers = [];
-  if (narrow) { NW = (W - 12) / 2; s = W / 1400; H = 600 * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
-  else { NW = Math.min(210, (W - 380) / 2); s = (W - 2 * NW - 80) / 1400; H = Math.max(rows * (NH + G) - G + 16, 600 * s + 10); ox = NW + 40; oy = (H - 600 * s) / 2; }
+  var EW = 1660, EH = 340;
+  if (narrow) { NW = (W - 12) / 2; s = W / EW; H = EH * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
+  else { NW = Math.min(210, (W - 380) / 2); s = (W - 2 * NW - 90) / EW; H = Math.max(rows * (NH + G) - G + 16, EH * s + 10); ox = NW + 45; oy = (H - EH * s) / 2; }
   var cy = H / 2, xr = W - NW;
   svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
   var anc = emblema(svg, s, ox, oy);
-  function yAt(i) { return narrow ? 600 * s + 34 + i * (NH + G) : cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
+  function yAt(i) { return narrow ? EH * s + 34 + i * (NH + G) : cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
   function node(x, y, d, accent) {
     var g = E("g");
-    g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "rgba(255,255,255,.06)", stroke: "rgba(127,166,255,.28)", "stroke-width": 1 }));
+    g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "#fff", stroke: C.line, "stroke-width": 1.2 }));
     g.appendChild(E("rect", { x: x, y: y + 9, width: 3, height: NH - 18, rx: 1.5, fill: accent }));
-    g.appendChild(T({ x: x + 12, y: y + (narrow ? 17 : 21), "font-family": DISP, "font-size": narrow ? 9.5 : 12, "font-weight": 600, fill: "#fff" }, narrow ? d.n : d.k));
-    g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: "rgba(255,255,255,.55)" }, d.s));
+    g.appendChild(T({ x: x + 12, y: y + (narrow ? 17 : 21), "font-family": DISP, "font-size": narrow ? 9.5 : 12, "font-weight": 600, fill: C.ink }, narrow ? d.n : d.k));
+    g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: C.muted }, d.s));
     svg.appendChild(g);
   }
   function wire(x0, y0, x1, y1, color, off, vertical) {
@@ -417,20 +391,20 @@ function dataPath() {
   }
   if (narrow) {
     /* no celular os fios cruzariam os cards: cada coluna ganha um rótulo e um conector curto animado */
-    var hy = 600 * s + 22;
-    [[NW * .5, "#4D8BFF", "ENTRA · FONTES", 0], [xr + NW * .5, "#5ED9A0", "SAI · DECISÃO", 900]].forEach(function (c) {
-      wire(c[0], 600 * s * .84, c[0], hy - 10, c[1], c[3], true);
+    var hy = EH * s + 22;
+    [[NW * .5, C.blue, "ENTRA · FONTES", 0], [xr + NW * .5, C.green, "SAI · DECISÃO", 900]].forEach(function (c) {
+      wire(c[0], EH * s * .92, c[0], hy - 10, c[1], c[3], true);
       svg.appendChild(T({ x: c[0], y: hy + 1, "text-anchor": "middle", "font-family": MONO, "font-size": 7, "letter-spacing": 1.4, fill: c[1] }, c[2]));
     });
   }
   S.forEach(function (d, i) {
     var y = yAt(i), r = anc.rings[i];
-    if (!narrow) wire(NW, y + NH / 2, r[0] - 12 * s, r[1], "#4D8BFF", i * 640);
-    node(0, y, d, "#4D8BFF");
+    if (!narrow) wire(NW, y + NH / 2, r[0], r[1], C.blue, i * 640);
+    node(0, y, d, C.blue);
   });
   O.forEach(function (d, i) {
-    var y = yAt(i), t = anc.tips[i < 2 ? 0 : 1];
-    if (!narrow) wire(t[0] + 4 * s, t[1] + (i % 2 - .5) * 8, xr, y + NH / 2, d.c, 1900 + i * 700);
+    var y = yAt(i), t = anc.tips[0];
+    if (!narrow) wire(t[0], t[1], xr, y + NH / 2, d.c, 1900 + i * 700);
     node(xr, y, d, d.c);
   });
   host.appendChild(svg);
