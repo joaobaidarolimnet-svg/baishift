@@ -8,19 +8,30 @@ terceiros são as fontes do Google Fonts.
 
 ## Estrutura
 
+O site é uma página única organizada em **três frentes** — Diagnóstico, Consultoria de
+processos e Dashboard — mais modelos de contratação, FAQ e contato. O menu **Outros**
+leva às landing pages dos produtos fora do provedor.
+
 ```
-index.html              página única, com todas as seções
+index.html              página principal: hero, 01 Diagnóstico, 02 Processos, 03 Dashboard, modelos, FAQ, contato
+outros/*.html           landing pages de Severino, Aprova · Ordem e Aprova · Suficiência (geradas)
 404.html                página de erro
-assets/css/site.css     estilos (paleta, componentes, responsivo)
-assets/js/site.js       motor de gráficos SVG, menu, revelações
+assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages)
+assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, formulários
 assets/img/             favicon, ícones do app e imagem de compartilhamento
-robots.txt              liberação para buscadores + aponta o sitemap
-sitemap.xml             mapa do site
-site.webmanifest        manifesto (instalação como app)
-favicon.ico             ícone para navegadores antigos
+server.js               servidor estático (Railway): URLs limpas, cache versionado, 404
+robots.txt · sitemap.xml · site.webmanifest · favicon.ico
 dist/                   versão em arquivo único (gerada)
-tools/                  scripts de geração de imagens e verificação
+tools/                  geradores (landing pages, arquivo único, imagens) e verificação
 ```
+
+**Gráficos em movimento contínuo.** Frente 01: `dataPath()` — fontes (ERP, Omnichannel,
+Recebimentos, Pagamentos) → núcleo vertical Baishift Gestão → Painel, alta/baixa
+performance, Fechamento, com pacotes percorrendo os fios e um feixe descendo o núcleo.
+Frente 02: `procFlow()` — Negociação → Viabilidade → Venda → Instalação → Faturamento,
+com fita de volume e pacotes. Frente 03: `liveLine()` (monitor de recebimentos que anda
+sozinho), painéis com troca de período (`renderPanels`), feed de eventos e contadores.
+Tudo pausa com a aba em segundo plano ou o elemento fora da tela.
 
 ## Rodar localmente
 
@@ -123,26 +134,27 @@ O formulário não depende de servidor: monta a mensagem e entrega no canal conf
 avisa a nota no rodapé da página. Para trocar um gráfico, mude o array correspondente
 (`REC`, `DES`, `ATIV`, `CANC`) ou o objeto passado na chamada `on("id", ...)`.
 
-**Fluxo do pedido ao caixa e cascata.** Editáveis no array `STEPS` (fluxo) e no array
-`data` dentro de `waterfall()` — os dois precisam contar a mesma história (214 → 162).
-A faixa de resultados do hero e o quadro "O que o fluxo mostra" usam os mesmos números.
+**Processo ao vivo.** Etapas, volumes e tempos no array `STEPS` de `site.js`. Os quatro
+números da frente 01 e o quadro "O que o processo mostra" precisam contar a mesma história
+(214 vendidos → 169 instalados → 45 parados × R$ 104 = R$ 4.680/mês).
 
-**Integração.** Fontes e saídas do diagrama ficam nos arrays `S` e `O` dentro de
-`integration()`, em `site.js`. Os chips abaixo do diagrama são HTML puro.
+**Caminho dos dados.** Fontes e saídas nos arrays `S` e `O` dentro de `dataPath()`.
+
+**Painéis por período.** Dados de 7 dias, 30 dias e 12 meses no objeto `PANELS`.
+
+**Landing pages.** Textos em `tools/build-outros.mjs`; rode o script para regerar.
 
 **Feed de eventos do painel.** Lista `EV` dentro de `feed()`.
 
 **FAQ.** As perguntas estão duas vezes: no HTML (`<details>`) e no JSON-LD `FAQPage`
 no fim do `index.html`. Ao mudar uma, mude a outra.
 
-**Quem está por trás.** A seção "Por que a Baishift" tem um comentário marcando onde
-entra o card com nome, foto e provedor de quem está à frente da empresa.
-
 **Cores e tipografia.** Variáveis CSS no `:root` de `assets/css/site.css`.
 
 ## Scripts auxiliares
 
 ```bash
+node tools/build-outros.mjs    # regera as landing pages de outros/ a partir dos textos no script
 node tools/build-single.mjs    # gera dist/baishift-site.html (CSS e JS embutidos)
 ./tools/shot.sh tools/og.html assets/img/og.png 1200 630   # regera a imagem de compartilhamento
 ```
