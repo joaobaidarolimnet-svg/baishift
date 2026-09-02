@@ -289,9 +289,12 @@ function dataPath() {
            { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: C.green },
            { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
            { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
-  var NW = narrow ? Math.max(96, Math.min(128, (W - 150) / 2)) : Math.min(230, (W - 260) / 2), NH = narrow ? 42 : 50, G = narrow ? 10 : 14;
-  var rows = 4, H = rows * (NH + G) - G + 16, cx = W / 2, cy = H / 2, xr = W - NW, R = narrow ? 58 : 86;
-  var svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na Baishift e saindo como painel da diretoria, indicadores e fechamento" });
+  var NW = narrow ? Math.max(96, Math.min(128, (W - 150) / 2)) : Math.min(230, (W - 300) / 2), NH = narrow ? 42 : 50, G = narrow ? 10 : 14;
+  var rows = 4, H = rows * (NH + G) - G + 16, cx = W / 2, cy = H / 2, xr = W - NW;
+  /* o símbolo da mudança é o próprio núcleo: duas trilhas que trocam de lugar e seguem em frente */
+  var sw = narrow ? 92 : 168, sh = sw * .44, lw = narrow ? 4 : 6.5, sx = cx - sw / 2, symTop = cy - sh / 2 - (narrow ? 20 : 30);
+  var laneY = [symTop, symTop + sh];
+  var svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
   var movers = [];
   function yAt(i) { return cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
   function node(x, y, d, accent) {
@@ -302,70 +305,48 @@ function dataPath() {
     g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: C.muted }, d.s));
     svg.appendChild(g);
   }
-  /* os fios entram e saem pela borda do círculo, em ângulos distribuídos */
-  function port(i, left) { var a = left ? Math.PI + (1.5 - i) * .42 : (i - 1.5) * .42; return [cx + Math.cos(a) * (R + 2), cy + Math.sin(a) * (R + 2)]; }
+  /* as fontes entram pelas duas trilhas; as saídas partem das duas setas */
+  function port(i, left) { return left ? [sx - 4, laneY[i < 2 ? 0 : 1]] : [sx + sw + 4, laneY[i < 2 ? 0 : 1]]; }
   function wire(x0, y0, x1, y1, color, off) {
     var mx = (x0 + x1) / 2, p = E("path", { d: "M" + x0 + "," + y0 + " C" + mx + "," + y0 + " " + mx + "," + y1 + " " + x1 + "," + y1, fill: "none", stroke: color, "stroke-width": 1.4, opacity: .38 });
     svg.appendChild(p);
-    svg.appendChild(E("circle", { cx: x1, cy: y1, r: 2.6, fill: color, opacity: .9 }));
     var dot = E("circle", { r: 3, fill: color }); svg.appendChild(dot);
     movers.push({ p: p, dot: dot, len: p.getTotalLength(), off: off });
   }
   S.forEach(function (s, i) { var y = yAt(i), pt = port(i, true); wire(NW, y + NH / 2, pt[0], pt[1], C.blue, i * 640); node(0, y, s, C.blue); });
   O.forEach(function (o, i) { var y = yAt(i), pt = port(i, false); wire(pt[0], pt[1], xr, y + NH / 2, o.c, 1900 + i * 700); node(xr, y, o, o.c); });
 
-  /* ---- emblema ---- */
-  var coreId = "core" + (++UID), ringId = "ring" + (++UID);
-  var defs = E("defs"), rg = E("radialGradient", { id: coreId, cx: "50%", cy: "38%", r: "70%" });
-  rg.appendChild(E("stop", { offset: "0%", "stop-color": "#173A8A" })); rg.appendChild(E("stop", { offset: "100%", "stop-color": C.ink }));
-  var lg = E("linearGradient", { id: ringId, x1: 0, y1: 0, x2: 1, y2: 1 });
-  lg.appendChild(E("stop", { offset: "0%", "stop-color": "#7FA6FF" })); lg.appendChild(E("stop", { offset: "55%", "stop-color": C.blue })); lg.appendChild(E("stop", { offset: "100%", "stop-color": C.orange }));
-  defs.appendChild(rg); defs.appendChild(lg); svg.appendChild(defs);
+  /* ---- símbolo ---- */
   var fx = glow(svg);
-  /* halo suave atrás do círculo */
-  svg.appendChild(E("circle", { cx: cx, cy: cy, r: R + 14, fill: C.blue, opacity: .08 }));
-  /* anel tracejado que gira devagar */
-  var dashed = E("circle", { cx: cx, cy: cy, r: R + 10, fill: "none", stroke: "rgba(22,82,240,.35)", "stroke-width": 1, "stroke-dasharray": "2 7" });
-  if (!RM) dashed.appendChild(E("animateTransform", { attributeName: "transform", type: "rotate", from: "0 " + cx + " " + cy, to: "360 " + cx + " " + cy, dur: "48s", repeatCount: "indefinite" }));
-  svg.appendChild(dashed);
-  /* corpo e anel com brilho */
-  svg.appendChild(E("circle", { cx: cx, cy: cy, r: R, fill: "url(#" + coreId + ")" }));
-  svg.appendChild(E("circle", { cx: cx, cy: cy, r: R + 1, fill: "none", stroke: "url(#" + ringId + ")", "stroke-width": narrow ? 2.5 : 3.2, filter: fx }));
-  /* símbolo da mudança: duas trilhas que trocam de lugar e seguem em frente */
-  var sw = narrow ? 36 : 54, sh = sw * .46, sx = cx - sw / 2, sy = cy - R * (narrow ? .66 : .64) - sh / 2, sg = E("g", { transform: "translate(" + sx + " " + sy + ")" });
+  svg.appendChild(E("ellipse", { cx: cx, cy: symTop + sh / 2, rx: sw * .62, ry: sh * .95, fill: C.blue, opacity: .05 }));
+  var sg = E("g", { transform: "translate(" + sx + " " + symTop + ")" });
   function trilha(deCima) {
     var y0 = deCima ? 0 : sh, y1 = deCima ? sh : 0, x1 = sw * .2, x2 = sw * .74;
-    return "M0," + y0 + " H" + x1 + " C" + (sw * .47) + "," + y0 + " " + (sw * .47) + "," + y1 + " " + x2 + "," + y1 + " H" + (sw - 7);
+    return "M0," + y0 + " H" + x1 + " C" + (sw * .47) + "," + y0 + " " + (sw * .47) + "," + y1 + " " + x2 + "," + y1 + " H" + (sw - lw * 2.2);
   }
-  [[true, "#7FA6FF"], [false, "#FFB166"]].forEach(function (c) {
-    var d = trilha(c[0]), lw = narrow ? 2.4 : 3.2;
-    sg.appendChild(E("path", { d: d, fill: "none", stroke: c[1], "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: .38 }));
-    var run = E("path", { d: d, fill: "none", stroke: c[1], "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": "7 9", filter: fx });
-    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 64, to: 0, dur: "1.7s", repeatCount: "indefinite" }));
+  [[true, C.blue, "#7FA6FF"], [false, C.orange, "#FFB166"]].forEach(function (c) {
+    var d = trilha(c[0]);
+    sg.appendChild(E("path", { d: d, fill: "none", stroke: c[1], "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: .9 }));
+    var run = E("path", { d: d, fill: "none", stroke: c[2], "stroke-width": lw * .42, "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": "10 14", filter: fx });
+    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 96, to: 0, dur: "1.8s", repeatCount: "indefinite" }));
     sg.appendChild(run);
-    var ye = c[0] ? sh : 0;
-    sg.appendChild(E("path", { d: "M" + (sw - 9) + "," + (ye - 5.5) + " L" + sw + "," + ye + " L" + (sw - 9) + "," + (ye + 5.5) + "Z", fill: c[1], filter: fx }));
+    var ye = c[0] ? sh : 0, ah = lw * 1.9;
+    sg.appendChild(E("path", { d: "M" + (sw - ah * 1.6) + "," + (ye - ah) + " L" + sw + "," + ye + " L" + (sw - ah * 1.6) + "," + (ye + ah) + "Z", fill: c[1], filter: fx }));
   });
   svg.appendChild(sg);
-  /* o nome, com o "ai" em destaque: a inteligência artificial mora dentro de BaiShift */
-  var fs = narrow ? 17 : 26, wm = T({ x: cx, y: cy + (narrow ? 12 : 17), "text-anchor": "middle", "font-family": DISP, "font-size": fs, "font-weight": 700, fill: "#fff", "letter-spacing": -.5 }, "");
-  var tb = E("tspan"); tb.textContent = "B"; var ta = E("tspan", { fill: "#FFB166" }); ta.textContent = "ai"; var ts2 = E("tspan"); ts2.textContent = "Shift";
+  /* o nome, com o "ai" em destaque, e a descrição */
+  var fs = narrow ? 18 : 30, wy = symTop + sh + (narrow ? 30 : 48);
+  var wm = T({ x: cx, y: wy, "text-anchor": "middle", "font-family": DISP, "font-size": fs, "font-weight": 700, fill: C.ink, "letter-spacing": -.6 }, "");
+  var tb = E("tspan"); tb.textContent = "B"; var ta = E("tspan", { fill: C.orange }); ta.textContent = "ai"; var ts2 = E("tspan"); ts2.textContent = "Shift";
   wm.appendChild(tb); wm.appendChild(ta); wm.appendChild(ts2); svg.appendChild(wm);
-  sparkle(svg, cx - fs * 1.05, cy + (narrow ? 12 : 17) - fs * .95, narrow ? 3.2 : 4.4, "#FFB166", 1.6, .4);
-  /* a descrição precisa caber na corda do círculo: na tela estreita, só a parte que importa */
-  svg.appendChild(T({ x: cx, y: cy + (narrow ? 26 : 37), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6 : 8, fill: "#8FB4FF", "letter-spacing": narrow ? 1.2 : 1.4 }, narrow ? "ANÁLISE COM IA" : "GESTÃO · ANÁLISE COM IA"));
+  svg.appendChild(T({ x: cx, y: wy + (narrow ? 14 : 20), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6.2 : 8, fill: C.muted, "letter-spacing": narrow ? 1.2 : 1.6 }, narrow ? "ANÁLISE COM IA" : "GESTÃO · ANÁLISE COM IA"));
   /* faíscas de inteligência artificial */
-  sparkle(svg, cx + R * .74, cy - R * .78, narrow ? 7 : 10, "#FFB166", 2.4, 0);
-  sparkle(svg, cx + R * 1.02, cy - R * .42, narrow ? 4 : 5.5, "#fff", 1.9, .7);
-  sparkle(svg, cx + R * .48, cy - R * 1.06, narrow ? 3.5 : 4.5, "#7FA6FF", 2.9, 1.3);
-  /* brilho que orbita o anel */
-  var glintHalo = E("circle", { r: narrow ? 6 : 8, fill: "#fff", opacity: .18 }), glint = E("circle", { r: narrow ? 2.6 : 3.2, fill: "#fff", filter: fx });
-  svg.appendChild(glintHalo); svg.appendChild(glint);
+  sparkle(svg, sx + sw + (narrow ? 8 : 12), symTop - (narrow ? 10 : 14), narrow ? 6 : 10, C.orange, 2.4, 0);
+  sparkle(svg, cx - fs * 1.1, wy - fs * .95, narrow ? 3.4 : 4.6, C.orange, 1.6, .4);
+  sparkle(svg, sx - (narrow ? 8 : 12), symTop + sh + (narrow ? 8 : 12), narrow ? 3.2 : 4.5, "#7FA6FF", 2.9, 1.3);
   host.appendChild(svg);
   stopPath = rafLoop(host, function (ts) {
     movers.forEach(function (m) { var pt = m.p.getPointAtLength(((ts + m.off) / 16) % m.len); m.dot.setAttribute("cx", pt.x); m.dot.setAttribute("cy", pt.y); });
-    var a = (ts / 2600) % (Math.PI * 2), gx = cx + Math.cos(a) * (R + 1), gy = cy + Math.sin(a) * (R + 1);
-    glint.setAttribute("cx", gx); glint.setAttribute("cy", gy); glintHalo.setAttribute("cx", gx); glintHalo.setAttribute("cy", gy);
   });
 }
 
