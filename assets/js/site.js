@@ -298,10 +298,16 @@ function emblema(svg, s, ox, oy) {
   img.setAttribute("href", src);
   img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", src);
   g.appendChild(img);
-  /* filete de luz percorrendo a borda do cartão */
-  var run = E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "none", stroke: "#9FC0FF", "stroke-width": 6, "stroke-linecap": "round", "stroke-dasharray": "300 3400", opacity: 1, filter: filtro(svg, 4) });
-  if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 0, to: -3680, dur: "4.2s", repeatCount: "indefinite" }));
-  g.appendChild(run);
+  /* luz percorrendo a borda do cartão: quase o perímetro inteiro, cabeça brilhante
+     e cauda que esmaece — três camadas de comprimentos diferentes alinhadas pela frente */
+  var PER = 3523, LMAX = PER * .92, soft = filtro(svg, 7, "so"), gl = filtro(svg, 3);
+  [[LMAX, 16, "#7FA6FF", .22, soft], [PER * .62, 7, "#BFD7FF", .55, gl], [PER * .3, 4, "#FFFFFF", .95, gl]].forEach(function (c) {
+    var r = E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "none", stroke: c[2], "stroke-width": c[1], "stroke-linecap": "round", "stroke-dasharray": c[0] + " " + (PER * 2), opacity: c[3], filter: c[4] });
+    var lag = LMAX - c[0];
+    if (!RM) r.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: -lag, to: -(PER + lag), dur: "5.5s", repeatCount: "indefinite" }));
+    else r.setAttribute("stroke-dashoffset", -lag);
+    g.appendChild(r);
+  });
   svg.appendChild(g);
   var P = function (x, y) { return [ox + x * s, oy + y * s]; };
   return { rings: [P(16, 105), P(16, 155), P(16, 205), P(16, 255)], tips: [P(1484, 180), P(1484, 180)] };
