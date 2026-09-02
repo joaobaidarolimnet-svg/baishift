@@ -47,7 +47,8 @@ python3 -m http.server 8899
 
 O site está no ar no **Railway**, que lê do GitHub e republica sozinho a cada push.
 
-- **Endereço atual:** https://app-production-db06.up.railway.app
+- **Endereço oficial:** https://www.baishift.com.br
+- **Endereço técnico:** https://app-production-db06.up.railway.app (redireciona para o oficial)
 - **Repositório:** https://github.com/joaobaidarolimnet-svg/baishift
 - **Projeto Railway:** `baishift` › serviço `app`
 
@@ -62,10 +63,15 @@ Aceita URLs limpas: `/a/b/c` encontra `a/b/c.html` ou `a/b/c/index.html`. Para
 acrescentar uma página nova, basta criar o arquivo — `servicos.html` fica disponível
 em `/servicos`.
 
-**Cache.** O servidor versiona o CSS e o JS pelo conteúdo: o HTML sai com
-`site.css?v=<hash>`, então cada publicação força o navegador a baixar o arquivo novo,
-e o arquivo em si pode ficar um ano em cache. O HTML é sempre revalidado (`no-cache`
-+ ETag). Não é preciso trocar nome de arquivo nem "limpar cache" depois de publicar.
+**Cache.** O servidor versiona CSS, JS, logos, favicon e imagem de compartilhamento
+pelo conteúdo: o HTML sai com `?v=<hash>`, então cada publicação força o navegador a
+baixar o arquivo novo, e o arquivo em si pode ficar um ano em cache. O HTML é sempre
+revalidado (`no-cache` + ETag). Não é preciso trocar nome de arquivo nem "limpar
+cache" depois de publicar.
+
+**Host oficial.** `server.js` redireciona (301) qualquer outro host — o `.up.railway.app`,
+a raiz `baishift.com.br` — e o `http` puro para `https://www.baishift.com.br`, preservando
+o caminho. Canonical, Open Graph, sitemap, robots e dados estruturados usam o oficial.
 
 Para atualizar, basta enviar para a `main`:
 
@@ -73,32 +79,30 @@ Para atualizar, basta enviar para a `main`:
 git add -A && git commit -m "descrição da mudança" && git push
 ```
 
-Rodar o servidor de produção localmente:
+Rodar o servidor de produção localmente (em `localhost`/`127.0.0.1` o redirecionamento
+de host fica desligado):
 
 ```bash
 PORT=8900 npm start     # abra http://localhost:8900
 ```
 
-### Ligar o domínio baishift.com.br
+### Domínio
 
-O DNS do domínio está na **Locaweb**. No Railway, adicione o domínio ao serviço:
-
-```bash
-railway domain baishift.com.br
-railway domain status <id>      # mostra o registro exato a criar
-```
-
-O Railway devolve um destino `CNAME`. Como `baishift.com.br` é domínio raiz (apex) e
-a Locaweb não faz CNAME na raiz, o caminho usual é:
+O DNS de `baishift.com.br` fica na **Locaweb**, junto com o e-mail (`MX`, SPF e os hosts
+`webmail`, `smtp`, `pop`, `imap` — não remover). Registros criados para o site:
 
 | Tipo | Nome | Valor |
 |---|---|---|
-| CNAME | `www` | (o destino que o Railway informar) |
-| — | `@` (raiz) | redirecionamento da Locaweb de `baishift.com.br` para `www.baishift.com.br` |
+| CNAME | `www` | `swxzxo57.up.railway.app` |
+| TXT | `_railway-verify.www` | `railway-verify=7480633e81ee1a81902e921908ab1c7540e935e1e880a31bc56b25bed9faa153` |
 
-Se preferir o domínio raiz direto, é possível colocar a Cloudflare na frente (CNAME
-achatado na raiz). Depois de propagar, confira com `railway domain status <id>` até o
-certificado ficar emitido.
+A Locaweb não aceita CNAME na raiz do domínio, por isso o endereço oficial é o `www`.
+A raiz `baishift.com.br` deve ser tratada com o **redirecionamento de domínio** no painel
+da Locaweb (apontando para `https://www.baishift.com.br`). Se um dia o DNS for para a
+Cloudflare, a raiz pode receber CNAME e ser adicionada de volta no Railway
+(`railway domain baishift.com.br`).
+
+Estado do domínio no Railway: `railway domain status 43ed9844-b2d6-4026-9f39-d6320fde3295`.
 
 ### O que trocar antes de ir ao ar
 
