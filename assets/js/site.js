@@ -289,68 +289,37 @@ function grad(svg, stops, attrs) {
   stops.forEach(function (st) { g.appendChild(E("stop", st[2] ? { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] } : { offset: st[0], "stop-color": st[1] })); });
   d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
 }
-/* o emblema limpo, em unidades de projeto 1580×340; devolve os pontos de encaixe em coordenadas do svg */
+/* o emblema: monograma B com duas setas subindo + wordmark BAISHIFT, em unidades 1500×360 */
 function emblema(svg, s, ox, oy) {
-  var U = "userSpaceOnUse";
-  var glow = filtro(svg, 3), soft = filtro(svg, 10, "so");
-  var bfill = grad(svg, [["0%", "#3D7BFF"], ["45%", "#1F5CF5"], ["100%", "#0B2B9A"]]);
-  var sfill = grad(svg, [["0%", "#0A1630"], ["60%", "#10245A"], ["100%", "#1E43B5"]]);
-  var afill = grad(svg, [["0%", "#3D7BFF"], ["100%", "#0B2B9A"]], { gradientUnits: U, x1: 1420, y1: 0, x2: 1540, y2: 0 });
-  var fr = grad(svg, [["0%", "#0F2456"], ["100%", "#1F5CF5"]], { x1: 0, y1: 0, x2: 1, y2: 0 });
-  var trace = grad(svg, [["0%", "#1F5CF5"], ["100%", "#1F5CF5", 0]], { gradientUnits: U, x1: 40, y1: 0, x2: 250, y2: 0 });
+  var NAVY = "#12388A", OR = "#F26A1B";
   var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
-  /* circuito entrando pela esquerda */
-  var circ = E("g", { fill: "none", stroke: trace, "stroke-width": 6, "stroke-linecap": "round", "stroke-linejoin": "round" });
-  var traces = [[90, 100, [[150, 100], [180, 122], [250, 122]]], [40, 160, [[110, 160], [140, 138], [250, 138]]], [60, 210, [[120, 210], [150, 188], [250, 188]]], [110, 250, [[160, 250], [190, 228], [250, 228]]]];
-  var rings = [];
-  traces.forEach(function (t, i) {
-    var d = "M" + t[0] + "," + t[1] + " " + t[2].map(function (p) { return "L" + p[0] + "," + p[1]; }).join(" ");
-    circ.appendChild(E("path", { d: d }));
-    var pulse = E("path", { d: d, stroke: "#7FB0FF", "stroke-width": 6, "stroke-dasharray": "26 300" });
-    if (!RM) pulse.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 326, to: 0, dur: (2.4 + i * .3) + "s", begin: (i * .4) + "s", repeatCount: "indefinite" }));
-    circ.appendChild(pulse);
-    circ.appendChild(E("circle", { cx: t[0], cy: t[1], r: 11, fill: "#fff", stroke: "#1F5CF5", "stroke-width": 6 }));
-    rings.push([t[0], t[1]]);
-  });
-  g.appendChild(circ);
-  /* B */
-  var gb = E("g", { transform: "skewX(-12)" });
-  gb.appendChild(T({ x: 292, y: 292, "font-family": DISP, "font-weight": 800, "font-size": 300, fill: bfill, "letter-spacing": -6 }, "B"));
-  g.appendChild(gb);
-  /* badge AI */
-  var badge = E("g");
-  badge.appendChild(E("rect", { x: 520, y: 52, width: 236, height: 236, rx: 42, fill: "#1F5CF5", opacity: .25, filter: soft }));
-  badge.appendChild(E("rect", { x: 520, y: 52, width: 236, height: 236, rx: 42, fill: "#070F26" }));
-  badge.appendChild(E("rect", { x: 523, y: 55, width: 230, height: 230, rx: 40, fill: "none", stroke: "#2F6BFF", "stroke-width": 3, opacity: .9 }));
-  var gai = E("g", { transform: "skewX(-12)" });
-  gai.appendChild(T({ x: 664, y: 214, "text-anchor": "middle", "font-family": DISP, "font-weight": 800, "font-size": 118, fill: "#fff", "letter-spacing": -3 }, "AI"));
-  badge.appendChild(gai);
-  g.appendChild(badge);
-  /* Shift */
-  var gs = E("g", { transform: "skewX(-12)" });
-  gs.appendChild(T({ x: 830, y: 292, "font-family": DISP, "font-weight": 800, "font-size": 252, fill: sfill, "letter-spacing": -8 }, "Shift"));
-  g.appendChild(gs);
-  /* seta delicada apontando para a direita, com a cauda se dissolvendo em pixels */
-  var arr = E("g");
-  var rnd = seeded(23);
-  for (var k = 0; k < 22; k++) {
-    var x = 1318 + rnd() * 96, y = 96 + rnd() * 150, sz = 6 + rnd() * 15, tone3 = rnd();
-    var r = E("rect", { x: x, y: y, width: sz, height: sz, rx: sz * .16, fill: tone3 > .6 ? "#1F5CF5" : (tone3 > .3 ? "#0F2456" : "#9AA6BF"), opacity: .3 + rnd() * .6 });
-    if (!RM) r.appendChild(E("animate", { attributeName: "opacity", values: ".15;.95;.15", dur: (1.8 + rnd() * 2.2) + "s", begin: (rnd() * 2) + "s", repeatCount: "indefinite" }));
-    arr.appendChild(r);
+  g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "#fff", stroke: NAVY, "stroke-width": 4 }));
+  /* monograma */
+  var m = E("g", { transform: "translate(70 30)" });
+  m.appendChild(E("path", { d: "M112,92 H168 A44,44 0 0 1 168,180 H112", fill: "none", stroke: NAVY, "stroke-width": 36 }));
+  m.appendChild(E("path", { d: "M112,180 H180 A51,51 0 0 1 180,282 H112", fill: "none", stroke: NAVY, "stroke-width": 36 }));
+  m.appendChild(E("rect", { x: 76, y: 60, width: 36, height: 240, fill: NAVY }));
+  m.appendChild(E("path", { d: "M50,66 L94,4 L138,66 Z", fill: NAVY }));
+  m.appendChild(E("path", { d: "M37,122 V262 Q37,292 67,292 H80", fill: "none", stroke: OR, "stroke-width": 30, "stroke-linejoin": "round" }));
+  m.appendChild(E("path", { d: "M4,124 L37,78 L70,124 Z", fill: OR }));
+  /* trilhas de circuito dentro das setas, com pulsos subindo */
+  function trilha(d, ringX, ringY, ringFill, delay) {
+    m.appendChild(E("path", { d: d, fill: "none", stroke: "#fff", "stroke-width": 4, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    var pulse = E("path", { d: d, fill: "none", stroke: "#BFD7FF", "stroke-width": 4, "stroke-linecap": "round", "stroke-dasharray": "18 200" });
+    if (!RM) pulse.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 0, to: -218, dur: "2.6s", begin: delay + "s", repeatCount: "indefinite" }));
+    m.appendChild(pulse);
+    m.appendChild(E("circle", { cx: ringX, cy: ringY, r: 8, fill: ringFill, stroke: "#fff", "stroke-width": 4 }));
   }
-  var chev = E("g", { transform: "translate(1420 172)" });
-  var chevD = "M0,-62 L112,0 L0,62 Q34,0 0,-62 Z";
-  chev.appendChild(E("path", { d: chevD, fill: afill, stroke: afill, "stroke-width": 10, "stroke-linejoin": "round" }));
-  chev.appendChild(E("path", { d: "M14,-40 L86,0 L14,40 Q36,0 14,-40 Z", fill: "#fff", opacity: .12 }));
-  if (!RM) chev.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", values: "1420 172;1428 172;1420 172", dur: "2.8s", repeatCount: "indefinite" }));
-  arr.appendChild(chev);
-  g.appendChild(arr);
-  /* moldura em volta da logo inteira */
-  g.appendChild(E("rect", { x: 14, y: 16, width: 1552, height: 308, rx: 44, fill: "none", stroke: fr, "stroke-width": 4 }));
+  trilha("M94,296 V232 L88,224 V204 M94,188 V150", 94, 196, NAVY, 0);
+  trilha("M37,284 V210 M37,192 V150", 37, 201, OR, 1.3);
+  g.appendChild(m);
+  /* wordmark */
+  var w = T({ x: 430, y: 238, "font-family": DISP, "font-weight": 800, "font-size": 150, fill: NAVY, "letter-spacing": 8 }, "");
+  var t1 = E("tspan"); t1.textContent = "B"; var t2 = E("tspan", { fill: OR }); t2.textContent = "AI"; var t3 = E("tspan"); t3.textContent = "SHIFT";
+  w.appendChild(t1); w.appendChild(t2); w.appendChild(t3); g.appendChild(w);
   svg.appendChild(g);
   var P = function (x, y) { return [ox + x * s, oy + y * s]; };
-  return { rings: rings.map(function (r) { return P(r[0] - 14, r[1]); }), tips: [P(1540, 172), P(1540, 172)] };
+  return { rings: [P(16, 105), P(16, 155), P(16, 205), P(16, 255)], tips: [P(1484, 180), P(1484, 180)] };
 }
 function dataPath() {
   var host = el("datapath"); if (!host) return;
@@ -364,7 +333,7 @@ function dataPath() {
            { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
            { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
   var rows = 4, NH = narrow ? 42 : 50, G = narrow ? 10 : 14, NW, H, s, ox, oy, svg, movers = [];
-  var EW = 1580, EH = 340;
+  var EW = 1500, EH = 360;
   if (narrow) { NW = (W - 12) / 2; s = W / EW; H = EH * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
   else { NW = Math.min(210, (W - 380) / 2); s = (W - 2 * NW - 90) / EW; H = Math.max(rows * (NH + G) - G + 16, EH * s + 10); ox = NW + 45; oy = (H - EH * s) / 2; }
   var cy = H / 2, xr = W - NW;
@@ -396,12 +365,12 @@ function dataPath() {
   }
   S.forEach(function (d, i) {
     var y = yAt(i), r = anc.rings[i];
-    if (!narrow) wire(NW, y + NH / 2, ox + 14 * s, r[1], C.blue, i * 640);
+    if (!narrow) wire(NW, y + NH / 2, r[0], r[1], C.blue, i * 640);
     node(0, y, d, C.blue);
   });
   O.forEach(function (d, i) {
     var y = yAt(i), t = anc.tips[0];
-    if (!narrow) wire(ox + 1566 * s, t[1] + (i - 1.5) * 10 * s, xr, y + NH / 2, d.c, 1900 + i * 700);
+    if (!narrow) wire(t[0], t[1] + (i - 1.5) * 12 * s, xr, y + NH / 2, d.c, 1900 + i * 700);
     node(xr, y, d, d.c);
   });
   host.appendChild(svg);
