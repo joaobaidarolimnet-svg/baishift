@@ -289,27 +289,15 @@ function grad(svg, stops, attrs) {
   stops.forEach(function (st) { g.appendChild(E("stop", st[2] ? { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] } : { offset: st[0], "stop-color": st[1] })); });
   d.appendChild(g); svg.appendChild(d); return "url(#" + id + ")";
 }
-/* a logo oficial (versão fundo escuro), em unidades 1500×360 */
+/* a logo oficial (versão branca sobre navy), em unidades 1500×360 */
 function emblema(svg, s, ox, oy) {
-  var NAVY = "#0B1440", OR = "#FF6A2A";
   var g = E("g", { transform: "translate(" + ox + " " + oy + ") scale(" + s + ")" });
-  g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: NAVY }));
-  /* B · [AI] · SHIFT */
-  var F = { "font-family": DISP, "font-weight": 800, "font-size": 172, "letter-spacing": 6 };
-  g.appendChild(T(Object.assign({ x: 236, y: 244, fill: "#fff" }, F), "B"));
-  g.appendChild(E("rect", { x: 384, y: 96, width: 216, height: 168, rx: 30, fill: "none", stroke: "#fff", "stroke-width": 12 }));
-  g.appendChild(T(Object.assign({ x: 492, y: 244, "text-anchor": "middle", fill: OR }, F, { "letter-spacing": 2 }), "AI"));
-  g.appendChild(T(Object.assign({ x: 636, y: 244, fill: "#fff" }, F), "SHIFT"));
-  /* seta vazada com chevron subindo */
-  var a = E("g", { transform: "translate(1226 104)", fill: "none", stroke: OR, "stroke-width": 12, "stroke-linejoin": "round", "stroke-linecap": "round" });
-  a.appendChild(E("path", { d: "M45,36 L8,76 H28 V134 H62 V76 H82 Z" }));
-  var chev = E("path", { d: "M12,30 L45,-2 L78,30" });
-  if (!RM) {
-    chev.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", values: "0 6;0 -8;0 6", dur: "2.4s", repeatCount: "indefinite" }));
-    chev.appendChild(E("animate", { attributeName: "opacity", values: ".35;1;.35", dur: "2.4s", repeatCount: "indefinite" }));
-  }
-  a.appendChild(chev);
-  g.appendChild(a);
+  g.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "#0B1440" }));
+  var img = E("image", { x: 200, y: 42, width: 1100, height: 283.5, preserveAspectRatio: "xMidYMid meet" });
+  var src = (document.querySelector(".brand .lg-white") || {}).getAttribute ? document.querySelector(".brand .lg-white").getAttribute("src") : "assets/marca/01-logo/baishift-branco.svg";
+  img.setAttribute("href", src);
+  img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", src);
+  g.appendChild(img);
   svg.appendChild(g);
   var P = function (x, y) { return [ox + x * s, oy + y * s]; };
   return { rings: [P(16, 105), P(16, 155), P(16, 205), P(16, 255)], tips: [P(1484, 180), P(1484, 180)] };

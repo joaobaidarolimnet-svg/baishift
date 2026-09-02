@@ -26,6 +26,11 @@ html = html
   .replace(/\n\s*<link rel="apple-touch-icon"[^>]*>/, "")
   .replace(/\n\s*<link rel="manifest"[^>]*>/, "");
 
+/* svgs da marca embutidos como data URI: o arquivo único não depende de caminhos */
+for (const f of ["assets/marca/01-logo/baishift-principal.svg", "assets/marca/01-logo/baishift-branco.svg"]) {
+  const uri = "data:image/svg+xml," + encodeURIComponent(read(f).replace(/\n\s*/g, ""));
+  html = html.split(f).join(uri);
+}
 for (const [oque, marca] of [["estilos", "--blue:#1652F0"], ["script", "function procFlow"]])
   if (!html.includes(marca)) throw new Error("build-single: " + oque + " não foram embutidos");
 

@@ -18,7 +18,8 @@ outros/*.html           landing pages de Severino, Aprova · Ordem e Aprova · S
 404.html                página de erro
 assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages)
 assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, formulários
-assets/img/             favicon, ícones do app e imagem de compartilhamento
+assets/marca/           kit oficial da marca (logos, ícones, favicons e o guia marca-baishift.html)
+assets/img/             favicon e ícones do app (copiados do kit) e imagem de compartilhamento
 server.js               servidor estático (Railway): URLs limpas, cache versionado, 404
 robots.txt · sitemap.xml · site.webmanifest · favicon.ico
 dist/                   versão em arquivo único (gerada)
@@ -149,14 +150,21 @@ números da frente 01 e o quadro "O que o processo mostra" precisam contar a mes
 **FAQ.** As perguntas estão duas vezes: no HTML (`<details>`) e no JSON-LD `FAQPage`
 no fim do `index.html`. Ao mudar uma, mude a outra.
 
+**Marca.** O kit oficial está em `assets/marca/` (guia em `marca-baishift.html`). O
+cabeçalho usa `baishift-principal.svg` sobre fundo claro e `baishift-branco.svg` sobre
+o hero escuro (troca automática pela classe `on-dark` da barra); o rodapé e o diagrama
+usam a versão branca. Regras do guia: AI sempre laranja e dentro da caixa, versão
+branca sobre fundo escuro, mínimo de 140 px de largura, sem sombra ou inclinação.
+Favicon e ícones do app são cópias de `03-favicon/` e `02-icone/`.
+
 **Cores e tipografia.** Variáveis CSS no `:root` de `assets/css/site.css`.
 
 ## Scripts auxiliares
 
 ```bash
 node tools/build-outros.mjs    # regera as landing pages de outros/ a partir dos textos no script
-node tools/build-single.mjs    # gera dist/baishift-site.html (CSS e JS embutidos)
-./tools/shot.sh tools/og.html assets/img/og.png 1200 630   # regera a imagem de compartilhamento
+node tools/build-single.mjs    # gera dist/baishift-site.html (CSS, JS e logos embutidos)
+./tools/shot.sh tools/og.html assets/img/og.png 1200 630   # regera a imagem de compartilhamento (usa a logo do kit)
 ```
 
 `tools/verify.mjs` abre o site no Chrome headless, rola a página inteira, confere que
