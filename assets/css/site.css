@@ -6,7 +6,7 @@
   --white:#FFFFFF;--mist:#F4F7FC;--line:#DDE5F3;--ink:#0A1B3D;--navy:#0C2149;--deep:#071433;--muted:#5B6E93;
   --blue:#1652F0;--blue-deep:#06215C;--blue-soft:#E8EFFE;--blue-light:#7FA6FF;
   --orange:#FF7A1A;--orange-soft:#FFF0E2;--green:#12855A;--red:#D8402F;--wa:#25D366;
-  --maxw:1500px;--pad:clamp(18px,3.4vw,52px);--r:14px;
+  --maxw:100%;--pad:clamp(16px,1.8vw,30px);--r:14px;
   --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --display:"Sora","Inter",system-ui,sans-serif;
