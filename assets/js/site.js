@@ -324,12 +324,12 @@ function dataPath() {
            { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: C.green },
            { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
            { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
-  var rows = 4, NH = narrow ? 42 : 58, G = narrow ? 10 : 16, NW, H, s, ox, oy, svg, movers = [], cardW;
+  var rows = 4, NH = narrow ? 42 : 68, G = narrow ? 10 : 18, NW, H, s, ox, oy, svg, movers = [], cardW;
   var EW = 1500, EH = 360;
   if (narrow) { NW = (W - 12) / 2; s = W / EW; H = EH * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
   else {
     /* cards largos e legíveis; a logo fica pequena no centro, com espaço de fio dos dois lados */
-    NW = Math.min(290, (W - 560) / 2); cardW = Math.min(470, W - 2 * NW - 320); s = cardW / EW;
+    NW = Math.min(370, (W - 500) / 2); cardW = Math.min(400, W - 2 * NW - 300); s = cardW / EW;
     H = Math.max(rows * (NH + G) - G + 16, EH * s + 40); ox = (W - cardW) / 2; oy = (H - EH * s) / 2;
   }
   var cy = H / 2, xr = W - NW;
@@ -349,9 +349,9 @@ function dataPath() {
   function node(x, y, d, accent) {
     var g = E("g");
     g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "#fff", stroke: C.line, "stroke-width": 1.2 }));
-    g.appendChild(E("rect", { x: x, y: y + 9, width: 3, height: NH - 18, rx: 1.5, fill: accent }));
-    g.appendChild(T({ x: x + 14, y: y + (narrow ? 17 : 24), "font-family": DISP, "font-size": narrow ? 9.5 : 13.5, "font-weight": 600, fill: C.ink }, narrow ? d.n : d.k));
-    g.appendChild(T({ x: x + 14, y: y + (narrow ? 30 : 42), "font-family": SANS, "font-size": narrow ? 7.5 : 10.2, fill: C.muted }, d.s));
+    g.appendChild(E("rect", { x: x, y: y + 10, width: narrow ? 3 : 4, height: NH - 20, rx: 2, fill: accent }));
+    g.appendChild(T({ x: x + 16, y: y + (narrow ? 17 : 28), "font-family": DISP, "font-size": narrow ? 9.5 : 15.5, "font-weight": 600, fill: C.ink }, narrow ? d.n : d.k));
+    g.appendChild(T({ x: x + 16, y: y + (narrow ? 30 : 49), "font-family": SANS, "font-size": narrow ? 7.5 : 11.5, fill: C.muted }, d.s));
     svg.appendChild(g);
   }
   function wire(x0, y0, x1, y1, color, off, vertical) {
