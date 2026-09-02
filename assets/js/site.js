@@ -302,14 +302,14 @@ function emblema(svg, s, ox, oy) {
      e um filete de luz corre pela borda */
   var clipId = "clip" + (++UID), defs = E("defs"), cp = E("clipPath", { id: clipId });
   cp.appendChild(E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40 })); defs.appendChild(cp);
-  var gid = "sweep" + (++UID), lg = E("linearGradient", { id: gid, x1: 0, y1: 0, x2: 1, y2: 0 });
-  [["0%", "#FFFFFF", 0], ["42%", "#BFD7FF", .3], ["50%", "#FFFFFF", .5], ["58%", "#BFD7FF", .3], ["100%", "#FFFFFF", 0]].forEach(function (st) {
-    lg.appendChild(E("stop", { offset: st[0], "stop-color": st[1], "stop-opacity": st[2] }));
-  });
-  defs.appendChild(lg); svg.appendChild(defs);
-  var sweepG = E("g", { "clip-path": "url(#" + clipId + ")" }), mover = E("g"), band = E("rect", { x: -180, y: -80, width: 360, height: 520, fill: "url(#" + gid + ")", transform: "skewX(-18)" });
-  if (!RM) mover.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", from: "-120 0", to: "1780 0", dur: "3.4s", repeatCount: "indefinite" }));
-  mover.appendChild(band); sweepG.appendChild(mover); g.appendChild(sweepG);
+  svg.appendChild(defs);
+  /* o feixe tem forma de seta ">" apontando no sentido do fluxo, com borda suave e núcleo mais claro */
+  var sweepG = E("g", { "clip-path": "url(#" + clipId + ")" }), mover = E("g");
+  function chev(t, d) { var y0 = -90, y1 = 450, ym = 180; return [0, y0, d, ym, 0, y1, t, y1, d + t, ym, t, y0].join(","); }
+  mover.appendChild(E("polygon", { points: chev(74, 150), fill: "#DDE9FF", opacity: .42, filter: filtro(svg, 7, "so") }));
+  mover.appendChild(E("polygon", { points: chev(22, 150), fill: "#FFFFFF", opacity: .6, filter: filtro(svg, 2.5, "so"), transform: "translate(26 0)" }));
+  if (!RM) mover.appendChild(E("animateTransform", { attributeName: "transform", type: "translate", from: "-300 0", to: "1720 0", dur: "3.4s", repeatCount: "indefinite" }));
+  sweepG.appendChild(mover); g.appendChild(sweepG);
   var run = E("rect", { x: 16, y: 16, width: 1468, height: 328, rx: 40, fill: "none", stroke: "#9FC0FF", "stroke-width": 6, "stroke-linecap": "round", "stroke-dasharray": "300 3400", opacity: 1, filter: filtro(svg, 4) });
   if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 0, to: -3680, dur: "4.2s", repeatCount: "indefinite" }));
   g.appendChild(run);
