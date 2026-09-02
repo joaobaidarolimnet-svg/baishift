@@ -11,10 +11,13 @@ const crypto = require("node:crypto");
 const RAIZ = __dirname;
 const PORTA = process.env.PORT || 3000;
 
-/* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>", então toda publicação
-   força o navegador a baixar o arquivo novo, e o arquivo em si pode ficar em cache por um ano. */
+/* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>" (e o mesmo para as logos,
+   favicon e imagem de compartilhamento), então toda publicação força o navegador a baixar o
+   arquivo novo, e o arquivo em si pode ficar em cache por um ano. */
 const VERSAO = {};
-["assets/css/site.css", "assets/js/site.js"].forEach(f => {
+["assets/css/site.css", "assets/js/site.js",
+ "assets/marca/01-logo/baishift-principal.svg", "assets/marca/01-logo/baishift-branco.svg",
+ "assets/img/favicon.svg", "assets/img/favicon-32.png", "assets/img/icon-180.png", "assets/img/og.png", "favicon.ico"].forEach(f => {
   try { VERSAO[f] = crypto.createHash("sha1").update(fs.readFileSync(path.join(RAIZ, f))).digest("hex").slice(0, 10); }
   catch { /* sem o arquivo, a URL fica sem versão */ }
 });
