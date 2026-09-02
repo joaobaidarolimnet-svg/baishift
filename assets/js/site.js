@@ -331,13 +331,29 @@ function dataPath() {
   /* corpo e anel com brilho */
   svg.appendChild(E("circle", { cx: cx, cy: cy, r: R, fill: "url(#" + coreId + ")" }));
   svg.appendChild(E("circle", { cx: cx, cy: cy, r: R + 1, fill: "none", stroke: "url(#" + ringId + ")", "stroke-width": narrow ? 2.5 : 3.2, filter: fx }));
-  /* símbolo da marca */
-  var sc = narrow ? .62 : .82, mk = E("g", { transform: "translate(" + (cx - 16 * sc) + " " + (cy - R * .74) + ") scale(" + sc + ")" });
-  mk.appendChild(E("rect", { width: 32, height: 32, rx: 8, fill: C.blue }));
-  mk.appendChild(E("path", { d: "M16 7.2 24.8 16.6h-4.3V23a1.6 1.6 0 0 1-1.6 1.6h-5.8A1.6 1.6 0 0 1 11.5 23v-6.4H7.2z", fill: "#fff" }));
-  svg.appendChild(mk);
-  svg.appendChild(T({ x: cx, y: cy + (narrow ? 10 : 14), "text-anchor": "middle", "font-family": DISP, "font-size": narrow ? 17 : 26, "font-weight": 700, fill: "#fff", "letter-spacing": -.5 }, "Baishift"));
-  svg.appendChild(T({ x: cx, y: cy + (narrow ? 24 : 34), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6.5 : 8.5, fill: "#8FB4FF", "letter-spacing": 2.2 }, "GESTÃO VERTICAL"));
+  /* símbolo da mudança: duas trilhas que trocam de lugar e seguem em frente */
+  var sw = narrow ? 36 : 54, sh = sw * .46, sx = cx - sw / 2, sy = cy - R * (narrow ? .66 : .64) - sh / 2, sg = E("g", { transform: "translate(" + sx + " " + sy + ")" });
+  function trilha(deCima) {
+    var y0 = deCima ? 0 : sh, y1 = deCima ? sh : 0, x1 = sw * .2, x2 = sw * .74;
+    return "M0," + y0 + " H" + x1 + " C" + (sw * .47) + "," + y0 + " " + (sw * .47) + "," + y1 + " " + x2 + "," + y1 + " H" + (sw - 7);
+  }
+  [[true, "#7FA6FF"], [false, "#FFB166"]].forEach(function (c) {
+    var d = trilha(c[0]), lw = narrow ? 2.4 : 3.2;
+    sg.appendChild(E("path", { d: d, fill: "none", stroke: c[1], "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: .38 }));
+    var run = E("path", { d: d, fill: "none", stroke: c[1], "stroke-width": lw, "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": "7 9", filter: fx });
+    if (!RM) run.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 64, to: 0, dur: "1.7s", repeatCount: "indefinite" }));
+    sg.appendChild(run);
+    var ye = c[0] ? sh : 0;
+    sg.appendChild(E("path", { d: "M" + (sw - 9) + "," + (ye - 5.5) + " L" + sw + "," + ye + " L" + (sw - 9) + "," + (ye + 5.5) + "Z", fill: c[1], filter: fx }));
+  });
+  svg.appendChild(sg);
+  /* o nome, com o "ai" em destaque: a inteligência artificial mora dentro de BaiShift */
+  var fs = narrow ? 17 : 26, wm = T({ x: cx, y: cy + (narrow ? 12 : 17), "text-anchor": "middle", "font-family": DISP, "font-size": fs, "font-weight": 700, fill: "#fff", "letter-spacing": -.5 }, "");
+  var tb = E("tspan"); tb.textContent = "B"; var ta = E("tspan", { fill: "#FFB166" }); ta.textContent = "ai"; var ts2 = E("tspan"); ts2.textContent = "Shift";
+  wm.appendChild(tb); wm.appendChild(ta); wm.appendChild(ts2); svg.appendChild(wm);
+  sparkle(svg, cx - fs * 1.05, cy + (narrow ? 12 : 17) - fs * .95, narrow ? 3.2 : 4.4, "#FFB166", 1.6, .4);
+  /* a descrição precisa caber na corda do círculo: na tela estreita, só a parte que importa */
+  svg.appendChild(T({ x: cx, y: cy + (narrow ? 26 : 37), "text-anchor": "middle", "font-family": MONO, "font-size": narrow ? 6 : 8, fill: "#8FB4FF", "letter-spacing": narrow ? 1.2 : 1.4 }, narrow ? "ANÁLISE COM IA" : "GESTÃO · ANÁLISE COM IA"));
   /* faíscas de inteligência artificial */
   sparkle(svg, cx + R * .74, cy - R * .78, narrow ? 7 : 10, "#FFB166", 2.4, 0);
   sparkle(svg, cx + R * 1.02, cy - R * .42, narrow ? 4 : 5.5, "#fff", 1.9, .7);
