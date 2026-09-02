@@ -153,7 +153,22 @@ function responder404(req, res) {
   res.end("404");
 }
 
+/* Endereço oficial: qualquer outro host (o .up.railway.app, a raiz sem www) e o http
+   puro redirecionam de forma permanente para https://www.baishift.com.br */
+const HOST_OFICIAL = "www.baishift.com.br";
+function redirecionar(req, res) {
+  const host = String(req.headers.host || "").split(":")[0].toLowerCase();
+  const proto = String(req.headers["x-forwarded-proto"] || "http").split(",")[0].trim();
+  const local = host === "localhost" || /^127\./.test(host) || /^192\.168\./.test(host) || host === "";
+  if (local) return false;
+  if (host === HOST_OFICIAL && proto === "https") return false;
+  res.writeHead(301, { "Location": "https://" + HOST_OFICIAL + req.url, "Cache-Control": "public, max-age=3600" });
+  res.end();
+  return true;
+}
+
 const servidor = http.createServer((req, res) => {
+  if (redirecionar(req, res)) return;
   if (req.method !== "GET" && req.method !== "HEAD") {
     res.writeHead(405, { "Allow": "GET, HEAD", "Content-Type": "text/plain; charset=utf-8" });
     return res.end("Método não permitido");

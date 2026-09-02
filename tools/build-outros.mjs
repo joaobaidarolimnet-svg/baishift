@@ -61,14 +61,14 @@ const page = p => `<!DOCTYPE html>
 <meta name="description" content="${p.desc}">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#142F7A">
-<link rel="canonical" href="https://baishift.com.br/outros/${p.slug}">
+<link rel="canonical" href="https://www.baishift.com.br/outros/${p.slug}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Baishift">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:url" content="https://baishift.com.br/outros/${p.slug}">
+<meta property="og:url" content="https://www.baishift.com.br/outros/${p.slug}">
 <meta property="og:title" content="${p.nome} — Baishift">
 <meta property="og:description" content="${p.desc}">
-<meta property="og:image" content="https://baishift.com.br/assets/img/og.png">
+<meta property="og:image" content="https://www.baishift.com.br/assets/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
