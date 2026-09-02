@@ -313,28 +313,41 @@ function dataPath() {
            { k: "Indicadores de alta performance", n: "Alta perform.", s: "o que puxar para cima", c: C.green },
            { k: "Indicadores de baixa performance", n: "Baixa perform.", s: "o que precisa de decisão", c: C.orange },
            { k: "Fechamento", n: "Fechamento", s: "auditável até o dia 5", c: C.green }];
-  var rows = 4, NH = narrow ? 42 : 50, G = narrow ? 10 : 14, NW, H, s, ox, oy, svg, movers = [];
+  var rows = 4, NH = narrow ? 42 : 58, G = narrow ? 10 : 16, NW, H, s, ox, oy, svg, movers = [], cardW;
   var EW = 1500, EH = 360;
   if (narrow) { NW = (W - 12) / 2; s = W / EW; H = EH * s + 34 + rows * (NH + G) - G + 6; ox = 0; oy = 0; }
-  else { NW = Math.min(210, (W - 380) / 2); s = (W - 2 * NW - 90) / EW; H = Math.max(rows * (NH + G) - G + 16, EH * s + 10); ox = NW + 45; oy = (H - EH * s) / 2; }
+  else {
+    /* cards largos e legíveis; a logo fica pequena no centro, com espaço de fio dos dois lados */
+    NW = Math.min(290, (W - 560) / 2); cardW = Math.min(470, W - 2 * NW - 320); s = cardW / EW;
+    H = Math.max(rows * (NH + G) - G + 16, EH * s + 40); ox = (W - cardW) / 2; oy = (H - EH * s) / 2;
+  }
   var cy = H / 2, xr = W - NW;
   svg = E("svg", { viewBox: "0 0 " + W + " " + H, width: "100%", height: H, role: "img", "aria-label": "ERP, omnichannel, recebimentos e pagamentos entrando na BaiShift e saindo como painel da diretoria, indicadores e fechamento" });
+  if (!narrow) {
+    /* barramento: a informação atravessa a tela e passa por baixo da Baishift */
+    [-16, 0, 16].forEach(function (dy, k) {
+      var bus = E("path", { d: "M" + (NW + 16) + "," + (cy + dy) + " H" + (W - NW - 16), fill: "none", stroke: C.blue, "stroke-width": 1.4, opacity: .22, "stroke-dasharray": "7 11" });
+      if (!RM) bus.appendChild(E("animate", { attributeName: "stroke-dashoffset", from: 72, to: 0, dur: (1.3 + k * .25) + "s", repeatCount: "indefinite" }));
+      svg.appendChild(bus);
+    });
+    /* sombra azul suave sob a logo: volume e tecnologia sem alterar a marca */
+    svg.appendChild(E("rect", { x: ox + 16 * s, y: oy + 16 * s + 10, width: 1468 * s, height: 328 * s, rx: 40 * s, fill: C.blue, opacity: .28, filter: filtro(svg, 14, "so") }));
+  }
   var anc = emblema(svg, s, ox, oy);
   function yAt(i) { return narrow ? EH * s + 34 + i * (NH + G) : cy - (rows * (NH + G) - G) / 2 + i * (NH + G); }
   function node(x, y, d, accent) {
     var g = E("g");
     g.appendChild(E("rect", { x: x, y: y, width: NW, height: NH, rx: 9, fill: "#fff", stroke: C.line, "stroke-width": 1.2 }));
     g.appendChild(E("rect", { x: x, y: y + 9, width: 3, height: NH - 18, rx: 1.5, fill: accent }));
-    g.appendChild(T({ x: x + 12, y: y + (narrow ? 17 : 21), "font-family": DISP, "font-size": narrow ? 9.5 : 12, "font-weight": 600, fill: C.ink }, narrow ? d.n : d.k));
-    g.appendChild(T({ x: x + 12, y: y + (narrow ? 30 : 36), "font-family": SANS, "font-size": narrow ? 7.5 : 9.2, fill: C.muted }, d.s));
+    g.appendChild(T({ x: x + 14, y: y + (narrow ? 17 : 24), "font-family": DISP, "font-size": narrow ? 9.5 : 13.5, "font-weight": 600, fill: C.ink }, narrow ? d.n : d.k));
+    g.appendChild(T({ x: x + 14, y: y + (narrow ? 30 : 42), "font-family": SANS, "font-size": narrow ? 7.5 : 10.2, fill: C.muted }, d.s));
     svg.appendChild(g);
   }
   function wire(x0, y0, x1, y1, color, off, vertical) {
     var d = vertical ? "M" + x0 + "," + y0 + " C" + x0 + "," + ((y0 + y1) / 2) + " " + x1 + "," + ((y0 + y1) / 2) + " " + x1 + "," + y1
                      : "M" + x0 + "," + y0 + " C" + ((x0 + x1) / 2) + "," + y0 + " " + ((x0 + x1) / 2) + "," + y1 + " " + x1 + "," + y1;
-    var p = E("path", { d: d, fill: "none", stroke: color, "stroke-width": 1.3, opacity: .45 }); svg.appendChild(p);
-    var dot = E("circle", { r: 3, fill: color }); svg.appendChild(dot);
-    movers.push({ p: p, dot: dot, len: p.getTotalLength(), off: off });
+    var p = E("path", { d: d, fill: "none", stroke: color, "stroke-width": 1.4, opacity: .5 }); svg.appendChild(p);
+    for (var k = 0; k < (vertical ? 1 : 2); k++) { var dot = E("circle", { r: 3, fill: color }); svg.appendChild(dot); movers.push({ p: p, dot: dot, len: p.getTotalLength(), off: off + k * 1100 }); }
   }
   if (narrow) {
     /* no celular os fios cruzariam os cards: cada coluna ganha um rótulo e um conector curto animado */
@@ -351,12 +364,12 @@ function dataPath() {
   });
   O.forEach(function (d, i) {
     var y = yAt(i), t = anc.tips[0];
-    if (!narrow) wire(t[0], t[1] + (i - 1.5) * 12 * s, xr, y + NH / 2, d.c, 1900 + i * 700);
+    if (!narrow) wire(t[0], t[1] + (i - 1.5) * 50 * s, xr, y + NH / 2, d.c, 1900 + i * 700);
     node(xr, y, d, d.c);
   });
   host.appendChild(svg);
   stopPath = rafLoop(host, function (ts) {
-    movers.forEach(function (m) { var pt = m.p.getPointAtLength(((ts + m.off) / 16) % m.len); m.dot.setAttribute("cx", pt.x); m.dot.setAttribute("cy", pt.y); });
+    movers.forEach(function (m) { var pt = m.p.getPointAtLength(((ts + m.off) / 12) % m.len); m.dot.setAttribute("cx", pt.x); m.dot.setAttribute("cy", pt.y); });
   });
 }
 
