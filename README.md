@@ -3,8 +3,8 @@
 Site institucional da **Baishift** — gestão, processos e software para provedores de internet.
 
 Site estático, sem framework e sem etapa de build. Os gráficos são desenhados em SVG
-por JavaScript próprio, sem nenhuma biblioteca externa. As únicas requisições a
-terceiros são as fontes do Google Fonts.
+por JavaScript próprio, sem nenhuma biblioteca externa. No navegador, as únicas requisições a terceiros são as fontes do Google Fonts; o servidor
+consulta um serviço de localização por IP para as métricas do painel.
 
 ## Estrutura
 
@@ -16,7 +16,9 @@ leva às landing pages dos produtos fora do provedor.
 conteudo/site.json      FONTE DA VERDADE dos textos, produtos e carrossel — edite aqui (ou pelo painel)
 conteudo/imagens/       imagens enviadas pelo painel
 templates/*.js          modelos das páginas (index, produto, partes comuns)
-lib/                    validação do conteúdo, helpers de HTML, gerador das páginas
+lib/                    validação do conteúdo, gerador das páginas, acesso, publicação, imagens, métricas
+gestor/                 painel do gestor (login, telas, estilos)
+dados/                  (ignorado) disco persistente local: usuários, eventos, imagens pendentes
 index.html              GERADO a partir do JSON: página principal
 outros/*.html           GERADOS: landing pages dos produtos do menu Outros
 sitemap.xml             GERADO
@@ -145,6 +147,52 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
   visitante com a mensagem pronta. Nada fica quebrado enquanto o número não existe.
 
 O formulário não depende de servidor: monta a mensagem e entrega no canal configurado.
+
+## Painel do gestor
+
+Em **https://www.baishift.com.br/gestor** (não há link no site). Entra-se com e-mail e senha;
+no primeiro acesso o painel obriga a trocar a senha. Administradores cadastram outros
+usuários (editores ou administradores) em "Usuários".
+
+**O que dá para editar:** todos os textos da página principal, o visual do início (painel
+demonstrativo ligado/desligado ou um carrossel de até 3 imagens com temporizador), os
+produtos do menu Outros (com página própria, capa, ícone e blocos livres) e os dados do
+site (título, descrições, WhatsApp, e-mail, cidade). Os gráficos animados e os números da
+história continuam no código.
+
+**Como funciona por baixo.** O conteúdo é o `conteudo/site.json`. "Visualizar" mostra a
+página com o rascunho sem gravar nada. "Publicar" faz um commit no GitHub com o JSON, as
+imagens e o HTML gerado, e aplica na hora no servidor; o Railway republica em um ou dois
+minutos com o mesmo conteúdo. O rascunho fica no navegador até ser publicado ou descartado.
+Sem `GITHUB_TOKEN` e rodando na sua máquina, "Publicar" grava nos arquivos e você faz o commit.
+
+**Imagens** são redimensionadas no navegador (até 1920 px, WebP), conferidas pela assinatura
+do arquivo no servidor e nomeadas por conteúdo em `conteudo/imagens/`. SVG não é aceito.
+
+**Métricas ("Visão geral").** O site manda sinais pequenos para `POST /api/evento`
+(página, seção alcançada, clique, slide do carrossel, formulário), sem cookies e sem
+serviço de terceiros no navegador. O servidor descobre cidade e estado por IP (ipwho.is,
+com ipapi.co de reserva), com cache; o IP não é gravado — só um código diário irreversível
+para contar visitantes únicos por dia. Os eventos ficam em `dados/eventos/AAAA-MM.jsonl`
+por 13 meses. Visitantes com "não rastrear" ligado não são contados. Em `localhost` a coleta
+fica desligada, salvo `localStorage.setItem("baishift:metricas", "1")`.
+
+**Disco persistente.** Usuários, sessões, imagens pendentes e eventos ficam fora do
+repositório: em `dados/` na sua máquina (ignorado pelo git) e no volume do Railway montado em
+`/data` (`railway volume add --mount-path /data`).
+
+**Variáveis de ambiente (Railway → serviço `app` → Variables):**
+
+| Variável | Uso |
+|---|---|
+| `GESTOR_EMAIL`, `GESTOR_SENHA_INICIAL` | criam o primeiro usuário (administrador) quando ainda não há nenhum; a senha é trocada no primeiro acesso |
+| `GESTOR_RESET_SENHA` | escape: no próximo boot redefine a senha de `GESTOR_EMAIL` para esse valor (troca obrigatória). Remova depois de entrar |
+| `GITHUB_TOKEN` | token fine-grained só deste repositório, com *Contents: Read and write*. Quando vencer, o painel avisa ao publicar; gere outro e troque aqui |
+| `GITHUB_REPO`, `GITHUB_BRANCH` | padrão `joaobaidarolimnet-svg/baishift` e `main` |
+| `DADOS_DIR` | pasta do disco persistente (padrão: o volume do Railway ou `./dados`) |
+
+Rodar o painel localmente: `GESTOR_EMAIL=voce@exemplo.com GESTOR_SENHA_INICIAL=12345689 PORT=8900 npm start`
+e abra `http://localhost:8900/gestor`.
 
 ## Manutenção
 
