@@ -1,0 +1,202 @@
+{
+  "versao": 1,
+  "atualizadoEm": "2026-09-02T00:00:00Z",
+  "site": {
+    "tituloAba": "Baishift — Gestão, processos e software para provedores de internet",
+    "descricao": "Diagnóstico, consultoria de processos e dashboard para provedores de internet. Decisão com número, dentro do IXC, feito por quem opera um provedor.",
+    "descricaoSocial": "O provedor decidindo com número, não com sensação. Diagnóstico, consultoria de processos e dashboard feitos por quem opera um provedor.",
+    "whatsapp": "",
+    "email": "contato@baishift.com.br",
+    "cidade": "Rolim de Moura, RO",
+    "notaRodape": "Os painéis, o fluxo e os resultados desta página usam dados ilustrativos de um provedor de porte médio, para demonstrar o formato das entregas."
+  },
+  "inicio": {
+    "rotulo": "Diagnóstico · Processos · Dashboard",
+    "titulo": "O provedor decidindo *com número*, não com sensação.",
+    "subtitulo": "Três frentes, uma regra: primeiro os números aparecem, depois eles melhoram. Diagnóstico da operação, processos redesenhados dentro do IXC e o dashboard que a diretoria abre todo dia — feito por quem opera um provedor.",
+    "botaoPrincipal": { "texto": "Começar pelo diagnóstico", "link": "#diagnostico" },
+    "botaoSecundario": { "texto": "Ver o dashboard ao vivo", "link": "#dashboard" },
+    "tags": ["Gestão em ISP", "IXC Soft", "Controladoria", "Dashboards", "Software sob medida"],
+    "painelAtivo": true,
+    "carrossel": { "intervalo": 6, "imagens": [] },
+    "frentesResumo": [
+      { "titulo": "Diagnóstico", "texto": "Onde a empresa está, para onde pode ir e quanto custa o caminho." },
+      { "titulo": "Consultoria de processos", "texto": "O que existe, o que falta e o que perde dinheiro entre uma área e outra." },
+      { "titulo": "Dashboard", "texto": "A visão geral do provedor, viva, no painel e no celular da diretoria." }
+    ]
+  },
+  "diagnostico": {
+    "rotulo": "Diagnóstico",
+    "titulo": "Primeiro, a empresa como ela é. Depois, para onde ela vai.",
+    "lead": "Toda operação tem dois resultados: o que a diretoria sente e o que o número mostra. O diagnóstico mede a distância entre os dois — e entrega o mapa para fechá-la.",
+    "afirmacoes": [
+      { "titulo": "Sensação não fecha caixa. *Número fecha.*", "texto": "O diagnóstico troca a impressão pela leitura real de carteira, caixa, campo e fiscal — direto do IXC, sem planilha paralela." },
+      { "titulo": "O que não é medido *é adivinhado.*", "texto": "Cada indicador ausente é uma decisão tomada no escuro. Sai a lista dos que existem, dos que faltam e de quem responde por cada um." },
+      { "titulo": "Saber onde está, *antes* de decidir para onde ir.", "texto": "O resultado é um plano priorizado por retorno, com cronograma e responsável. A direção deixa de ser opinião." }
+    ],
+    "oferta": {
+      "titulo": "Diagnóstico de gestão",
+      "selo": "sem compromisso",
+      "medidas": [
+        { "valor": "45 min", "texto": "de conversa" },
+        { "valor": "2 semanas", "texto": "lendo os números do IXC" },
+        { "valor": "8 entregas", "texto": "em um plano priorizado" }
+      ],
+      "tituloEntregas": "O que você recebe",
+      "entregas": [
+        "Mapa dos processos atuais no IXC",
+        "Gargalos do pedido ao caixa, com valor",
+        "Situação real do caixa e da carteira",
+        "Indicadores disponíveis hoje e os que faltam",
+        "Inconsistências fiscais e de faturamento",
+        "Controles ausentes por setor",
+        "Priorização das ações por retorno",
+        "Plano com cronograma e responsável"
+      ],
+      "botao": "Agendar pelo WhatsApp",
+      "alternativa": "ou envie uma mensagem"
+    }
+  },
+  "processos": {
+    "rotulo": "Consultoria de processos",
+    "titulo": "O processo que o provedor jura que funciona, desenhado como ele acontece.",
+    "lead": "Três perguntas por setor: como é hoje, o que ainda não existe e onde o volume para. O resultado é o processo escrito, parametrizado no IXC e treinado com a equipe.",
+    "cartoes": [
+      { "rotulo": "Processos atuais", "titulo": "Como acontece hoje", "texto": "Quem faz, em qual tela do IXC, em quanto tempo e o que fica fora do sistema. O mapa do que existe, sem julgamento.", "itens": ["Mapa por setor, do pedido ao caixa", "Tempo de ciclo medido em cada etapa", "O que ainda vive na planilha"] },
+      { "rotulo": "Processos a desenvolver", "titulo": "O que ainda não existe", "texto": "Rotinas que a operação faz de cabeça e que precisam virar regra escrita, parametrizada e cobrada.", "itens": ["Régua de cobrança", "Alçadas e aprovações", "Calendário de fechamento"] },
+      { "rotulo": "Processos a melhorar", "titulo": "Onde o volume para", "texto": "Etapas que existem, mas perdem tempo, contrato ou dinheiro entre uma área e outra.", "itens": ["Fila de instalação", "Cancelamento e retenção", "Faturamento dentro do ciclo"] }
+    ],
+    "entrega": "processo escrito, parametrizado no IXC e treinado com a equipe"
+  },
+  "dashboard": {
+    "rotulo": "Dashboard",
+    "titulo": "A visão geral do provedor, viva.",
+    "lead": "Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular. Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.",
+    "legendaCelular": "A pergunta da diretoria, no celular"
+  },
+  "modelos": {
+    "rotulo": "Modelos de contratação",
+    "titulo": "Escolha o formato que o provedor comporta.",
+    "apoio": "Quatro formatos, um ponto de partida: o diagnóstico define escopo, prazo e valor de cada um.",
+    "cartoes": [
+      { "tag": "Escopo fechado", "titulo": "Projeto pontual", "texto": "Um gargalo específico, resolvido com começo, meio e fim.", "itens": ["Diagnóstico de gestão", "Redesenho de um processo", "Parametrização do IXC", "Construção do dashboard"], "paraQuem": "já sabe onde o processo trava." },
+      { "tag": "Recorrente", "titulo": "Acompanhamento mensal", "texto": "O rito de decisão rodando todo mês, com a Baishift na mesa.", "itens": ["Fechamento do mês", "Indicadores por setor", "Reunião de resultado", "Cobrança do plano de ação"], "paraQuem": "quer o número virando decisão sem depender de ninguém de dentro." },
+      { "tag": "Recorrente", "titulo": "Controladoria terceirizada", "texto": "O financeiro rodando com a Baishift, sem montar equipe interna.", "itens": ["Conciliação bancária", "Recebimentos e cobrança", "Pagamentos", "Relatórios gerenciais"], "paraQuem": "ainda fecha o mês na planilha paralela." },
+      { "tag": "Sob medida", "titulo": "Software e automação", "texto": "A rotina manual que custa caro vira ferramenta integrada ao IXC.", "itens": ["Levantamento na operação", "Ferramenta desenvolvida", "Dados integrados", "Sustentação mensal"], "paraQuem": "já sabe qual rotina está engolindo horas." }
+    ],
+    "nota": "Escopo, prazo e valor são definidos a partir do diagnóstico · retorno em até dois dias úteis"
+  },
+  "perfil": {
+    "rotulo": "Honestidade poupa reunião",
+    "titulo": "Para quem serve — e para quem não serve.",
+    "serveTitulo": "Serve bem",
+    "serve": [
+      "Provedor de 2 mil a 50 mil assinantes que já sente o processo travar",
+      "Diretoria que quer decidir com número, não com sensação",
+      "Quem usa IXC Soft e sabe que usa uma fração do que ele faz",
+      "Quem quer parar de fechar o mês na planilha paralela"
+    ],
+    "naoServeTitulo": "Não serve",
+    "naoServe": [
+      "Quem quer trocar de ERP em trinta dias",
+      "Quem procura o fornecedor mais barato da praça",
+      "Quem quer dashboard bonito sem arrumar o processo antes",
+      "Quem não vai liberar acesso aos próprios dados"
+    ]
+  },
+  "faq": {
+    "rotulo": "Perguntas frequentes",
+    "titulo": "O que todo provedor pergunta antes de começar.",
+    "itens": [
+      { "pergunta": "Quanto tempo leva o diagnóstico?", "resposta": "Quarenta e cinco minutos de conversa com a diretoria e duas semanas lendo os números reais do IXC. No fim, você recebe a lista do que resolver, em que ordem e com que retorno esperado." },
+      { "pergunta": "Preciso contratar alguma coisa depois do diagnóstico?", "resposta": "Não. O diagnóstico é sem compromisso. Cada etapa seguinte tem entrega e preço próprios, e você decide subir a próxima só depois de ver o resultado da anterior." },
+      { "pergunta": "Para qual tamanho de provedor faz sentido?", "resposta": "Provedores de 2 mil a 50 mil assinantes que já sentem o processo travar: fila de instalação, cobrança atrasada, fechamento na planilha paralela. Abaixo disso o processo costuma caber na cabeça do dono; acima, a estrutura já é outra." },
+      { "pergunta": "Preciso liberar acesso aos meus dados?", "resposta": "Sim. O trabalho é feito com os números reais do IXC — carteira, caixa, campo e fiscal. Sem acesso aos dados não há diagnóstico, só opinião." },
+      { "pergunta": "Vou precisar trocar de sistema?", "resposta": "Não. Os processos são redesenhados e parametrizados dentro do IXC, e o dashboard lê o banco do sistema que já está na operação. Quem quer trocar de ERP em trinta dias não é o perfil." },
+      { "pergunta": "Como funciona a contratação?", "resposta": "Quatro formatos: projeto pontual com escopo fechado, acompanhamento mensal, controladoria terceirizada ou software sob medida. Depois da primeira conversa, a Baishift retorna com o escopo, o prazo e o formato que faz sentido para o seu provedor." }
+    ]
+  },
+  "contato": {
+    "rotulo": "Vamos começar pelo diagnóstico",
+    "titulo": "Primeiro os números aparecem. Depois eles *melhoram*.",
+    "texto": "Conte como a gestão do provedor funciona hoje. A Baishift retorna com o escopo, o prazo e o formato de contratação.",
+    "botaoWhatsapp": "Chamar no WhatsApp",
+    "areas": [
+      { "titulo": "Diagnóstico", "texto": "Situação real e plano priorizado" },
+      { "titulo": "Processos IXC", "texto": "Escritos, parametrizados, treinados" },
+      { "titulo": "Dashboard", "texto": "Base, caixa, churn, campo" },
+      { "titulo": "Controladoria", "texto": "Fechamento, rateio, custo" },
+      { "titulo": "Software para ISP", "texto": "Cobrança, campo, autoatendimento" },
+      { "titulo": "Sob medida", "texto": "Outros segmentos" }
+    ],
+    "formulario": { "titulo": "Agendar o diagnóstico", "subtitulo": "Cinco campos. A Baishift responde em até dois dias úteis." }
+  },
+  "produtos": [
+    {
+      "slug": "severino", "nome": "Severino", "ativo": true, "cor": "#F5A300", "letra": "S",
+      "icone": { "arquivo": "", "alt": "" },
+      "status": "em desenvolvimento",
+      "descricaoMenu": "Assistente de IA para o profissional autônomo",
+      "descricao": "Assistente de IA que organiza agenda, orçamento, cobrança e recebimento do profissional autônomo.",
+      "publico": "Eletricista · Pedreiro · Encanador · Jardineiro",
+      "titulo": "Ele fala. *O Severino anota.*",
+      "lead": "Assistente de IA que organiza a agenda, o orçamento, a cobrança e o recebimento do profissional autônomo — por voz, no WhatsApp, sem planilha e sem aplicativo complicado.",
+      "chips": ["Orçamento enviado · R$ 850", "Serviço amanhã · 8h", "Pagamento recebido"],
+      "capa": { "arquivo": "", "alt": "" },
+      "comoFunciona": {
+        "rotulo": "Como funciona", "titulo": "Três coisas, feitas direito.",
+        "itens": [
+          { "titulo": "Agenda", "texto": "O profissional fala quando vai fazer o serviço e o Severino marca, avisa o cliente e lembra na véspera." },
+          { "titulo": "Orçamento", "texto": "Descreve o serviço por voz; o Severino monta o orçamento e manda para o cliente aprovar." },
+          { "titulo": "Cobrança e recebimento", "texto": "Quando o serviço termina, a cobrança sai sozinha — e o Severino confirma quando o dinheiro entrou." }
+        ]
+      },
+      "blocos": [],
+      "listaEspera": { "ativa": true, "convite": "Entre na lista e seja avisado quando o Severino *abrir para os primeiros profissionais*.", "campo": "Sua profissão", "placeholder": "Ex.: eletricista" }
+    },
+    {
+      "slug": "aprova-ordem", "nome": "Aprova · Ordem", "ativo": true, "cor": "#C0563A", "letra": "§",
+      "icone": { "arquivo": "", "alt": "" },
+      "status": "em preparação",
+      "descricaoMenu": "Questões e revisão para o Exame de Ordem",
+      "descricao": "Banco de questões com explicação clara, mapa de matéria por peso na prova e revisão espaçada para o Exame de Ordem.",
+      "publico": "1ª e 2ª fase do Exame de Ordem",
+      "titulo": "Questão comentada em *linguagem clara*, para quem estuda trabalhando.",
+      "lead": "Banco de questões com explicação direta, mapa de matéria pelo peso real na prova e revisão espaçada — para o candidato que tem uma hora por dia e precisa fazê-la render.",
+      "chips": ["Ética · 18% da prova", "Revisão de hoje · 24 questões", "Acerto na semana · 71%"],
+      "capa": { "arquivo": "", "alt": "" },
+      "comoFunciona": {
+        "rotulo": "Como funciona", "titulo": "Três coisas, feitas direito.",
+        "itens": [
+          { "titulo": "Questões comentadas", "texto": "Cada alternativa explicada em português simples: por que está certa, por que está errada, o que a banca queria." },
+          { "titulo": "Mapa por peso", "texto": "As matérias ordenadas pelo peso que têm na prova, para estudar primeiro o que mais pontua." },
+          { "titulo": "Revisão espaçada", "texto": "O que você errou volta no momento certo. O que você acertou sai do caminho." }
+        ]
+      },
+      "blocos": [],
+      "listaEspera": { "ativa": true, "convite": "Entre na lista e seja avisado quando o Aprova · Ordem *abrir a primeira turma*.", "campo": "Próximo exame", "placeholder": "Ex.: 1ª fase, próxima edição" }
+    },
+    {
+      "slug": "aprova-suficiencia", "nome": "Aprova · Suficiência", "ativo": true, "cor": "#12855A", "letra": "Σ",
+      "icone": { "arquivo": "", "alt": "" },
+      "status": "em preparação",
+      "descricaoMenu": "Simulados do Exame de Suficiência",
+      "descricao": "Questões das últimas edições, simulado cronometrado no formato do exame e exemplos de operação real de empresa.",
+      "publico": "Exame de Suficiência do contador",
+      "titulo": "Simulado no formato do exame, com exemplos de *empresa de verdade*.",
+      "lead": "Questões das últimas edições, simulado cronometrado no formato oficial e exemplos tirados da operação real de uma empresa — para chegar no dia da prova já tendo feito a prova.",
+      "chips": ["Simulado · 50 questões · 4h", "Custos · 82% de acerto", "Última edição resolvida"],
+      "capa": { "arquivo": "", "alt": "" },
+      "comoFunciona": {
+        "rotulo": "Como funciona", "titulo": "Três coisas, feitas direito.",
+        "itens": [
+          { "titulo": "Últimas edições", "texto": "As questões que caíram, organizadas por tema, com o gabarito comentado." },
+          { "titulo": "Simulado cronometrado", "texto": "O mesmo número de questões, o mesmo tempo, a mesma pressão — antes do dia da prova." },
+          { "titulo": "Exemplos reais", "texto": "Lançamentos, fechamento e custos retirados da operação de uma empresa de verdade, não de enunciado inventado." }
+        ]
+      },
+      "blocos": [],
+      "listaEspera": { "ativa": true, "convite": "Entre na lista e seja avisado quando o Aprova · Suficiência *abrir a primeira turma*.", "campo": "Próximo exame", "placeholder": "Ex.: próxima edição" }
+    }
+  ]
+}
