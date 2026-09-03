@@ -589,11 +589,12 @@ function lerCookies(req) {
 }
 function usuarioDe(req) { return auth.lerSessao(lerCookies(req)[COOKIE]); }
 
+/* lê o corpo até o limite; o que passar é descartado e a resposta é 413 (a conexão fica saudável) */
 function lerCorpo(req, limite) {
   return new Promise((resolve, reject) => {
-    const partes = []; let tamanho = 0;
-    req.on("data", c => { tamanho += c.length; if (tamanho > limite) { reject(new Erro(413, "corpo grande demais")); req.destroy(); } else partes.push(c); });
-    req.on("end", () => resolve(Buffer.concat(partes)));
+    const partes = []; let tamanho = 0, excedeu = false;
+    req.on("data", c => { tamanho += c.length; if (tamanho > limite) excedeu = true; else partes.push(c); });
+    req.on("end", () => excedeu ? reject(new Erro(413, "corpo grande demais")) : resolve(Buffer.concat(partes)));
     req.on("error", reject);
   });
 }

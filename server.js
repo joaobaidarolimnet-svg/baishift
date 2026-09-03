@@ -22,6 +22,14 @@ try {
   process.exit(1);
 }
 
+/* disco persistente (usuários, métricas) e usuário inicial */
+const dados = require("./lib/dados");
+const auth = require("./lib/auth");
+const painel = require("./lib/painel");
+console.log("disco persistente em " + dados.preparar());
+auth.semear();
+console.log("GitHub: " + (process.env.GITHUB_TOKEN ? "token presente" : "sem token" + (process.env.RAILWAY_ENVIRONMENT ? " — o painel não vai publicar até configurar GITHUB_TOKEN" : " (modo local)")));
+
 /* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>" (e o mesmo para as logos,
    favicon e imagem de compartilhamento), então toda publicação força o navegador a baixar o
    arquivo novo, e o arquivo em si pode ficar em cache por um ano. */
@@ -182,6 +190,11 @@ function redirecionar(req, res) {
 
 const servidor = http.createServer((req, res) => {
   if (redirecionar(req, res)) return;
+  const caminho = (req.url || "/").split("?")[0];
+  if (caminho === "/gestor" || caminho.startsWith("/gestor/")) {
+    painel.atender(req, res).catch(e => { console.error("painel:", e); if (!res.headersSent) res.writeHead(500); res.end(); });
+    return;
+  }
   if (req.method !== "GET" && req.method !== "HEAD") {
     res.writeHead(405, { "Allow": "GET, HEAD", "Content-Type": "text/plain; charset=utf-8" });
     return res.end("Método não permitido");
@@ -192,7 +205,7 @@ const servidor = http.createServer((req, res) => {
 });
 
 servidor.listen(PORTA, () => {
-  console.log("Site da Baishift no ar na porta " + PORTA);
+  console.log("Site da Baishift no ar na porta " + servidor.address().port);
 });
 
 /* o Railway encerra o processo com SIGTERM ao publicar uma versão nova */
