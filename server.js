@@ -11,6 +11,17 @@ const crypto = require("node:crypto");
 const RAIZ = __dirname;
 const PORTA = process.env.PORT || 3000;
 
+/* o site é gerado do conteudo/site.json antes de atender: o HTML no disco é sempre o do JSON */
+const { carregar } = require("./lib/conteudo");
+const { gerarTudo } = require("./lib/render");
+try {
+  const r = gerarTudo(carregar(), RAIZ);
+  console.log("conteúdo gerado: " + r.escritos.length + " arquivos" + (r.removidos.length ? ", " + r.removidos.length + " removidos" : ""));
+} catch (e) {
+  console.error("conteúdo inválido, o servidor não vai subir: " + e.message);
+  process.exit(1);
+}
+
 /* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>" (e o mesmo para as logos,
    favicon e imagem de compartilhamento), então toda publicação força o navegador a baixar o
    arquivo novo, e o arquivo em si pode ficar em cache por um ano. */
@@ -28,7 +39,8 @@ function versionar(html) {
 
 /* arquivos do projeto que não fazem parte do site e não devem ser servidos */
 const FORA = new Set(["server.js", "package.json", "package-lock.json", "readme.md"]);
-const PASTAS_FORA = new Set(["tools", "dist", "node_modules"]);
+const PASTAS_FORA = new Set(["tools", "dist", "node_modules", "lib", "templates", "gestor", "test", "docs", "dados"]);
+const CAMINHOS_FORA = new Set(["conteudo/site.json"]);
 
 const TIPOS = {
   ".html": "text/html; charset=utf-8",
@@ -90,6 +102,7 @@ function resolver(pedido) {
   if (trechos.some(t => t.startsWith("."))) return null;
   if (PASTAS_FORA.has(trechos[0])) return null;
   if (trechos.length === 1 && FORA.has(trechos[0].toLowerCase())) return null;
+  if (CAMINHOS_FORA.has(trechos.join("/"))) return null;
 
   return destino;
 }
@@ -124,7 +137,7 @@ function enviar(req, res, base, status) {
   }
   const ext = path.extname(arquivo).toLowerCase();
   const rel = path.relative(RAIZ, arquivo).split(path.sep).join("/");
-  const versionado = rel in VERSAO;
+  const versionado = rel in VERSAO || rel.startsWith("conteudo/imagens/");
 
   /* html é pequeno: passa pela memória para receber as URLs versionadas */
   if (ext === ".html") {
