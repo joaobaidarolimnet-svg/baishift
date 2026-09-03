@@ -13,18 +13,30 @@ processos e Dashboard — mais modelos de contratação, FAQ e contato. O menu *
 leva às landing pages dos produtos fora do provedor.
 
 ```
-index.html              página principal: hero, 01 Diagnóstico, 02 Processos, 03 Dashboard, modelos, FAQ, contato
-outros/*.html           landing pages de Severino, Aprova · Ordem e Aprova · Suficiência (geradas)
+conteudo/site.json      FONTE DA VERDADE dos textos, produtos e carrossel — edite aqui (ou pelo painel)
+conteudo/imagens/       imagens enviadas pelo painel
+templates/*.js          modelos das páginas (index, produto, partes comuns)
+lib/                    validação do conteúdo, helpers de HTML, gerador das páginas
+index.html              GERADO a partir do JSON: página principal
+outros/*.html           GERADOS: landing pages dos produtos do menu Outros
+sitemap.xml             GERADO
 404.html                página de erro
-assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages)
-assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, formulários
+assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages, carrossel)
+assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, carrossel, formulários
 assets/marca/           kit oficial da marca V2 (logos, ícones, favicons, social, papelaria; guia em identidade-baishift.html)
 assets/img/             favicon e ícones do app (copiados do kit) e imagem de compartilhamento
-server.js               servidor estático (Railway): URLs limpas, cache versionado, 404
-robots.txt · sitemap.xml · site.webmanifest · favicon.ico
+server.js               servidor (Railway): gera o site do JSON ao subir, URLs limpas, cache versionado, 404
+test/                   testes (npm test)
+robots.txt · site.webmanifest · favicon.ico
 dist/                   versão em arquivo único (gerada)
-tools/                  geradores (landing pages, arquivo único, imagens) e verificação
+tools/                  geradores (site, arquivo único, imagens) e verificação
 ```
+
+**Não edite `index.html` nem `outros/*.html` à mão**: eles são regerados a partir de
+`conteudo/site.json` toda vez que o servidor sobe. Para mudar um texto, edite o JSON e rode
+`npm run build` (ou use o painel em `/gestor`, quando estiver no ar). Títulos aceitam
+`*trecho*` para o destaque em cor, `**trecho**` para negrito e `[texto](url)` para link; em
+textos longos, linha em branco separa parágrafos.
 
 **Gráficos em movimento contínuo.** Frente 01: `dataPath()` — fontes (ERP, Omnichannel,
 Recebimentos, Pagamentos) → núcleo vertical Baishift Gestão → Painel, alta/baixa
@@ -149,12 +161,11 @@ números da frente 01 e o quadro "O que o processo mostra" precisam contar a mes
 
 **Painéis por período.** Dados de 7 dias, 30 dias e 12 meses no objeto `PANELS`.
 
-**Landing pages.** Textos em `tools/build-outros.mjs`; rode o script para regerar.
+**Landing pages e textos.** Tudo em `conteudo/site.json`; rode `npm run build` para regerar.
 
 **Feed de eventos do painel.** Lista `EV` dentro de `feed()`.
 
-**FAQ.** As perguntas estão duas vezes: no HTML (`<details>`) e no JSON-LD `FAQPage`
-no fim do `index.html`. Ao mudar uma, mude a outra.
+**FAQ.** Só em `conteudo/site.json` — o HTML e o JSON-LD `FAQPage` saem dos mesmos itens.
 
 **Marca.** O kit oficial (V2, seta divisa + triângulo vazado) está em `assets/marca/` (guia em `identidade-baishift.html`, regras em `LEIA-ME.md`, cores em `tokens.css`). O
 cabeçalho usa `baishift-principal.svg` sobre fundo claro e `baishift-branco.svg` sobre
@@ -168,7 +179,8 @@ Favicon, ícones do app (inclusive o maskable) e a imagem de compartilhamento s�
 ## Scripts auxiliares
 
 ```bash
-node tools/build-outros.mjs    # regera as landing pages de outros/ a partir dos textos no script
+npm run build                  # regera index.html, outros/*.html e sitemap.xml a partir de conteudo/site.json
+npm test                       # testes do gerador e da validação do conteúdo
 node tools/build-single.mjs    # gera dist/baishift-site.html (CSS, JS e logos embutidos)
 ./tools/shot.sh tools/og.html assets/img/og.png 1200 630   # regera a imagem de compartilhamento (usa a logo do kit)
 ```
