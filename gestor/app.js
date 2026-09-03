@@ -107,7 +107,8 @@
       { tela: "contato", nome: "Contato e rodapé" }, { tela: "produtos", nome: "Produtos" }, { tela: "site", nome: "Site" },
       { grupo: "Acesso" }, { tela: "usuarios", nome: "Usuários", admin: true }, { tela: "conta", nome: "Minha conta" }
     ],
-    aoNavegar: []           /* funções chamadas a cada troca de tela (a barra de publicar usa) */
+    aoNavegar: [],          /* funções chamadas a cada troca de tela (a barra de publicar usa) */
+    aoIniciar: []           /* funções esperadas depois de carregar o usuário, antes da primeira tela */
   };
 
   function padrao() { return ["visao-geral", "inicio", "conta"].find(t => G.TELAS[t]); }
@@ -142,6 +143,7 @@
     const d = await api("GET", "eu");
     G.estado.eu = d.usuario; G.estado.github = d.github; G.estado.railway = d.railway;
     montarMenu();
+    for (const fn of G.aoIniciar) { try { await fn(); } catch (e) { toast(e.message, "erro"); } }
     $("#menu-btn").addEventListener("click", () => { const ab = $("#lateral").classList.toggle("aberta"); $("#menu-btn").setAttribute("aria-expanded", ab ? "true" : "false"); });
     $("#topo-acoes").append(el("button", { class: "btn btn-2 btn-mini", type: "button", onclick: async () => { await api("POST", "sair", {}); location.href = "/gestor"; } }, "Sair"));
     if (G.estado.eu.trocarSenha && location.hash !== "#/conta") location.hash = "#/conta";
