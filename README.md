@@ -89,20 +89,22 @@ PORT=8900 npm start     # abra http://localhost:8900
 ### Domínio
 
 O DNS de `baishift.com.br` fica na **Locaweb**, junto com o e-mail (`MX`, SPF e os hosts
-`webmail`, `smtp`, `pop`, `imap` — não remover). Registros criados para o site:
+`webmail`, `smtp`, `pop`, `imap` — não remover). O painel da Locaweb não aceita CNAME na
+raiz nem mais de um registro por host, por isso a arquitetura é esta:
 
-| Tipo | Nome | Valor |
+| Endereço | Quem responde | Como |
 |---|---|---|
-| CNAME | `www` | `swxzxo57.up.railway.app` |
-| TXT | `_railway-verify.www` | `railway-verify=7480633e81ee1a81902e921908ab1c7540e935e1e880a31bc56b25bed9faa153` |
+| `www.baishift.com.br` | **Railway** (o site) | CNAME `www` → `swxzxo57.up.railway.app` + TXT `_railway-verify.www` |
+| `baishift.com.br` (raiz) | **GitHub Pages** (só redireciona) | A `baishift.com.br` → `185.199.108.153` |
 
-A Locaweb não aceita CNAME na raiz do domínio, por isso o endereço oficial é o `www`.
-A raiz `baishift.com.br` deve ser tratada com o **redirecionamento de domínio** no painel
-da Locaweb (apontando para `https://www.baishift.com.br`). Se um dia o DNS for para a
-Cloudflare, a raiz pode receber CNAME e ser adicionada de volta no Railway
-(`railway domain baishift.com.br`).
+A raiz é servida pelo repositório **`joaobaidarolimnet-svg/baishift-raiz`**: uma página
+mínima (`index.html` e `404.html`) que leva para `https://www.baishift.com.br` mantendo
+caminho e parâmetros. O GitHub emite o certificado HTTPS da raiz e o "HTTPS obrigatório"
+está ligado. Se um dia o DNS for para a Cloudflare, a raiz pode receber CNAME direto para
+o Railway (`railway domain baishift.com.br`) e o redirecionador deixa de ser necessário.
 
-Estado do domínio no Railway: `railway domain status 43ed9844-b2d6-4026-9f39-d6320fde3295`.
+Estado do `www` no Railway: `railway domain status 43ed9844-b2d6-4026-9f39-d6320fde3295`.
+Estado da raiz no GitHub: `gh api repos/joaobaidarolimnet-svg/baishift-raiz/pages/health`.
 
 ### O que trocar antes de ir ao ar
 
