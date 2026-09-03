@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel · Baishift</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/gestor/gestor.css">
+</head>
+<body class="app">
+<header class="topo">
+  <button class="menu-btn" id="menu-btn" type="button" aria-label="Abrir menu" aria-controls="lateral" aria-expanded="false">☰</button>
+  <a class="marca" href="/gestor"><img src="/assets/marca/01-logo/baishift-principal.svg" alt="Baishift" width="911" height="175"><span>Painel</span></a>
+  <div class="topo-acoes" id="topo-acoes"></div>
+</header>
+<aside class="lateral" id="lateral">
+  <nav id="nav" aria-label="Seções do painel"></nav>
+  <div class="lateral-pe" id="eu"></div>
+</aside>
+<main class="tela" id="tela"></main>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script src="/gestor/app.js"></script>
+<script src="/gestor/tela-conta.js"></script>
+<script src="/gestor/tela-usuarios.js"></script>
+</body>
+</html>
