@@ -5,7 +5,9 @@
   "description": "Site institucional da Baishift",
   "scripts": {
     "start": "node server.js",
-    "build:single": "node tools/build-single.mjs"
+    "build": "node tools/build-site.mjs",
+    "build:single": "node tools/build-single.mjs",
+    "test": "node --test test/"
   },
   "engines": {
     "node": ">=20"

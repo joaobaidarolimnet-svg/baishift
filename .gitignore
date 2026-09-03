@@ -6,3 +6,6 @@ node_modules/
 dist/
 tools/*.png
 tools/icon-[0-9]*.html
+
+# disco persistente local do painel (usuários, métricas, imagens pendentes)
+dados/
