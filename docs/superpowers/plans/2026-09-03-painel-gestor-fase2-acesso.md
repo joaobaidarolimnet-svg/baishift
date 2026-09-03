@@ -801,7 +801,9 @@ printf '/* provisório */\n' > gestor/app.js
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (r) {
         if (!r.ok) { msg.textContent = r.j.erro || "não foi possível entrar"; botao.disabled = false; botao.textContent = "Entrar"; return; }
-        location.href = "/gestor" + (r.j.trocarSenha ? "#/conta" : "");
+        /* só trocar o #hash não recarrega a página: marca a tela e recarrega para o servidor entregar o painel */
+        if (r.j.trocarSenha) location.hash = "#/conta";
+        location.reload();
       })
       .catch(function () { msg.textContent = "sem conexão com o servidor"; botao.disabled = false; botao.textContent = "Entrar"; });
   });
