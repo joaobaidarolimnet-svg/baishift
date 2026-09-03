@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+<!-- GERADO a partir de conteudo/site.json pelos modelos em templates/. Não edite este arquivo: edite o JSON e rode `node tools/build-site.mjs`, ou use o painel em /gestor. -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Severino — Baishift</title>
 <meta name="description" content="Assistente de IA que organiza agenda, orçamento, cobrança e recebimento do profissional autônomo.">
-<meta name="robots" content="index, follow">
+<meta name="author" content="Baishift">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#142F7A">
 <link rel="canonical" href="https://www.baishift.com.br/outros/severino">
 <meta property="og:type" content="website">
@@ -15,16 +17,27 @@
 <meta property="og:title" content="Severino — Baishift">
 <meta property="og:description" content="Assistente de IA que organiza agenda, orçamento, cobrança e recebimento do profissional autônomo.">
 <meta property="og:image" content="https://www.baishift.com.br/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Baishift — gestão, processos e software para provedores de internet">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Severino — Baishift">
+<meta name="twitter:description" content="Assistente de IA que organiza agenda, orçamento, cobrança e recebimento do profissional autônomo.">
+<meta name="twitter:image" content="https://www.baishift.com.br/assets/img/og.png">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="alternate icon" href="/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+<link rel="apple-touch-icon" href="/assets/img/icon-180.png" sizes="180x180">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css">
 <noscript><style>.rv{opacity:1;transform:none}.navlinks{position:static;opacity:1;visibility:visible;pointer-events:auto;transform:none}</style></noscript>
+<script>
+/* Contato. O WhatsApp só com dígitos, com DDI e DDD (ex.: "5569999999999").
+   Enquanto estiver vazio, os botões de WhatsApp levam ao formulário e o formulário abre o e-mail. */
+window.BAISHIFT = {"whatsapp":"","email":"contato@baishift.com.br"};
+</script>
 </head>
 <body style="--ac:#F5A300">
 
@@ -34,8 +47,8 @@
     <button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></button>
     <nav class="navlinks" id="navlinks" aria-label="Navegação">
       <a href="/">Baishift</a>
-      <a href="/outros/aprova-ordem">Aprova · Ordem</a>
-      <a href="/outros/aprova-suficiencia">Aprova · Suficiência</a>
+      <a href="/outros/aprova-ordem" data-ev="menu:outros:aprova-ordem">Aprova · Ordem</a>
+      <a href="/outros/aprova-suficiencia" data-ev="menu:outros:aprova-suficiencia">Aprova · Suficiência</a>
       <a class="cta" href="#lista">Entrar na lista</a>
     </nav>
   </div>
@@ -49,7 +62,7 @@
         <h1>Ele fala. <em>O Severino anota.</em></h1>
         <p class="lead">Assistente de IA que organiza a agenda, o orçamento, a cobrança e o recebimento do profissional autônomo — por voz, no WhatsApp, sem planilha e sem aplicativo complicado.</p>
         <span class="status"><b aria-hidden="true"></b>em desenvolvimento</span>
-        <div class="hero-acts" style="margin-top:26px"><a class="btn btn-1" href="#lista" style="background:#F5A300">Entrar na lista de espera</a><a class="btn btn-2" href="/">Voltar para a Baishift</a></div>
+        <div class="hero-acts" style="margin-top:26px"><a class="btn btn-1" href="#lista" style="background:#F5A300" data-ev="lista:severino">Entrar na lista de espera</a><a class="btn btn-2" href="/">Voltar para a Baishift</a></div>
       </div>
       <div class="rv">
         <div class="lp-art" aria-hidden="true">
@@ -73,6 +86,7 @@
     </div>
   </section>
 
+
   <div class="lp-band" id="lista">
     <div class="wrap">
       <div class="rv">
@@ -80,7 +94,7 @@
         <h2>Entre na lista e seja avisado quando o Severino <em>abrir para os primeiros profissionais</em>.</h2>
         <p style="margin-top:16px">Sem spam: um aviso quando abrir, e só.</p>
       </div>
-      <form class="form rv" data-mail="Lista de espera · Severino" novalidate>
+      <form class="form rv" data-mail="Lista de espera · Severino" data-ev="lista:severino" novalidate>
         <h3>Quero ser avisado</h3>
         <p class="fh">Dois campos. O aviso vai por e-mail.</p>
         <div class="fgrid">

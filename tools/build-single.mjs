@@ -15,11 +15,11 @@ const swap = (texto, alvo, novo) => {
   return texto.replace(alvo, novo);
 };
 
-html = swap(html, '<link rel="stylesheet" href="assets/css/site.css">', "<style>\n" + css + "\n</style>");
-html = swap(html, '<script src="assets/js/site.js" defer></script>', "<script>\n" + js + "\n</script>");
+html = swap(html, '<link rel="stylesheet" href="/assets/css/site.css">', "<style>\n" + css + "\n</style>");
+html = swap(html, '<script src="/assets/js/site.js" defer></script>', "<script>\n" + js + "\n</script>");
 html = html
   // o ícone vira data URI para o arquivo continuar autossuficiente
-  .replace('<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">',
+  .replace('<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">',
            '<link rel="icon" href="data:image/svg+xml,' +
            encodeURIComponent(read("assets/img/favicon.svg").replace(/\n\s*/g, "")) + '">')
   .replace(/\n\s*<link rel="alternate icon"[^>]*>/, "")
@@ -29,7 +29,7 @@ html = html
 /* svgs da marca embutidos como data URI: o arquivo único não depende de caminhos */
 for (const f of ["assets/marca/01-logo/baishift-principal.svg", "assets/marca/01-logo/baishift-branco.svg"]) {
   const uri = "data:image/svg+xml," + encodeURIComponent(read(f).replace(/\n\s*/g, ""));
-  html = html.split(f).join(uri);
+  html = html.split("/" + f).join(uri);
 }
 for (const [oque, marca] of [["estilos", "--blue:#1652F0"], ["script", "function procFlow"]])
   if (!html.includes(marca)) throw new Error("build-single: " + oque + " não foram embutidos");

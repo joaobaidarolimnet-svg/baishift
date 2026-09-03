@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- GERADO a partir de conteudo/site.json pelos modelos em templates/. Não edite este arquivo: edite o JSON e rode `node tools/build-site.mjs`, ou use o painel em /gestor. -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -21,22 +22,22 @@
 <meta property="og:image:alt" content="Baishift — gestão, processos e software para provedores de internet">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Baishift — Gestão, processos e software para provedores de internet">
-<meta name="twitter:description" content="O provedor decidindo com número, não com sensação. Diagnóstico, consultoria de processos e dashboard.">
+<meta name="twitter:description" content="O provedor decidindo com número, não com sensação. Diagnóstico, consultoria de processos e dashboard feitos por quem opera um provedor.">
 <meta name="twitter:image" content="https://www.baishift.com.br/assets/img/og.png">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
-<link rel="alternate icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="assets/img/icon-180.png" sizes="180x180">
-<link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="alternate icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/assets/img/icon-180.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/site.css">
 <noscript><style>.rv{opacity:1;transform:none}.navlinks{position:static;opacity:1;visibility:visible;pointer-events:auto;transform:none}</style></noscript>
 <script>
-/* Contato. Preencha o WhatsApp só com dígitos, com DDI e DDD (ex.: "5569999999999").
+/* Contato. O WhatsApp só com dígitos, com DDI e DDD (ex.: "5569999999999").
    Enquanto estiver vazio, os botões de WhatsApp levam ao formulário e o formulário abre o e-mail. */
-window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
+window.BAISHIFT = {"whatsapp":"","email":"contato@baishift.com.br"};
 </script>
 </head>
 <body>
@@ -45,7 +46,7 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
 
 <header class="bar on-dark" id="bar">
   <div class="bar-in">
-    <a class="brand" href="#topo" aria-label="Baishift — início"><img class="lg lg-navy" src="assets/marca/01-logo/baishift-principal.svg" alt="Baishift" width="911" height="175"><img class="lg lg-white" src="assets/marca/01-logo/baishift-branco.svg" alt="" aria-hidden="true" width="911" height="175"></a>
+    <a class="brand" href="#topo" aria-label="Baishift — início"><img class="lg lg-navy" src="/assets/marca/01-logo/baishift-principal.svg" alt="Baishift" width="911" height="175"><img class="lg lg-white" src="/assets/marca/01-logo/baishift-branco.svg" alt="" aria-hidden="true" width="911" height="175"></a>
     <button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></button>
     <nav class="navlinks" id="navlinks" aria-label="Navegação principal">
       <a href="#diagnostico">Diagnóstico</a>
@@ -55,13 +56,13 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
       <div class="dd" id="dd">
         <button class="ddb" type="button" aria-expanded="false" aria-controls="ddm">Outros <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg></button>
         <ul class="ddm" id="ddm">
-          <li><a href="outros/severino" style="--ac:#F5A300"><span class="mk" aria-hidden="true">S</span><div><b>Severino</b><span>Assistente de IA para o profissional autônomo · em desenvolvimento</span></div></a></li>
-          <li><a href="outros/aprova-ordem" style="--ac:#C0563A"><span class="mk" aria-hidden="true">§</span><div><b>Aprova · Ordem</b><span>Questões e revisão para o Exame de Ordem · em preparação</span></div></a></li>
-          <li><a href="outros/aprova-suficiencia" style="--ac:#12855A"><span class="mk" aria-hidden="true">Σ</span><div><b>Aprova · Suficiência</b><span>Simulados do Exame de Suficiência · em preparação</span></div></a></li>
+          <li><a href="/outros/severino" style="--ac:#F5A300" data-ev="menu:outros:severino"><span class="mk" aria-hidden="true">S</span><div><b>Severino</b><span>Assistente de IA para o profissional autônomo · em desenvolvimento</span></div></a></li>
+          <li><a href="/outros/aprova-ordem" style="--ac:#C0563A" data-ev="menu:outros:aprova-ordem"><span class="mk" aria-hidden="true">§</span><div><b>Aprova · Ordem</b><span>Questões e revisão para o Exame de Ordem · em preparação</span></div></a></li>
+          <li><a href="/outros/aprova-suficiencia" style="--ac:#12855A" data-ev="menu:outros:aprova-suficiencia"><span class="mk" aria-hidden="true">Σ</span><div><b>Aprova · Suficiência</b><span>Simulados do Exame de Suficiência · em preparação</span></div></a></li>
         </ul>
       </div>
       <a href="#faq">FAQ</a>
-      <a class="cta" href="#contato">Falar com a Baishift</a>
+      <a class="cta" href="#contato" data-ev="cta:menu">Falar com a Baishift</a>
     </nav>
   </div>
   <div id="prog" aria-hidden="true"></div>
@@ -75,11 +76,10 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
     <div>
       <span class="pill mono"><b aria-hidden="true"></b> Diagnóstico · Processos · Dashboard</span>
       <h1>O provedor decidindo <em>com número</em>, não com sensação.</h1>
-      <p class="hero-sub">Três frentes, uma regra: primeiro os números aparecem, depois eles melhoram. Diagnóstico da
-        operação, processos redesenhados dentro do IXC e o dashboard que a diretoria abre todo dia — feito por quem opera um provedor.</p>
+      <p class="hero-sub">Três frentes, uma regra: primeiro os números aparecem, depois eles melhoram. Diagnóstico da operação, processos redesenhados dentro do IXC e o dashboard que a diretoria abre todo dia — feito por quem opera um provedor.</p>
       <div class="hero-acts">
-        <a class="btn btn-1" href="#diagnostico">Começar pelo diagnóstico</a>
-        <a class="btn btn-ghost" href="#dashboard">Ver o dashboard ao vivo</a>
+        <a class="btn btn-1" href="#diagnostico" data-ev="cta:principal">Começar pelo diagnóstico</a>
+        <a class="btn btn-ghost" href="#dashboard" data-ev="cta:secundario">Ver o dashboard ao vivo</a>
       </div>
       <div class="tags"><span>Gestão em ISP</span><span>IXC Soft</span><span>Controladoria</span><span>Dashboards</span><span>Software sob medida</span></div>
     </div>
@@ -122,8 +122,7 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
     <div class="fr-head rv">
       <div><span class="eyebrow"><b>Frente 01</b> Diagnóstico</span>
         <h2 id="h-diag">Primeiro, a empresa como ela é. Depois, para onde ela vai.</h2></div>
-      <p class="lead">Toda operação tem dois resultados: o que a diretoria sente e o que o número mostra. O diagnóstico
-        mede a distância entre os dois — e entrega o mapa para fechá-la.</p>
+      <p class="lead">Toda operação tem dois resultados: o que a diretoria sente e o que o número mostra. O diagnóstico mede a distância entre os dois — e entrega o mapa para fechá-la.</p>
     </div>
     <div class="stage rv">
       <div class="cap"><i aria-hidden="true"></i><b>Caminho dos dados</b> · de onde eles nascem até a decisão</div>
@@ -150,16 +149,13 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
         <div class="meta"><div><b>45 min</b>de conversa</div><div><b>2 semanas</b>lendo os números do IXC</div><div><b>8 entregas</b>em um plano priorizado</div></div>
         <h4>O que você recebe</h4>
         <ol>
-          <li>Mapa dos processos atuais no IXC</li><li>Gargalos do pedido ao caixa, com valor</li>
-          <li>Situação real do caixa e da carteira</li><li>Indicadores disponíveis hoje e os que faltam</li>
-          <li>Inconsistências fiscais e de faturamento</li><li>Controles ausentes por setor</li>
-          <li>Priorização das ações por retorno</li><li>Plano com cronograma e responsável</li>
+          <li>Mapa dos processos atuais no IXC</li><li>Gargalos do pedido ao caixa, com valor</li><li>Situação real do caixa e da carteira</li><li>Indicadores disponíveis hoje e os que faltam</li><li>Inconsistências fiscais e de faturamento</li><li>Controles ausentes por setor</li><li>Priorização das ações por retorno</li><li>Plano com cronograma e responsável</li>
         </ol>
         <div class="acts">
-          <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="#contato" href="#contato">
+          <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="#contato" href="#contato" data-ev="whatsapp:oferta">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
             <span>Agendar pelo WhatsApp</span></a>
-          <a class="alt" href="#contato">ou envie uma mensagem</a>
+          <a class="alt" href="#contato" data-ev="cta:oferta">ou envie uma mensagem</a>
         </div>
       </div>
     </div>
@@ -172,8 +168,7 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
     <div class="fr-head rv">
       <div><span class="eyebrow"><b>Frente 02</b> Consultoria de processos</span>
         <h2 id="h-proc">O processo que o provedor jura que funciona, desenhado como ele acontece.</h2></div>
-      <p class="lead">Três perguntas por setor: como é hoje, o que ainda não existe e onde o volume para. O resultado
-        é o processo escrito, parametrizado no IXC e treinado com a equipe.</p>
+      <p class="lead">Três perguntas por setor: como é hoje, o que ainda não existe e onde o volume para. O resultado é o processo escrito, parametrizado no IXC e treinado com a equipe.</p>
     </div>
     <div class="procs">
       <div class="proc rv"><span class="k">Processos atuais</span><h3>Como acontece hoje</h3>
@@ -210,8 +205,7 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
     <div class="hud-head">
       <div class="rv"><span class="eyebrow"><b>Frente 03</b> Dashboard</span>
         <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">A visão geral do provedor, viva.</h2>
-        <p class="lead" style="margin-top:14px">Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular.
-          Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.</p></div>
+        <p class="lead" style="margin-top:14px">Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular. Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.</p></div>
       <div class="rv">
         <div class="phone" aria-hidden="true"><div class="screen">
           <div class="sh"><span>Diretoria</span><b>ao vivo</b></div>
@@ -298,12 +292,12 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
   <div class="wrap">
     <div class="foot-grid">
       <div class="rv">
-        <img class="foot-logo" src="assets/marca/01-logo/baishift-branco.svg" alt="Baishift" width="911" height="175">
+        <img class="foot-logo" src="/assets/marca/01-logo/baishift-branco.svg" alt="Baishift" width="911" height="175">
         <span class="mono" style="color:#8FB4FF;display:block;margin-bottom:14px">Vamos começar pelo diagnóstico</span>
         <h2>Primeiro os números aparecem. Depois eles <em>melhoram</em>.</h2>
         <p style="margin-top:16px;color:rgba(255,255,255,.72);max-width:44ch">Conte como a gestão do provedor funciona hoje. A Baishift retorna com o escopo, o prazo e o formato de contratação.</p>
         <div class="contact-acts">
-          <a class="btn btn-wa" data-whatsapp data-fallback="Enviar por e-mail" data-fallback-href="mailto:contato@baishift.com.br?subject=Diagn%C3%B3stico%20de%20gest%C3%A3o%20do%20provedor" href="#contato">
+          <a class="btn btn-wa" data-whatsapp data-fallback="Enviar por e-mail" data-fallback-href="mailto:contato@baishift.com.br?subject=Diagn%C3%B3stico%20de%20gest%C3%A3o%20do%20provedor" href="#contato" data-ev="whatsapp:rodape">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
             <span>Chamar no WhatsApp</span></a>
           <a class="alt" href="mailto:contato@baishift.com.br">contato@baishift.com.br</a>
@@ -337,37 +331,15 @@ window.BAISHIFT = { whatsapp: "", email: "contato@baishift.com.br" };
   </div>
 </footer>
 
-<a class="wa" data-whatsapp data-fallback="Falar com a Baishift" data-fallback-href="#contato" href="#contato" aria-label="Falar com a Baishift">
+<a class="wa" data-whatsapp data-fallback="Falar com a Baishift" data-fallback-href="#contato" href="#contato" aria-label="Falar com a Baishift" data-ev="whatsapp:flutuante">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
   <span>Falar no WhatsApp</span>
 </a>
 
-<script src="assets/js/site.js" defer></script>
+<script src="/assets/js/site.js" defer></script>
 
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    { "@type": "ProfessionalService", "@id": "https://www.baishift.com.br/#organizacao", "name": "Baishift", "url": "https://www.baishift.com.br/",
-      "email": "contato@baishift.com.br",
-      "description": "Diagnóstico de gestão, consultoria de processos no IXC e dashboard para provedores de internet.",
-      "image": "https://www.baishift.com.br/assets/img/og.png", "logo": "https://www.baishift.com.br/assets/marca/01-logo/baishift-principal.svg",
-      "address": { "@type": "PostalAddress", "addressLocality": "Rolim de Moura", "addressRegion": "RO", "addressCountry": "BR" },
-      "areaServed": { "@type": "Country", "name": "Brasil" },
-      "knowsAbout": ["Gestão de provedor de internet", "IXC Soft", "Controladoria", "Business intelligence", "Automação de processos"],
-      "hasOfferCatalog": { "@type": "OfferCatalog", "name": "Frentes de atuação", "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diagnóstico de gestão", "description": "Situação real da empresa com os números do IXC e plano priorizado por retorno." } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de processos", "description": "Processos atuais, a desenvolver e a melhorar — escritos, parametrizados no IXC e treinados." } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Dashboard", "description": "Painel da diretoria com base, caixa, churn e campo direto do banco, no computador e no celular." } } ] } },
-    { "@type": "FAQPage", "@id": "https://www.baishift.com.br/#faq", "mainEntity": [
-      { "@type": "Question", "name": "Quanto tempo leva o diagnóstico?", "acceptedAnswer": { "@type": "Answer", "text": "Quarenta e cinco minutos de conversa com a diretoria e duas semanas lendo os números reais do IXC. No fim, você recebe a lista do que resolver, em que ordem e com que retorno esperado." } },
-      { "@type": "Question", "name": "Preciso contratar alguma coisa depois do diagnóstico?", "acceptedAnswer": { "@type": "Answer", "text": "Não. O diagnóstico é sem compromisso. Cada etapa seguinte tem entrega e preço próprios, e você decide subir a próxima só depois de ver o resultado da anterior." } },
-      { "@type": "Question", "name": "Para qual tamanho de provedor faz sentido?", "acceptedAnswer": { "@type": "Answer", "text": "Provedores de 2 mil a 50 mil assinantes que já sentem o processo travar: fila de instalação, cobrança atrasada, fechamento na planilha paralela." } },
-      { "@type": "Question", "name": "Preciso liberar acesso aos meus dados?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O trabalho é feito com os números reais do IXC — carteira, caixa, campo e fiscal. Sem acesso aos dados não há diagnóstico, só opinião." } },
-      { "@type": "Question", "name": "Vou precisar trocar de sistema?", "acceptedAnswer": { "@type": "Answer", "text": "Não. Os processos são redesenhados e parametrizados dentro do IXC, e o dashboard lê o banco do sistema que já está na operação." } },
-      { "@type": "Question", "name": "Como funciona a contratação?", "acceptedAnswer": { "@type": "Answer", "text": "Quatro formatos: projeto pontual com escopo fechado, acompanhamento mensal, controladoria terceirizada ou software sob medida. Depois da primeira conversa, a Baishift retorna com o escopo, o prazo e o formato que faz sentido para o seu provedor." } } ] }
-  ]
-}
+{"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","@id":"https://www.baishift.com.br/#organizacao","name":"Baishift","url":"https://www.baishift.com.br/","email":"contato@baishift.com.br","description":"Diagnóstico de gestão, consultoria de processos no IXC e dashboard para provedores de internet.","image":"https://www.baishift.com.br/assets/img/og.png","logo":"https://www.baishift.com.br/assets/marca/01-logo/baishift-principal.svg","address":{"@type":"PostalAddress","addressLocality":"Rolim de Moura","addressRegion":"RO","addressCountry":"BR"},"areaServed":{"@type":"Country","name":"Brasil"},"knowsAbout":["Gestão de provedor de internet","IXC Soft","Controladoria","Business intelligence","Automação de processos"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Frentes de atuação","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Diagnóstico de gestão","description":"Situação real da empresa com os números do IXC e plano priorizado por retorno."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Consultoria de processos","description":"Processos atuais, a desenvolver e a melhorar — escritos, parametrizados no IXC e treinados."}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Dashboard","description":"Painel da diretoria com base, caixa, churn e campo direto do banco, no computador e no celular."}}]}},{"@type":"FAQPage","@id":"https://www.baishift.com.br/#faq","mainEntity":[{"@type":"Question","name":"Quanto tempo leva o diagnóstico?","acceptedAnswer":{"@type":"Answer","text":"Quarenta e cinco minutos de conversa com a diretoria e duas semanas lendo os números reais do IXC. No fim, você recebe a lista do que resolver, em que ordem e com que retorno esperado."}},{"@type":"Question","name":"Preciso contratar alguma coisa depois do diagnóstico?","acceptedAnswer":{"@type":"Answer","text":"Não. O diagnóstico é sem compromisso. Cada etapa seguinte tem entrega e preço próprios, e você decide subir a próxima só depois de ver o resultado da anterior."}},{"@type":"Question","name":"Para qual tamanho de provedor faz sentido?","acceptedAnswer":{"@type":"Answer","text":"Provedores de 2 mil a 50 mil assinantes que já sentem o processo travar: fila de instalação, cobrança atrasada, fechamento na planilha paralela. Abaixo disso o processo costuma caber na cabeça do dono; acima, a estrutura já é outra."}},{"@type":"Question","name":"Preciso liberar acesso aos meus dados?","acceptedAnswer":{"@type":"Answer","text":"Sim. O trabalho é feito com os números reais do IXC — carteira, caixa, campo e fiscal. Sem acesso aos dados não há diagnóstico, só opinião."}},{"@type":"Question","name":"Vou precisar trocar de sistema?","acceptedAnswer":{"@type":"Answer","text":"Não. Os processos são redesenhados e parametrizados dentro do IXC, e o dashboard lê o banco do sistema que já está na operação. Quem quer trocar de ERP em trinta dias não é o perfil."}},{"@type":"Question","name":"Como funciona a contratação?","acceptedAnswer":{"@type":"Answer","text":"Quatro formatos: projeto pontual com escopo fechado, acompanhamento mensal, controladoria terceirizada ou software sob medida. Depois da primeira conversa, a Baishift retorna com o escopo, o prazo e o formato que faz sentido para o seu provedor."}}]}]}
 </script>
 </body>
 </html>
