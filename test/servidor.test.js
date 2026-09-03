@@ -15,7 +15,7 @@ function espera(fn, ms = 8000) {
 async function pede(metodo, caminho, { corpo, cookie, gestor = true, tipo = "application/json" } = {}) {
   const cab = {}; if (cookie) cab.cookie = cookie; if (gestor) cab["x-gestor"] = "1";
   if (corpo !== undefined) cab["content-type"] = tipo;
-  const r = await fetch(base + caminho, { method: metodo, headers: cab, body: corpo === undefined ? undefined : (typeof corpo === "string" ? corpo : JSON.stringify(corpo)), redirect: "manual" });
+  const r = await fetch(base + caminho, { method: metodo, headers: cab, body: corpo === undefined ? undefined : (typeof corpo === "string" || Buffer.isBuffer(corpo) ? corpo : JSON.stringify(corpo)), redirect: "manual" });
   const texto = await r.text(); let json = null; try { json = JSON.parse(texto); } catch {}
   return { status: r.status, texto, json, cookie: (r.headers.get("set-cookie") || "").split(";")[0] };
 }
@@ -101,6 +101,38 @@ test("usuários: criar, regras, editora entra e precisa trocar a senha", async (
   assert.equal(r.status, 200);
   assert.equal((await pede("GET", "/gestor/api/usuarios", { cookie: r.cookie })).status, 403, "editora não é admin");
   assert.equal((await pede("POST", "/gestor/api/sair", { cookie: r.cookie, corpo: {} })).cookie, "gestor_sessao=");
+});
+
+test("conteúdo, imagem pendente e pré-visualização", async () => {
+  let r = await pede("GET", "/gestor/api/conteudo", { cookie: cookieDono });
+  assert.equal(r.status, 200); assert.equal(r.json.conteudo.produtos.length, 3); assert.ok(r.json.atualizadoEm); assert.equal(r.json.limites.titulo, 160);
+  const png = Buffer.concat([Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]), Buffer.alloc(40, 1)]);
+  r = await fetch(base + "/gestor/api/imagens", { method: "POST", headers: { cookie: cookieDono, "x-gestor": "1", "content-type": "image/png", "x-contexto": "severino-capa" }, body: png });
+  assert.equal(r.status, 201); const img = await r.json(); assert.match(img.ref, /^pendente:[0-9a-f]{24}$/);
+  r = await fetch(base + "/gestor/api/pendentes/" + img.id, { headers: { cookie: cookieDono } });
+  assert.equal(r.status, 200); assert.equal(r.headers.get("content-type"), "image/png");
+  assert.equal((await fetch(base + "/gestor/api/pendentes/" + img.id)).status, 401, "imagem pendente exige sessão");
+  r = await fetch(base + "/gestor/api/imagens", { method: "POST", headers: { cookie: cookieDono, "x-gestor": "1", "content-type": "image/svg+xml" }, body: "<svg/>" });
+  assert.equal(r.status, 400);
+  const c = (await pede("GET", "/gestor/api/conteudo", { cookie: cookieDono })).json.conteudo;
+  c.produtos[0].capa = { arquivo: img.ref, alt: "Capa" }; c.inicio.titulo = "Prévia *marcada*";
+  const form = "conteudo=" + encodeURIComponent(JSON.stringify(c)) + "&pagina=inicio";
+  r = await pede("POST", "/gestor/api/previa", { cookie: cookieDono, gestor: false, corpo: form, tipo: "application/x-www-form-urlencoded" });
+  assert.equal(r.status, 200); assert.match(r.texto, /data-previa=""/); assert.match(r.texto, /Prévia <em>marcada<\/em>/);
+  r = await pede("POST", "/gestor/api/previa", { cookie: cookieDono, gestor: false, corpo: form.replace("pagina=inicio", "pagina=produto:severino"), tipo: "application/x-www-form-urlencoded" });
+  assert.equal(r.status, 200); assert.match(r.texto, /lp-capa/); assert.match(r.texto, new RegExp("/gestor/api/pendentes/" + img.id));
+  assert.equal((await pede("POST", "/gestor/api/previa", { gestor: false, corpo: form, tipo: "application/x-www-form-urlencoded" })).status, 401);
+});
+
+test("publicar: conflito de versão e conteúdo inválido não gravam nada", async () => {
+  const c = (await pede("GET", "/gestor/api/conteudo", { cookie: cookieDono })).json.conteudo;
+  let r = await pede("POST", "/gestor/api/publicar", { cookie: cookieDono, corpo: { conteudo: c, baseadoEm: "1999-01-01T00:00:00Z" } });
+  assert.equal(r.status, 409); assert.equal(r.json.conflito, true); assert.ok(r.json.atualizadoEm);
+  c.inicio.titulo = "x".repeat(200);
+  r = await pede("POST", "/gestor/api/publicar", { cookie: cookieDono, corpo: { conteudo: c, baseadoEm: c.atualizadoEm } });
+  assert.equal(r.status, 400); assert.equal(r.json.campo, "inicio.titulo");
+  r = await pede("GET", "/gestor/api/publicacoes", { cookie: cookieDono });
+  assert.equal(r.status, 200); assert.deepEqual(r.json.publicacoes, []);
 });
 
 test("cinco erros bloqueiam o IP por 15 minutos", async () => {

@@ -28,6 +28,8 @@ const auth = require("./lib/auth");
 const painel = require("./lib/painel");
 console.log("disco persistente em " + dados.preparar());
 auth.semear();
+const limpos = require("./lib/imagens").limparPendentes(7);
+if (limpos.length) console.log("imagens pendentes antigas removidas: " + limpos.length);
 console.log("GitHub: " + (process.env.GITHUB_TOKEN ? "token presente" : "sem token" + (process.env.RAILWAY_ENVIRONMENT ? " — o painel não vai publicar até configurar GITHUB_TOKEN" : " (modo local)")));
 
 /* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>" (e o mesmo para as logos,
