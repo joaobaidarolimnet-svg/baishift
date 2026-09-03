@@ -30,6 +30,24 @@ console.log("disco persistente em " + dados.preparar());
 auth.semear();
 const limpos = require("./lib/imagens").limparPendentes(7);
 if (limpos.length) console.log("imagens pendentes antigas removidas: " + limpos.length);
+const metricas = require("./lib/metricas");
+const antigos = metricas.limparAntigos();
+if (antigos.length) console.log("eventos antigos removidos: " + antigos.join(", "));
+const limiteEventos = new metricas.Limite(120);
+
+/* POST /api/evento: sinal do site (sem cookies). Responde 204 na hora e registra depois. */
+function receberEvento(req, res) {
+  const xff = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  const ip = xff || (req.socket && req.socket.remoteAddress) || "";
+  const partes = []; let tamanho = 0;
+  req.on("data", c => { tamanho += c.length; if (tamanho <= 2048) partes.push(c); });
+  req.on("end", () => {
+    res.writeHead(204, { "Cache-Control": "no-store" }); res.end();
+    if (tamanho > 2048 || !limiteEventos.permite(ip)) return;
+    let e; try { e = JSON.parse(Buffer.concat(partes).toString("utf8")); } catch { return; }
+    metricas.registrar(e, { ip, ua: String(req.headers["user-agent"] || "") }).catch(err => console.error("métricas:", err.message));
+  });
+}
 console.log("GitHub: " + (process.env.GITHUB_TOKEN ? "token presente" : "sem token" + (process.env.RAILWAY_ENVIRONMENT ? " — o painel não vai publicar até configurar GITHUB_TOKEN" : " (modo local)")));
 
 /* Versão dos assets pelo conteúdo: o HTML sai com "site.css?v=<hash>" (e o mesmo para as logos,
@@ -197,6 +215,7 @@ const servidor = http.createServer((req, res) => {
     painel.atender(req, res).catch(e => { console.error("painel:", e); if (!res.headersSent) res.writeHead(500); res.end(); });
     return;
   }
+  if (caminho === "/api/evento" && req.method === "POST") return receberEvento(req, res);
   if (req.method !== "GET" && req.method !== "HEAD") {
     res.writeHead(405, { "Allow": "GET, HEAD", "Content-Type": "text/plain; charset=utf-8" });
     return res.end("Método não permitido");

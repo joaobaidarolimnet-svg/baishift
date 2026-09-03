@@ -678,4 +678,35 @@ try {
   if (window.console && console.error) console.error("Baishift · falha ao montar os gráficos:", err);
 }
 
+/* ================= MÉTRICAS PRÓPRIAS (sem cookies, sem terceiros) =================
+   Manda eventos pequenos para /api/evento. Não manda em pré-visualização, com "não rastrear"
+   ligado, nem em localhost (salvo localStorage "baishift:metricas" = "1", para testar). */
+(function () {
+  if (document.documentElement.hasAttribute("data-previa")) return;
+  if (navigator.doNotTrack === "1" || window.doNotTrack === "1") return;
+  var host = location.hostname, local = host === "localhost" || /^127\./.test(host), ligado = false;
+  try { ligado = localStorage.getItem("baishift:metricas") === "1"; } catch (e) { /* sem localStorage */ }
+  if (local && !ligado) return;
+  var pagina = location.pathname, ref = document.referrer || "", utm = {};
+  try { var q = new URLSearchParams(location.search); ["source", "medium", "campaign"].forEach(function (k) { var v = q.get("utm_" + k); if (v) utm[k] = v.slice(0, 80); }); } catch (e) { /* sem URLSearchParams */ }
+  function enviar(tipo, alvo) {
+    var corpo = JSON.stringify({ tipo: tipo, pagina: pagina, alvo: alvo || "", ref: ref.slice(0, 300), utm: utm, largura: window.innerWidth });
+    try { if (navigator.sendBeacon && navigator.sendBeacon("/api/evento", new Blob([corpo], { type: "text/plain" }))) return; } catch (e) { /* cai no fetch */ }
+    try { fetch("/api/evento", { method: "POST", headers: { "Content-Type": "text/plain" }, body: corpo, keepalive: true }).catch(function () {}); } catch (e) { /* sem fetch */ }
+  }
+  enviar("pagina");
+  var vistas = {};
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { var id = e.target.id; if (e.isIntersecting && !vistas[id]) { vistas[id] = 1; enviar("secao", id); io.unobserve(e.target); } }); }, { threshold: 0.2 });
+    ["diagnostico", "processos", "dashboard", "modelos", "faq", "contato"].forEach(function (id) { var s = el(id); if (s) io.observe(s); });
+  }
+  document.addEventListener("click", function (e) { var a = e.target.closest ? e.target.closest("[data-ev]") : null; if (a && a.tagName !== "FORM") enviar("clique", a.getAttribute("data-ev")); });
+  document.addEventListener("submit", function (e) {
+    var f = e.target; if (!f.checkValidity || !f.checkValidity()) return;
+    if (f.id === "lead") enviar("formulario", "diagnostico"); else if (f.getAttribute("data-ev")) enviar("formulario", f.getAttribute("data-ev"));
+  }, true);
+  var cs = el("carrossel");
+  if (cs) { var slides = {}; var slide = function (i) { if (!slides[i]) { slides[i] = 1; enviar("slide", String(i + 1)); } }; slide(0); cs.addEventListener("slide", function (e) { slide(e.detail); }); }
+})();
+
 })();

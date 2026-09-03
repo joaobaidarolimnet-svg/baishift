@@ -135,6 +135,16 @@ test("publicar: conflito de versão e conteúdo inválido não gravam nada", asy
   assert.equal(r.status, 200); assert.deepEqual(r.json.publicacoes, []);
 });
 
+test("métricas: evento público grava e o painel lê o resumo", async () => {
+  let r = await fetch(base + "/api/evento", { method: "POST", headers: { "content-type": "text/plain", "user-agent": "Mozilla/5.0 (Macintosh)" }, body: JSON.stringify({ tipo: "pagina", pagina: "/", largura: 1440 }) });
+  assert.equal(r.status, 204);
+  r = await fetch(base + "/api/evento", { method: "POST", body: "lixo" }); assert.equal(r.status, 204);
+  await new Promise(res => setTimeout(res, 300));
+  r = await pede("GET", "/gestor/api/metricas?periodo=7", { cookie: cookieDono });
+  assert.equal(r.status, 200); assert.equal(r.json.periodo, 7); assert.ok(r.json.totais.visitas.valor >= 1); assert.equal(r.json.produtos.length, 3);
+  assert.equal((await pede("GET", "/gestor/api/metricas")).status, 401);
+});
+
 test("cinco erros bloqueiam o IP por 15 minutos", async () => {
   for (let i = 0; i < 5; i++) await pede("POST", "/gestor/api/entrar", { corpo: { email: "ninguem@baishift.com.br", senha: "x" } });
   const r = await pede("POST", "/gestor/api/entrar", { corpo: { email: "teste@baishift.com.br", senha: "senha-nova-do-dono" } });
