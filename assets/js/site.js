@@ -529,6 +529,34 @@ function renderPanels(per) {
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") set(false); });
 })();
 
+/* carrossel do início: troca sozinho no intervalo, pausa com o mouse, o foco, a aba escondida
+   e com prefers-reduced-motion; setas e pontos trocam na mão */
+(function () {
+  var cs = el("carrossel"); if (!cs) return;
+  var slides = cs.querySelectorAll(".cs-slide"), dots = cs.querySelectorAll(".cs-dots button"), n = slides.length;
+  if (n < 2) return;
+  var i = 0, paused = false, ms = Math.max(3, Math.min(30, +cs.getAttribute("data-intervalo") || 6)) * 1000;
+  function go(k) {
+    i = (k + n) % n;
+    for (var j = 0; j < n; j++) {
+      var on = j === i;
+      slides[j].classList.toggle("on", on);
+      slides[j].setAttribute("aria-hidden", on ? "false" : "true");
+      if (slides[j].tagName === "A") { if (on) slides[j].removeAttribute("tabindex"); else slides[j].setAttribute("tabindex", "-1"); }
+      if (dots[j]) dots[j].setAttribute("aria-selected", on ? "true" : "false");
+    }
+    cs.dispatchEvent(new CustomEvent("slide", { detail: i }));
+  }
+  cs.querySelector(".cs-prev").addEventListener("click", function () { go(i - 1); });
+  cs.querySelector(".cs-next").addEventListener("click", function () { go(i + 1); });
+  Array.prototype.forEach.call(dots, function (d, k) { d.addEventListener("click", function () { go(k); }); });
+  cs.addEventListener("pointerenter", function () { paused = true; });
+  cs.addEventListener("pointerleave", function () { paused = false; });
+  cs.addEventListener("focusin", function () { paused = true; });
+  cs.addEventListener("focusout", function () { paused = false; });
+  everyMs(ms, function () { if (!paused) go(i + 1); });
+})();
+
 /* barra: tema sobre o hero, progresso e seção ativa */
 (function () {
   var bar = el("bar"), prog = el("prog"), hero = document.querySelector(".hero");
