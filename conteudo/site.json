@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "atualizadoEm": "2026-09-04T13:04:11.539Z",
+  "atualizadoEm": "2026-09-04T13:04:32.923Z",
   "site": {
     "tituloAba": "Baishift — Gestão, processos e software para provedores de internet",
     "descricao": "Diagnóstico, consultoria de processos e dashboard para provedores de internet. Decisão com número, dentro do IXC, feito por quem opera um provedor.",
@@ -12,7 +12,7 @@
   },
   "inicio": {
     "rotulo": "*Inteligência* de dados que muda o *jogo*",
-    "titulo": "*A Reforma Tributária* vai impactar o seu **CAIXA** e ela não vai esperar você se preparar.",
+    "titulo": "*A Reforma Tributária* vai impactar o seu *CAIXA* e ela não vai esperar você se preparar.",
     "subtitulo": "Três frentes, uma regra: primeiro os números aparecem, depois eles melhoram. Diagnóstico da operação, processos redesenhados dentro do IXC e o dashboard que a diretoria abre todo dia — feito por quem opera um provedor.",
     "botaoPrincipal": {
       "texto": "Começar pelo diagnóstico",
