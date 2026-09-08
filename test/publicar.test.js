@@ -60,10 +60,12 @@ test("modo local: materializa a imagem pendente, gera as páginas, remove órfã
 
 test("conflito de versão: 409 sem forçar, publica com forcar", async () => {
   const raiz = raizNova();
+  /* lido do arquivo, não fixado no teste: o texto muda toda vez que o painel publica */
+  const antes = lerJson(raiz).inicio.rotulo;
   const rasc = rascunhoCom(raiz, c => { c.inicio.rotulo = "novo rótulo"; });
   rasc.baseadoEm = "1999-01-01T00:00:00Z";
   await assert.rejects(publicar(rasc, { usuario, raiz, env: {} }), e => e instanceof ErroPublicar && e.status === 409 && e.conflito === true);
-  assert.equal(lerJson(raiz).inicio.rotulo, "Diagnóstico · Processos · Dashboard", "nada gravado");
+  assert.equal(lerJson(raiz).inicio.rotulo, antes, "nada gravado");
   rasc.forcar = true;
   await publicar(rasc, { usuario, raiz, env: {} });
   assert.equal(lerJson(raiz).inicio.rotulo, "novo rótulo");
@@ -71,8 +73,9 @@ test("conflito de versão: 409 sem forçar, publica com forcar", async () => {
 
 test("no Railway sem token não publica", async () => {
   const raiz = raizNova();
+  const antes = lerJson(raiz).inicio.rotulo;
   await assert.rejects(publicar(rascunhoCom(raiz, c => { c.inicio.rotulo = "x"; }), { usuario, raiz, env: { RAILWAY_ENVIRONMENT: "production" } }), e => e.status === 503 && /GITHUB_TOKEN/.test(e.message));
-  assert.equal(lerJson(raiz).inicio.rotulo, "Diagnóstico · Processos · Dashboard");
+  assert.equal(lerJson(raiz).inicio.rotulo, antes, "nada gravado");
 });
 
 test("imagem pendente inexistente é recusada antes de gravar", async () => {
