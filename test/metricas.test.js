@@ -10,8 +10,8 @@ dados.preparar();
 const M = require("../lib/metricas");
 
 test("validar: aceita os cinco tipos, corta tamanhos, recusa lixo", () => {
-  const e = M.validar({ tipo: "pagina", pagina: "/outros/severino", ref: "https://www.google.com/search?q=x", utm: { source: "ig", medium: "x".repeat(200), lixo: 1 }, largura: 390 });
-  assert.equal(e.pagina, "/outros/severino"); assert.equal(e.utm.medium.length, 80); assert.equal("lixo" in e.utm, false);
+  const e = M.validar({ tipo: "pagina", pagina: "/apps/severino", ref: "https://www.google.com/search?q=x", utm: { source: "ig", medium: "x".repeat(200), lixo: 1 }, largura: 390 });
+  assert.equal(e.pagina, "/apps/severino"); assert.equal(e.utm.medium.length, 80); assert.equal("lixo" in e.utm, false);
   assert.equal(M.validar({ tipo: "video", pagina: "/" }), null);
   assert.equal(M.validar({ tipo: "pagina", pagina: "http://x" }), null);
   assert.equal(M.validar("x"), null);
@@ -25,7 +25,7 @@ test("origem e dispositivo", () => {
   assert.equal(M.origem("https://lm.facebook.com/", {}), "facebook");
   assert.equal(M.origem("https://www.linkedin.com/feed/", {}), "linkedin");
   assert.equal(M.origem("https://outrosite.com.br/blog", {}), "outrosite.com.br");
-  assert.equal(M.origem("https://www.baishift.com.br/outros/severino", {}), "direto");
+  assert.equal(M.origem("https://www.baishift.com.br/apps/severino", {}), "direto");
   assert.equal(M.origem("", {}), "direto");
   assert.equal(M.dispositivo(390, "Mozilla/5.0 (Macintosh)"), "celular");
   assert.equal(M.dispositivo(1440, "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0)"), "celular");
@@ -77,29 +77,33 @@ test("resumo agrega o período e compara com o anterior", async () => {
   const agora = new Date("2026-09-10T12:00:00Z");
   const ev = (dia, tipo, extra) => JSON.stringify(Object.assign({ t: "2026-09-" + String(dia).padStart(2, "0") + "T10:00:00.000Z", tipo, pagina: "/", alvo: "", origem: "direto", utm: {}, disp: "computador", cidade: "Rolim de Moura", uf: "RO", pais: "BR", vis: "v" + dia }, extra));
   const linhas = [
-    ev(9, "pagina", { origem: "google", cidade: "Cacoal" }), ev(9, "pagina", { vis: "v9b", disp: "celular" }), ev(9, "secao", { alvo: "diagnostico" }), ev(9, "secao", { alvo: "contato" }),
+    ev(9, "pagina", { pagina: "/provedores", origem: "google", cidade: "Cacoal" }), ev(9, "pagina", { pagina: "/provedores", vis: "v9b", disp: "celular" }),
+    ev(9, "secao", { alvo: "diagnostico" }), ev(9, "secao", { alvo: "contato" }),
     ev(9, "clique", { alvo: "carrossel:1" }), ev(9, "slide", { alvo: "1" }), ev(9, "slide", { alvo: "2" }), ev(9, "formulario", { alvo: "diagnostico" }),
-    ev(10, "pagina", { pagina: "/outros/severino" }), ev(10, "clique", { alvo: "menu:outros:severino" }), ev(10, "formulario", { alvo: "lista:severino", pagina: "/outros/severino" }),
+    /* endereço novo e endereço antigo do mesmo produto: os dois contam */
+    ev(10, "pagina", { pagina: "/apps/severino" }), ev(10, "clique", { alvo: "app:severino" }),
+    ev(10, "pagina", { pagina: "/outros/severino" }), ev(10, "clique", { alvo: "menu:outros:severino" }),
+    ev(10, "formulario", { alvo: "lista:severino", pagina: "/apps/severino" }),
     ev(10, "clique", { alvo: "whatsapp:rodape" }),
     ev(2, "pagina", { vis: "antes1" }), ev(2, "pagina", { vis: "antes1" }), ev(3, "pagina", { vis: "antes2" })
   ];
   fs.writeFileSync(path.join(dir, "2026-09.jsonl"), linhas.join("\n") + "\n");
   const r = M.resumo(7, { agora, produtos: [{ slug: "severino", nome: "Severino" }, { slug: "aprova-ordem", nome: "Aprova · Ordem" }], semCache: true });
   assert.equal(r.periodo, 7);
-  assert.equal(r.totais.visitas.valor, 3); assert.equal(r.totais.visitas.anterior, 3);
+  assert.equal(r.totais.visitas.valor, 4); assert.equal(r.totais.visitas.anterior, 3);
   assert.equal(r.totais.visitantes.valor, 3); assert.equal(r.totais.visitantes.anterior, 2);
   assert.equal(r.totais.formularios.valor, 2); assert.equal(r.totais.cliquesAnuncio.valor, 1);
   assert.equal(r.porDia.length, 7); assert.equal(r.porDia[6].dia, "2026-09-10"); assert.equal(r.porDia[5].visitas, 2);
-  assert.deepEqual(r.paginas[0], { pagina: "/", visitas: 2 });
-  assert.deepEqual(r.origens, [{ origem: "direto", visitas: 2 }, { origem: "google", visitas: 1 }]);
-  assert.deepEqual(r.cidades[0], { cidade: "Rolim de Moura", uf: "RO", visitas: 2 });
-  assert.deepEqual(r.estados[0], { uf: "RO", visitas: 3 });
-  assert.deepEqual(r.dispositivos, { celular: 1, computador: 2 });
+  assert.deepEqual(r.paginas[0], { pagina: "/provedores", visitas: 2 });
+  assert.deepEqual(r.origens, [{ origem: "direto", visitas: 3 }, { origem: "google", visitas: 1 }]);
+  assert.deepEqual(r.cidades[0], { cidade: "Rolim de Moura", uf: "RO", visitas: 3 });
+  assert.deepEqual(r.estados[0], { uf: "RO", visitas: 4 });
+  assert.deepEqual(r.dispositivos, { celular: 1, computador: 3 });
   assert.equal(r.secoes.find(s => s.secao === "diagnostico").visitas, 1); assert.equal(r.secoes.find(s => s.secao === "faq").visitas, 0);
-  assert.equal(r.secoes[0].base, 2, "base = visitas da página principal");
+  assert.equal(r.secoes[0].base, 2, "base = visitas de /provedores, onde as seções vivem");
   assert.deepEqual(r.cliques[0], { alvo: "carrossel:1", cliques: 1 });
   assert.deepEqual(r.carrossel, [{ imagem: 1, exibicoes: 1, cliques: 1 }, { imagem: 2, exibicoes: 1, cliques: 0 }]);
-  assert.deepEqual(r.produtos[0], { slug: "severino", nome: "Severino", visitas: 1, cliquesMenu: 1, cliquesBlocos: 0, inscricoes: 1 });
+  assert.deepEqual(r.produtos[0], { slug: "severino", nome: "Severino", visitas: 2, cliquesMenu: 2, cliquesBlocos: 0, inscricoes: 1 });
   assert.deepEqual(r.formularios, { diagnostico: 1, listas: { severino: 1 } });
 });
 

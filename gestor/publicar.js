@@ -7,7 +7,7 @@
   const NOMES = { site: "Site", inicio: "Início", diagnostico: "Diagnóstico", processos: "Processos", dashboard: "Dashboard", modelos: "Modelos", perfil: "Serve / não serve", faq: "FAQ", contato: "Contato e rodapé" };
 
   const C = G.conteudo = {
-    publicado: null, rascunho: null, baseadoEm: null, limites: {}, paginaAtual: "inicio", carregando: null,
+    publicado: null, rascunho: null, baseadoEm: null, limites: {}, paginaAtual: "hub", carregando: null,
     chave() { return "gestor:rascunho:" + G.estado.eu.id; },
     alterado() { return !!C.rascunho && JSON.stringify(C.rascunho) !== JSON.stringify(C.publicado); },
     /* seções que diferem entre rascunho e publicado */
@@ -44,7 +44,7 @@
     },
     visualizar() {
       const form = el("form", { method: "post", action: "/gestor/api/previa", target: "_blank", hidden: true },
-        el("input", { type: "hidden", name: "conteudo", value: JSON.stringify(C.rascunho) }), el("input", { type: "hidden", name: "pagina", value: C.paginaAtual || "inicio" }));
+        el("input", { type: "hidden", name: "conteudo", value: JSON.stringify(C.rascunho) }), el("input", { type: "hidden", name: "pagina", value: C.paginaAtual || "hub" }));
       document.body.append(form); form.submit(); form.remove();
     },
     async publicar(forcar) {
@@ -92,5 +92,7 @@
   }
 
   G.aoIniciar.push(async () => { if (!G.estado.eu.trocarSenha) await C.garantir(); });
-  G.aoNavegar.push(tela => { if (tela !== "produtos") C.paginaAtual = "inicio"; });
+  /* cada tela do painel pré-visualiza a página do site que ela edita */
+  const PAGINA_DA_TELA = { hub: "hub", paineis: "dashboards", apps: "apps" };
+  G.aoNavegar.push(tela => { if (tela !== "produtos") C.paginaAtual = PAGINA_DA_TELA[tela] || "provedores"; });
 })();

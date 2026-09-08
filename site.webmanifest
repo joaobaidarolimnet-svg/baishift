@@ -1,7 +1,7 @@
 {
-  "name": "Baishift — Gestão, processos e software para provedores de internet",
+  "name": "Baishift — software de gestão, painéis e aplicativos",
   "short_name": "Baishift",
-  "description": "Consultoria de gestão em ISP, processos no IXC, controladoria, dashboards e software sob medida.",
+  "description": "Gestão de provedores, painéis sob medida e aplicativos próprios. Feitos dentro da operação, não em cima dela.",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",

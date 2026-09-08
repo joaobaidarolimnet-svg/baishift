@@ -5,23 +5,26 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { carregar, validar } = require("../lib/conteudo");
-const paginaInicio = require("../templates/index");
+const paginaProvedores = require("../templates/provedores");
+const paginaHub = require("../templates/hub");
+const paginaPaineis = require("../templates/paineis");
+const paginaApps = require("../templates/apps");
 
 const base = () => JSON.parse(JSON.stringify(carregar()));
 const conta = (s, re) => (s.match(re) || []).length;
 const IMG = n => ({ arquivo: "conteudo/imagens/promo-" + String(n).repeat(8) + ".webp", alt: "Promo " + n, link: "" });
 
-test("início com painel demonstrativo", () => {
-  const html = paginaInicio(validar(base()));
+test("provedores com painel demonstrativo", () => {
+  const html = paginaProvedores(validar(base()));
   assert.ok(html.includes('id="cRec"'));
   assert.ok(!html.includes('id="carrossel"'));
   assert.ok(html.includes('class="wrap hero-grid"'));
   assert.ok(html.startsWith("<!DOCTYPE html>\n<!-- GERADO"));
 });
 
-test("início com carrossel de uma imagem: sem setas, sem pontos, sem painel", () => {
+test("provedores com carrossel de uma imagem: sem setas, sem pontos, sem painel", () => {
   const o = base(); o.inicio.carrossel.imagens = [IMG(1)];
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.ok(html.includes('id="carrossel"'));
   assert.ok(!html.includes('id="cRec"'));
   assert.equal(conta(html, /class="cs-slide/g), 1);
@@ -31,7 +34,7 @@ test("início com carrossel de uma imagem: sem setas, sem pontos, sem painel", (
 
 test("início com três imagens e link: setas, pontos e link no slide", () => {
   const o = base(); o.inicio.carrossel.imagens = [Object.assign(IMG(1), { link: "https://x.y" }), IMG(2), IMG(3)]; o.inicio.carrossel.intervalo = 9;
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.equal(conta(html, /class="cs-slide/g), 3);
   assert.equal(conta(html, /class="cs-slide on"/g), 1);
   assert.equal(conta(html, /role="tab"/g), 3);
@@ -42,7 +45,7 @@ test("início com três imagens e link: setas, pontos e link no slide", () => {
 
 test("início sem painel e sem imagens: só o texto", () => {
   const o = base(); o.inicio.painelAtivo = false;
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.ok(!html.includes('id="cRec"'));
   assert.ok(!html.includes('id="carrossel"'));
   assert.ok(html.includes('class="wrap hero-grid solo"'));
@@ -50,24 +53,23 @@ test("início sem painel e sem imagens: só o texto", () => {
 
 test("escapa e marca", () => {
   const o = base(); o.inicio.titulo = "<script>x</script> *azul* **forte**";
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.ok(!html.includes("<script>x</script>"));
   assert.ok(html.includes("&lt;script&gt;x&lt;/script&gt; <em>azul</em> <strong>forte</strong>"));
 });
 
-test("menu Outros só com produtos ativos", () => {
-  const o = base(); o.produtos[1].ativo = false;
-  let html = paginaInicio(validar(o));
-  assert.equal(conta(html, /data-ev="menu:outros:/g), 2);
-  assert.ok(!html.includes("aprova-ordem"));
-  o.produtos.forEach(p => { p.ativo = false; });
-  html = paginaInicio(validar(o));
-  assert.ok(!html.includes('id="dd"'));
+test("a barra é a mesma nas quatro páginas e marca onde a pessoa está", () => {
+  const c = validar(base());
+  const links = /<a href="\/provedores"[^>]*>Provedores<\/a>[\s\S]*?<a href="\/dashboards"[^>]*>Painéis<\/a>[\s\S]*?<a href="\/apps"[^>]*>Aplicativos<\/a>/;
+  [paginaHub(c), paginaProvedores(c), paginaPaineis(c), paginaApps(c)].forEach(html => assert.match(html, links));
+  assert.ok(paginaProvedores(c).includes('<a href="/provedores" aria-current="true"'));
+  assert.ok(paginaPaineis(c).includes('<a href="/dashboards" aria-current="true"'));
+  assert.equal(conta(paginaHub(c), /aria-current="true"/g), 0, "no hub nenhuma porta fica marcada");
 });
 
 test("FAQ vai para o HTML e para o JSON-LD sem marcações", () => {
   const o = base(); o.faq.itens = [{ pergunta: "Só uma?", resposta: "Sim, *só* uma.\n\nSegundo parágrafo." }];
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.equal(conta(html, /<details>/g), 1);
   assert.ok(html.includes("<p>Sim, <em>só</em> uma.</p>\n<p>Segundo parágrafo.</p>"));
   const ld = JSON.parse(html.match(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/)[1]);
@@ -78,7 +80,7 @@ test("FAQ vai para o HTML e para o JSON-LD sem marcações", () => {
 
 test("contato e rodapé usam site.email e site.cidade", () => {
   const o = base(); o.site.email = "oi@baishift.com.br"; o.site.cidade = "Cacoal, RO";
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.ok(html.includes('href="mailto:oi@baishift.com.br"'));
   assert.ok(html.includes("· Cacoal, RO</span>"));
   assert.ok(html.includes('window.BAISHIFT = {"whatsapp":"","email":"oi@baishift.com.br"}'));
@@ -86,13 +88,13 @@ test("contato e rodapé usam site.email e site.cidade", () => {
 
 test("botão secundário vazio some", () => {
   const o = base(); o.inicio.botaoSecundario.texto = "";
-  const html = paginaInicio(validar(o));
+  const html = paginaProvedores(validar(o));
   assert.ok(!html.includes("btn-ghost"));
   assert.ok(html.includes('data-ev="cta:principal"'));
 });
 
 test("pré-visualização marca o html", () => {
-  const html = paginaInicio(validar(base()), { previa: true });
+  const html = paginaProvedores(validar(base()), { previa: true });
   assert.ok(html.includes('<html lang="pt-BR" data-previa="">'));
   assert.ok(html.includes('content="noindex, nofollow"'));
 });
@@ -110,7 +112,7 @@ test("produto padrão: arte com letra e chips, como funciona, lista de espera", 
   assert.ok(html.includes('id="lista"'));
   assert.ok(html.includes('data-ev="lista:severino"'));
   assert.ok(html.includes('<body style="--ac:#F5A300">'));
-  assert.ok(html.includes('<a href="/outros/aprova-ordem" data-ev="menu:outros:aprova-ordem">Aprova · Ordem</a>'));
+  assert.ok(html.includes('<a href="/apps" aria-current="true" data-ev="menu:apps">Aplicativos</a>'));
   assert.ok(!html.includes("lp-blocos"));
 });
 
@@ -124,14 +126,14 @@ test("produto com capa troca a arte", () => {
 test("produto com ícone usa a imagem no lugar da letra", () => {
   const [p, c] = produtoCom({ icone: { arquivo: "conteudo/imagens/severino-icone-bbbbbbbb.png", alt: "" } });
   assert.ok(paginaProduto(p, c).includes('<span class="glyph"><img src="/conteudo/imagens/severino-icone-bbbbbbbb.png" alt=""></span>'));
-  assert.ok(paginaInicio(c).includes('<span class="mk" aria-hidden="true"><img src="/conteudo/imagens/severino-icone-bbbbbbbb.png" alt=""></span>'));
+  assert.ok(paginaApps(c).includes('<span class="mk" aria-hidden="true"><img src="/conteudo/imagens/severino-icone-bbbbbbbb.png" alt=""></span>'));
 });
 
 test("produto sem lista de espera: sem faixa, sem botão do topo, CTA vira contato", () => {
   const html = paginaProduto(...produtoCom({ listaEspera: { ativa: false, convite: "", campo: "", placeholder: "" } }));
   assert.ok(!html.includes('id="lista"'));
   assert.ok(!html.includes("Entrar na lista"));
-  assert.ok(html.includes('<a class="cta" href="/#contato">Falar com a Baishift</a>'));
+  assert.ok(html.includes('<a class="cta" href="/#contato" data-ev="cta:menu">Falar com a Baishift</a>'));
 });
 
 test("blocos de cada tipo, na ordem", () => {
@@ -169,27 +171,70 @@ test("sitemap só com produtos ativos e data do conteúdo", () => {
   const o = base(); o.produtos[2].ativo = false; o.atualizadoEm = "2026-09-03T10:00:00Z";
   const xml = sitemap(validar(o));
   assert.ok(xml.includes("<loc>https://www.baishift.com.br/</loc><lastmod>2026-09-03</lastmod>"));
-  assert.ok(xml.includes("/outros/severino</loc>"));
+  assert.ok(xml.includes("/provedores</loc>"));
+  assert.ok(xml.includes("/dashboards</loc>"));
+  assert.ok(xml.includes("/apps</loc>"));
+  assert.ok(xml.includes("/apps/severino</loc>"));
   assert.ok(!xml.includes("aprova-suficiencia"));
 });
 
 test("paginas devolve um arquivo por página ativa", () => {
   const o = base(); o.produtos[1].ativo = false;
   const arq = paginas(validar(o));
-  assert.deepEqual(Object.keys(arq).sort(), ["index.html", "outros/aprova-suficiencia.html", "outros/severino.html", "sitemap.xml"]);
+  assert.deepEqual(Object.keys(arq).sort(), ["apps/aprova-suficiencia.html", "apps/index.html", "apps/severino.html", "dashboards.html", "index.html", "provedores.html", "sitemap.xml"]);
 });
 
-test("gerarTudo grava, remove páginas de produtos que saíram e devolve o relatório", () => {
+test("gerarTudo grava, remove o que saiu e apaga as landings do endereço antigo", () => {
   const raiz = fs.mkdtempSync(path.join(os.tmpdir(), "baishift-"));
+  fs.mkdirSync(path.join(raiz, "apps"));
+  fs.writeFileSync(path.join(raiz, "apps", "velho.html"), "x");
   fs.mkdirSync(path.join(raiz, "outros"));
-  fs.writeFileSync(path.join(raiz, "outros", "velho.html"), "x");
+  fs.writeFileSync(path.join(raiz, "outros", "severino.html"), "x");
   const o = base(); o.produtos[2].ativo = false;
   const r = gerarTudo(validar(o), raiz);
-  assert.deepEqual(r.escritos.sort(), ["index.html", "outros/aprova-ordem.html", "outros/severino.html", "sitemap.xml"]);
-  assert.deepEqual(r.removidos, ["outros/velho.html"]);
+  assert.deepEqual(r.escritos.sort(), ["apps/aprova-ordem.html", "apps/index.html", "apps/severino.html", "dashboards.html", "index.html", "provedores.html", "sitemap.xml"]);
+  assert.deepEqual(r.removidos.sort(), ["apps/velho.html", "outros/severino.html"]);
   assert.ok(fs.existsSync(path.join(raiz, "index.html")));
-  assert.ok(!fs.existsSync(path.join(raiz, "outros", "velho.html")));
-  assert.ok(!fs.existsSync(path.join(raiz, "outros", "aprova-suficiencia.html")));
+  assert.ok(!fs.existsSync(path.join(raiz, "apps", "velho.html")));
+  assert.ok(!fs.existsSync(path.join(raiz, "apps", "aprova-suficiencia.html")));
+  assert.ok(!fs.existsSync(path.join(raiz, "outros")), "a pasta do endereço antigo some quando esvazia");
   assert.equal(fs.readdirSync(raiz).filter(f => f.includes(".tmp-")).length, 0, "não sobra arquivo temporário");
   fs.rmSync(raiz, { recursive: true, force: true });
+});
+
+/* ---------- hub, painéis e índice dos aplicativos ---------- */
+
+test("hub: as três portas, com os endereços na ordem certa", () => {
+  const html = paginaHub(validar(base()));
+  assert.equal(conta(html, /class="door"/g), 3);
+  assert.ok(html.includes('href="/provedores" data-ev="porta:provedores"'));
+  assert.ok(html.includes('href="/dashboards" data-ev="porta:dashboards"'));
+  assert.ok(html.includes('href="/apps" data-ev="porta:apps"'));
+  assert.ok(html.includes('<link rel="canonical" href="https://www.baishift.com.br/">'));
+  assert.ok(html.startsWith("<!DOCTYPE html>\n<!-- GERADO"));
+});
+
+test("painéis: um painel por segmento, só o primeiro visível", () => {
+  const html = paginaPaineis(validar(base()));
+  assert.equal(conta(html, /data-painel="/g), 3);
+  assert.equal(conta(html, /data-painel="[a-z]+" hidden/g), 2);
+  assert.equal(conta(html, /data-gr="/g), 9);
+  assert.ok(html.includes('data-seg="clinica" aria-pressed="true"'));
+  assert.ok(html.includes('<link rel="canonical" href="https://www.baishift.com.br/dashboards">'));
+});
+
+test("apps: um cartão por produto ativo, apontando para /apps/<slug>", () => {
+  const o = base(); o.produtos[1].ativo = false;
+  const html = paginaApps(validar(o));
+  assert.equal(conta(html, /class="app-card"/g), 2);
+  assert.ok(html.includes('href="/apps/severino"'));
+  assert.ok(!html.includes('href="/apps/aprova-ordem"'));
+  assert.ok(html.includes('data-ev="app:severino"'));
+});
+
+test("apps sem nenhum produto ativo mostra o aviso", () => {
+  const o = base(); o.produtos.forEach(p => { p.ativo = false; });
+  const html = paginaApps(validar(o));
+  assert.ok(!html.includes("app-card"));
+  assert.ok(html.includes("app-vazio"));
 });

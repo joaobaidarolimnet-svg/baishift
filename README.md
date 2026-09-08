@@ -1,6 +1,6 @@
 # baishift.com.br
 
-Site institucional da **Baishift** — gestão, processos e software para provedores de internet.
+Site institucional da **Baishift** — gestão de provedores, painéis sob medida e aplicativos próprios.
 
 Site estático, sem framework e sem etapa de build. Os gráficos são desenhados em SVG
 por JavaScript próprio, sem nenhuma biblioteca externa. No navegador, as únicas requisições a terceiros são as fontes do Google Fonts; o servidor
@@ -8,37 +8,64 @@ consulta um serviço de localização por IP para as métricas do painel.
 
 ## Estrutura
 
-O site é uma página única organizada em **três frentes** — Diagnóstico, Consultoria de
-processos e Dashboard — mais modelos de contratação, FAQ e contato. O menu **Outros**
-leva às landing pages dos produtos fora do provedor.
+A página inicial é um **hub com três portas**. Cada porta é uma página inteira:
+
+| Endereço | O que fica lá |
+|---|---|
+| `/` | Hub: topo, as três portas, "quem faz", "honestidade poupa reunião" e contato |
+| `/provedores` | A frente principal: diagnóstico, consultoria de processos, dashboard do provedor, modelos de contratação, serve/não serve, FAQ e formulário |
+| `/dashboards` | Painéis sob medida, com um painel demonstrativo por segmento (clínica, transporte, distribuição) |
+| `/apps` | Índice dos aplicativos; cada um em `/apps/<slug>` |
+
+`/outros/<slug>` era o endereço antigo das landings e **redireciona (301)** para
+`/apps/<slug>` no `server.js` — quem tem o link velho salvo ou indexado chega no lugar certo.
 
 ```
 conteudo/site.json      FONTE DA VERDADE dos textos, produtos e carrossel — edite aqui (ou pelo painel)
 conteudo/imagens/       imagens enviadas pelo painel
-templates/*.js          modelos das páginas (index, produto, partes comuns)
+templates/hub.js        modelo da página inicial (as três portas)
+templates/provedores.js modelo de /provedores
+templates/paineis.js    modelo de /dashboards
+templates/apps.js       modelo de /apps (índice)
+templates/produto.js    modelo de /apps/<slug>
+templates/comum.js      <head>, barra de navegação e rodapé compartilhados
 lib/                    validação do conteúdo, gerador das páginas, acesso, publicação, imagens, métricas
 gestor/                 painel do gestor (login, telas, estilos)
 dados/                  (ignorado) disco persistente local: usuários, eventos, imagens pendentes
-index.html              GERADO a partir do JSON: página principal
-outros/*.html           GERADOS: landing pages dos produtos do menu Outros
+index.html              GERADO: o hub
+provedores.html         GERADO
+dashboards.html         GERADO
+apps/index.html         GERADO: índice dos aplicativos
+apps/*.html             GERADOS: landing pages dos aplicativos
 sitemap.xml             GERADO
 404.html                página de erro
 assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages, carrossel)
 assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, carrossel, formulários
 assets/marca/           kit oficial da marca V2 (logos, ícones, favicons, social, papelaria; guia em identidade-baishift.html)
 assets/img/             favicon e ícones do app (copiados do kit) e imagem de compartilhamento
-server.js               servidor (Railway): gera o site do JSON ao subir, URLs limpas, cache versionado, 404
+server.js               servidor (Railway): gera o site do JSON ao subir, URLs limpas, redirect do endereço antigo, cache versionado, 404
 test/                   testes (npm test)
 robots.txt · site.webmanifest · favicon.ico
-dist/                   versão em arquivo único (gerada)
+dist/                   /provedores em arquivo único (gerado)
 tools/                  geradores (site, arquivo único, imagens) e verificação
 ```
 
-**Não edite `index.html` nem `outros/*.html` à mão**: eles são regerados a partir de
+**Não edite as páginas `.html` à mão**: todas são regeradas a partir de
 `conteudo/site.json` toda vez que o servidor sobe. Para mudar um texto, edite o JSON e rode
 `npm run build` (ou use o painel em `/gestor`, quando estiver no ar). Títulos aceitam
 `*trecho*` para o destaque em cor, `**trecho**` para negrito e `[texto](url)` para link; em
 textos longos, linha em branco separa parágrafos.
+
+### Identidade
+
+O site inteiro usa a paleta oficial do kit da marca — navy `#142F7A`, navy profundo
+`#0C1B4A`, linha `#2A4189`, laranja `#EF562E`, papel `#F4F5F9` — e uma fonte só,
+**Archivo**, do título ao rótulo. Os mesmos valores estão em `assets/marca/tokens.css`.
+
+**Painéis por segmento (`/dashboards`).** Três painéis demonstrativos — clínica, transporte
+e distribuição — trocados por botões (`paineisSegmentos()`); cada um desenha sob demanda e só
+uma vez. Os textos saem do JSON; os números são ilustrativos e vivem no `assets/js/site.js`,
+como no painel do provedor.
 
 **Gráficos em movimento contínuo.** Frente 01: `dataPath()` — fontes (ERP, Omnichannel,
 Recebimentos, Pagamentos) → núcleo vertical Baishift Gestão → Painel, alta/baixa
@@ -222,14 +249,14 @@ usam a versão branca. Regras do guia: AI sempre laranja e dentro da caixa, vers
 branca sobre fundo escuro, mínimo de 140 px de largura, sem sombra ou inclinação.
 Favicon, ícones do app (inclusive o maskable) e a imagem de compartilhamento são cópias de `03-favicon/`, `02-icone/` e `04-social/`.
 
-**Cores e tipografia.** Variáveis CSS no `:root` de `assets/css/site.css`.
+**Cores e tipografia.** Variáveis CSS no `:root` de `assets/css/site.css`, espelhadas em `assets/marca/tokens.css`.
 
 ## Scripts auxiliares
 
 ```bash
-npm run build                  # regera index.html, outros/*.html e sitemap.xml a partir de conteudo/site.json
+npm run build                  # regera as páginas e o sitemap.xml a partir de conteudo/site.json
 npm test                       # testes do gerador e da validação do conteúdo
-node tools/build-single.mjs    # gera dist/baishift-site.html (CSS, JS e logos embutidos)
+node tools/build-single.mjs    # gera dist/baishift-site.html a partir de provedores.html (CSS, JS e logos embutidos)
 ./tools/shot.sh tools/og.html assets/img/og.png 1200 630   # regera a imagem de compartilhamento (usa a logo do kit)
 ```
 

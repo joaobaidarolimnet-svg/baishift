@@ -194,6 +194,15 @@ function responder404(req, res) {
   res.end("404");
 }
 
+/* Endereços antigos das landings: /outros/<slug> passou a ser /apps/<slug>.
+   Quem tem o link velho salvo (ou indexado) chega no lugar certo com 301. */
+function enderecoAntigo(caminho) {
+  if (caminho === "/outros" || caminho === "/outros/") return "/apps";
+  if (!caminho.startsWith("/outros/")) return null;
+  const resto = caminho.slice("/outros/".length).replace(/\.html$/, "");
+  return /^[a-z0-9][a-z0-9-]*$/.test(resto) ? "/apps/" + resto : "/apps";
+}
+
 /* Endereço oficial: qualquer outro host (o .up.railway.app, a raiz sem www) e o http
    puro redirecionam de forma permanente para https://www.baishift.com.br */
 const HOST_OFICIAL = "www.baishift.com.br";
@@ -216,6 +225,11 @@ const servidor = http.createServer((req, res) => {
     return;
   }
   if (caminho === "/api/evento" && req.method === "POST") return receberEvento(req, res);
+  const antigo = enderecoAntigo(caminho);
+  if (antigo) {
+    res.writeHead(301, { "Location": antigo, "Cache-Control": "public, max-age=86400" });
+    return res.end();
+  }
   if (req.method !== "GET" && req.method !== "HEAD") {
     res.writeHead(405, { "Allow": "GET, HEAD", "Content-Type": "text/plain; charset=utf-8" });
     return res.end("Método não permitido");

@@ -102,16 +102,20 @@
     TELAS: {},
     MENU: [
       { grupo: "Painel" }, { tela: "visao-geral", nome: "Visão geral" },
-      { grupo: "Conteúdo" }, { tela: "inicio", nome: "Início" }, { tela: "diagnostico", nome: "Diagnóstico" }, { tela: "processos", nome: "Processos" },
+      { grupo: "Início" }, { tela: "hub", nome: "Hub (as três portas)" },
+      { grupo: "Provedores" }, { tela: "inicio", nome: "Topo" }, { tela: "diagnostico", nome: "Diagnóstico" }, { tela: "processos", nome: "Processos" },
       { tela: "dashboard", nome: "Dashboard" }, { tela: "modelos", nome: "Modelos" }, { tela: "perfil", nome: "Serve / não serve" }, { tela: "faq", nome: "FAQ" },
-      { tela: "contato", nome: "Contato e rodapé" }, { tela: "produtos", nome: "Produtos" }, { tela: "site", nome: "Site" },
+      { tela: "contato", nome: "Contato e rodapé" },
+      { grupo: "Painéis" }, { tela: "paineis", nome: "Painéis sob medida" },
+      { grupo: "Aplicativos" }, { tela: "apps", nome: "Índice" }, { tela: "produtos", nome: "Produtos" },
+      { grupo: "Geral" }, { tela: "site", nome: "Site" },
       { grupo: "Acesso" }, { tela: "usuarios", nome: "Usuários", admin: true }, { tela: "conta", nome: "Minha conta" }
     ],
     aoNavegar: [],          /* funções chamadas a cada troca de tela (a barra de publicar usa) */
     aoIniciar: []           /* funções esperadas depois de carregar o usuário, antes da primeira tela */
   };
 
-  function padrao() { return ["visao-geral", "inicio", "conta"].find(t => G.TELAS[t]); }
+  function padrao() { return ["visao-geral", "hub", "conta"].find(t => G.TELAS[t]); }
   function montarMenu() {
     const nav = $("#nav"); nav.innerHTML = "";
     G.MENU.forEach(item => {

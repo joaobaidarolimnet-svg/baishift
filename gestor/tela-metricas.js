@@ -8,7 +8,7 @@
   const NOME_ORIGEM = { google: "Google", instagram: "Instagram", facebook: "Facebook", whatsapp: "WhatsApp", linkedin: "LinkedIn", youtube: "YouTube", direto: "Direto / link" };
   function nomeAlvo(a) {
     const i = a.indexOf(":"), k = i < 0 ? a : a.slice(0, i), resto = i < 0 ? "" : a.slice(i + 1);
-    return ({ whatsapp: "WhatsApp · " + resto, cta: "Botão · " + resto, menu: "Menu · " + resto.replace("outros:", ""), carrossel: "Anúncio " + resto, lista: "Lista de espera · " + resto, bloco: "Bloco · " + resto })[k] || a;
+    return ({ whatsapp: "WhatsApp · " + resto, cta: "Botão · " + resto, menu: "Menu · " + resto.replace("outros:", ""), porta: "Porta · " + resto, app: "Aplicativo · " + resto, carrossel: "Anúncio " + resto, lista: "Lista de espera · " + resto, bloco: "Bloco · " + resto })[k] || a;
   }
   function delta(v, a) {
     if (!a) return el("span", { class: "delta", text: v ? "sem base anterior" : "—" });

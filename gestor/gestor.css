@@ -2,12 +2,12 @@
    Painel do gestor — folha de estilo (ferramenta, densa, mesma marca do site)
    ========================================================= */
 :root{
-  --ink:#0A1B3D;--navy:#0C2149;--deep:#071433;--mist:#F4F7FC;--line:#DDE5F3;--muted:#5B6E93;
-  --blue:#1652F0;--blue-soft:#E8EFFE;--blue-light:#7FA6FF;--orange:#FF7A1A;--orange-soft:#FFF0E2;
-  --green:#12855A;--green-soft:#E3F5EC;--red:#D8402F;--red-soft:#FBE7E4;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --display:"Sora","Inter",system-ui,sans-serif;
+  --ink:#0F1A38;--navy:#142F7A;--deep:#0C1B4A;--mist:#F4F5F9;--line:#D9DEEB;--muted:#5A6788;
+  --blue:#2F5BD0;--blue-soft:#E7ECFA;--blue-light:#7FA6FF;--orange:#EF562E;--orange-soft:#FDE9E3;
+  --green:#16A06B;--green-soft:#E3F5EC;--red:#D8402F;--red-soft:#FBE7E4;
+  --mono:"Archivo",system-ui,sans-serif;
+  --sans:"Archivo","Segoe UI",-apple-system,system-ui,sans-serif;
+  --display:"Archivo",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}

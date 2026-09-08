@@ -15,24 +15,27 @@ de movimento e serve como símbolo isolado.
 | Nome | Hex | Uso |
 |---|---|---|
 | Azul BaiShift | `#142F7A` | Cor principal — letras e fundos |
-| Azul Profundo | `#0E2258` | Faixas escuras e gradientes |
+| Azul Profundo | `#0C1B4A` | Faixas escuras, cartões sobre navy |
+| Linha do Navy | `#2A4189` | Bordas sobre fundo azul |
 | Azul Claro | `#2A4FA8` | Topo do gradiente, estados ativos |
 | Laranja IA | `#EF562E` | O AI, a caixa e a seta |
 | Laranja Claro | `#FF7A3D` | Sobre fundo escuro |
-| Névoa | `#F4F7FC` | Fundo de tela e cartões |
-| Linha | `#DDE5F3` | Bordas e divisórias |
-| Cinza Texto | `#5B6E93` | Texto de apoio |
+| Papel | `#F4F5F9` | Fundo de tela e cartões |
+| Linha | `#D9DEEB` | Bordas e divisórias |
+| Cinza Texto | `#5A6788` | Texto de apoio |
 
 As mesmas variáveis estão em `tokens.css`, prontas para colar no site.
 
 ## Tipografia
 
-- **Sora** 600 — títulos e números grandes
-- **Inter** 400 a 600 — corpo, listas e formulários
-- **IBM Plex Mono** — rótulos, códigos e dados
+Uma fonte só, do título ao rótulo: **Archivo**.
+
+- **700 e 800** — títulos e números grandes
+- **400 a 600** — corpo, listas e formulários
+- **600 em caixa alta e espaçada** — rótulos e dados
 
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 ```
 
 O logotipo é vetor desenhado — não depende de nenhuma fonte instalada.
