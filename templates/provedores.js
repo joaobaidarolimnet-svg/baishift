@@ -1,8 +1,9 @@
-/* Modelo da página principal. Recebe o conteúdo validado e devolve o HTML completo.
+/* Modelo de /provedores — a frente principal: diagnóstico, processos, dashboard,
+   modelos, serve/não serve, FAQ e contato. Recebe o conteúdo validado e devolve o HTML.
    Regra: todo valor do JSON passa por h() ou marcar() antes de entrar no HTML. */
 "use strict";
 const { h, marcar, semMarcas, urlImagem, jsonEmbutido } = require("../lib/html");
-const { HOST, AVISO, SVG_WA, head, barraInicio, footEnd } = require("./comum");
+const { HOST, AVISO, SVG_WA, head, barra, footEnd } = require("./comum");
 
 const PAINEL_DEMO = `<div class="dash rv">
       <div class="dash-top"><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
@@ -54,7 +55,7 @@ const li = s => `<li>${marcar(s)}</li>`;
 const eyebrow = (n, r) => `<span class="eyebrow"><b>Frente ${n}</b> ${h(r)}</span>`;
 const botao = (b, cls, ev) => b.texto ? `<a class="btn ${cls}" href="${h(b.link || "#")}" data-ev="${ev}">${h(b.texto)}</a>` : "";
 
-module.exports = function paginaInicio(c, o = {}) {
+module.exports = function paginaProvedores(c, o = {}) {
   const st = c.site, ini = c.inicio, d = c.diagnostico, of = d.oferta, pr = c.processos, db = c.dashboard, mo = c.modelos, pf = c.perfil, fq = c.faq, ct = c.contato;
   const visual = ini.carrossel.imagens.length ? carrossel(ini.carrossel, o) : (ini.painelAtivo ? PAINEL_DEMO : "");
   const ANC = ["#diagnostico", "#processos", "#dashboard"], CLS = ["", " b", " c"];
@@ -62,6 +63,7 @@ module.exports = function paginaInicio(c, o = {}) {
 
   const ld = { "@context": "https://schema.org", "@graph": [
     { "@type": "ProfessionalService", "@id": HOST + "/#organizacao", "name": "Baishift", "url": HOST + "/",
+      "mainEntityOfPage": HOST + "/provedores",
       "email": st.email,
       "description": "Diagnóstico de gestão, consultoria de processos no IXC e dashboard para provedores de internet.",
       "image": HOST + "/assets/img/og.png", "logo": HOST + "/assets/marca/01-logo/baishift-principal.svg",
@@ -72,20 +74,20 @@ module.exports = function paginaInicio(c, o = {}) {
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diagnóstico de gestão", "description": "Situação real da empresa com os números do IXC e plano priorizado por retorno." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de processos", "description": "Processos atuais, a desenvolver e a melhorar — escritos, parametrizados no IXC e treinados." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Dashboard", "description": "Painel da diretoria com base, caixa, churn e campo direto do banco, no computador e no celular." } } ] } },
-    { "@type": "FAQPage", "@id": HOST + "/#faq", "mainEntity": fq.itens.map(q => ({ "@type": "Question", "name": q.pergunta, "acceptedAnswer": { "@type": "Answer", "text": semMarcas(q.resposta) } })) }
+    { "@type": "FAQPage", "@id": HOST + "/provedores#faq", "mainEntity": fq.itens.map(q => ({ "@type": "Question", "name": q.pergunta, "acceptedAnswer": { "@type": "Answer", "text": semMarcas(q.resposta) } })) }
   ] };
 
   return `<!DOCTYPE html>
 ${AVISO}
 <html lang="pt-BR"${o.previa ? ' data-previa=""' : ""}>
 <head>
-${head({ titulo: st.tituloAba, descricao: st.descricao, descricaoSocial: st.descricaoSocial, caminho: "/", site: st, manifesto: true, previa: o.previa })}
+${head({ titulo: ini.tituloAba, descricao: ini.descricao, descricaoSocial: st.descricaoSocial, caminho: "/provedores", site: st, manifesto: false, previa: o.previa })}
 </head>
 <body>
 
 <a class="skip" href="#topo">Pular para o conteúdo</a>
 
-${barraInicio(c, o)}
+${barra("provedores", "#contato")}
 
 <main id="topo">
 
@@ -289,7 +291,7 @@ ${ct.areas.map(a => `          <div><b>${h(a.titulo)}</b><span>${h(a.texto)}</sp
         <div class="ok" id="fok" hidden>Mensagem preparada. Se a janela não abriu, escreva para ${h(st.email)}.</div>
       </form>
     </div>
-    ${footEnd(st, { href: "#topo", texto: "Voltar ao topo ↑" })}
+    ${footEnd(st, { href: "/", texto: "Voltar para o início ↑" })}
     <p class="foot-note">${h(st.notaRodape)}</p>
   </div>
 </footer>

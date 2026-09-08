@@ -17,11 +17,13 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 await new Promise(r => ws.addEventListener("open", r));
 await send("Runtime.enable"); await send("Log.enable"); await send("Page.enable");
 
-async function load(w, h, mobile) {
+const PAGINAS = ["/", "/provedores", "/dashboards", "/apps"];
+async function load(w, h, mobile, caminho = "/") {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile, screenWidth: w, screenHeight: h });
-  await send("Page.navigate", { url: "http://127.0.0.1:8899/" });
+  await send("Page.navigate", { url: "http://127.0.0.1:8899" + caminho });
   await wait(2600);
 }
+const nome = c => (c === "/" ? "hub" : c.slice(1));
 async function scrollAll() {
   await ev(`(async()=>{const H=document.documentElement.scrollHeight;
     for(let y=0;y<H;y+=Math.round(window.innerHeight*0.7)){window.scrollTo(0,y);
@@ -37,15 +39,30 @@ async function shot(name, full) {
   console.log(name + ".png");
 }
 
-/* desktop: rola tudo para disparar as revelações, depois captura a página inteira */
-await load(1440, 900, false);
-await scrollAll();
-const revel = await ev(`JSON.stringify({total:document.querySelectorAll('.rv').length,visiveis:document.querySelectorAll('.rv.in').length})`);
-console.log("revelações:", revel);
-await shot("full-desktop", "half");
+/* desktop: cada página, rolando tudo para disparar as revelações */
+for (const caminho of PAGINAS) {
+  await load(1440, 900, false, caminho);
+  await scrollAll();
+  const medida = await ev(`JSON.stringify({
+    rv: document.querySelectorAll('.rv').length, rvIn: document.querySelectorAll('.rv.in').length,
+    chartsVazios: [...document.querySelectorAll('.chart')].filter(c=>!c.querySelector('svg') && !c.closest('[hidden]')).length,
+    overflowX: document.documentElement.scrollWidth > window.innerWidth
+  })`);
+  console.log(nome(caminho).padEnd(12), medida);
+  await shot("full-" + nome(caminho), "half");
+}
+
+/* /dashboards: os três painéis desenham ao trocar de segmento */
+await load(1440, 900, false, "/dashboards");
+const segmentos = await ev(`(async()=>{const bs=[...document.querySelectorAll('.seg button[data-seg]')];const out=[];
+  for(const b of bs){b.click();await new Promise(r=>setTimeout(r,500));
+    const p=document.querySelector('[data-painel="'+b.dataset.seg+'"]');
+    out.push(b.dataset.seg+':'+[...p.querySelectorAll('[data-gr]')].filter(c=>c.querySelector('svg')).length+'/3');}
+  return out.join('  ');})()`);
+console.log("painéis      ", segmentos);
 
 /* mobile: menu */
-await load(390, 844, true);
+await load(390, 844, true, "/provedores");
 await ev(`document.getElementById('navtoggle').click()`); await wait(420);
 const menuAberto = await ev(`JSON.stringify({aberto:document.getElementById('navlinks').classList.contains('open'),
   expanded:document.getElementById('navtoggle').getAttribute('aria-expanded'),
@@ -63,7 +80,7 @@ const check = await ev(`JSON.stringify({
   scrollW: document.documentElement.scrollWidth, innerW: window.innerWidth,
   svgs: document.querySelectorAll('svg').length,
   chartsVazios: [...document.querySelectorAll('.chart')].filter(c=>!c.querySelector('svg')).length,
-  kpiReceita: document.getElementById('k2').textContent
+  kpiReceita: document.getElementById('k2')?.textContent || "—"
 })`);
 console.log("mobile 390px:", check);
 console.log("\nErros de console:", errors.length ? "\n  " + errors.join("\n  ") : "nenhum");

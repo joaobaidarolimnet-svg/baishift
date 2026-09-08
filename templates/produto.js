@@ -1,7 +1,7 @@
-/* Modelo das landing pages dos produtos do menu Outros. */
+/* Modelo das landing pages dos aplicativos, em /apps/<slug>. */
 "use strict";
 const { h, marcar, urlImagem } = require("../lib/html");
-const { AVISO, head, barraProduto, footEnd } = require("./comum");
+const { AVISO, head, barra, footEnd } = require("./comum");
 
 function arte(p, o) {
   if (p.capa.arquivo) return `<div class="lp-art lp-capa"><img src="${h(urlImagem(p.capa.arquivo, o))}" alt="${h(p.capa.alt)}" loading="eager"></div>`;
@@ -73,11 +73,11 @@ module.exports = function paginaProduto(p, c, o = {}) {
 ${AVISO}
 <html lang="pt-BR"${o.previa ? ' data-previa=""' : ""}>
 <head>
-${head({ titulo: p.nome + " — Baishift", descricao: p.descricao, descricaoSocial: p.descricao, caminho: "/outros/" + p.slug, site: st, manifesto: false, previa: o.previa })}
+${head({ titulo: p.nome + " — Baishift", descricao: p.descricao, descricaoSocial: p.descricao, caminho: "/apps/" + p.slug, site: st, manifesto: false, previa: o.previa })}
 </head>
 <body style="--ac:${cor}">
 
-${barraProduto(p, c)}
+${barra("apps", le.ativa ? "#lista" : "/#contato")}
 
 <main id="topo">
   <div class="lp-hero">
@@ -87,7 +87,7 @@ ${barraProduto(p, c)}
         <h1>${marcar(p.titulo)}</h1>
         <p class="lead">${marcar(p.lead)}</p>
         ${p.status ? `<span class="status"><b aria-hidden="true"></b>${h(p.status)}</span>` : ""}
-        <div class="hero-acts" style="margin-top:26px">${le.ativa ? `<a class="btn btn-1" href="#lista" style="background:${cor}" data-ev="lista:${p.slug}">Entrar na lista de espera</a>` : ""}<a class="btn btn-2" href="/">Voltar para a Baishift</a></div>
+        <div class="hero-acts" style="margin-top:26px">${le.ativa ? `<a class="btn btn-1" href="#lista" style="background:${cor}" data-ev="lista:${p.slug}">Entrar na lista de espera</a>` : ""}<a class="btn btn-2" href="/apps">Ver todos os aplicativos</a></div>
       </div>
       <div class="rv">
         ${arte(p, o)}
@@ -101,7 +101,7 @@ ${lista}
 
 <footer class="lp-foot">
   <div class="wrap">
-    ${footEnd(st, { href: "/", texto: "Voltar para a Baishift ↑" })}
+    ${footEnd(st, { href: "/apps", texto: "Ver todos os aplicativos ↑" })}
   </div>
 </footer>
 

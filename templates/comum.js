@@ -1,21 +1,28 @@
-/* Partes compartilhadas pelas páginas: <head>, barras de navegação, rodapé, ícone do WhatsApp. */
+/* Partes compartilhadas pelas páginas: <head>, barra de navegação, rodapé, ícone do WhatsApp. */
 "use strict";
 const { h, jsonEmbutido, urlImagem } = require("../lib/html");
 
 const HOST = "https://www.baishift.com.br";
 const AVISO = "<!-- GERADO a partir de conteudo/site.json pelos modelos em templates/. Não edite este arquivo: edite o JSON e rode `node tools/build-site.mjs`, ou use o painel em /gestor. -->";
 const SVG_WA = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>';
-const SVG_SETA = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>';
+const SVG_GO = '<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
 const FONTES = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">`;
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">`;
 const NAVTOGGLE = '<button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></button>';
 
+/* As três portas do site. A ordem vale para o menu, para o hub e para o sitemap. */
+const PORTAS = [
+  { chave: "provedores", url: "/provedores", menu: "Provedores" },
+  { chave: "dashboards", url: "/dashboards", menu: "Painéis" },
+  { chave: "apps",       url: "/apps",       menu: "Aplicativos" }
+];
+
 function logo(href) {
-  return `<a class="brand" href="${href}" aria-label="Baishift — início"><img class="lg lg-navy" src="/assets/marca/01-logo/baishift-principal.svg" alt="Baishift" width="911" height="175"><img class="lg lg-white" src="/assets/marca/01-logo/baishift-branco.svg" alt="" aria-hidden="true" width="911" height="175"></a>`;
+  return `<a class="brand" href="${href}" aria-label="Baishift — início"><img class="lg lg-white" src="/assets/marca/01-logo/baishift-branco.svg" alt="Baishift" width="911" height="175"></a>`;
 }
 
-/* o: titulo, descricao, descricaoSocial, caminho ("/" ou "/outros/x"), site, manifesto, previa */
+/* o: titulo, descricao, descricaoSocial, caminho ("/" ou "/apps/x"), site, manifesto, previa */
 function head(o) {
   const url = HOST + o.caminho;
   return `<meta charset="UTF-8">
@@ -35,7 +42,7 @@ function head(o) {
 <meta property="og:image" content="${HOST}/assets/img/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Baishift — gestão, processos e software para provedores de internet">
+<meta property="og:image:alt" content="Baishift — gestão de provedores, painéis sob medida e aplicativos">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${h(o.titulo)}">
 <meta name="twitter:description" content="${h(o.descricaoSocial)}">
@@ -54,50 +61,26 @@ window.BAISHIFT = ${jsonEmbutido({ whatsapp: o.site.whatsapp, email: o.site.emai
 </script>`;
 }
 
-/* quadradinho colorido com a letra (ou o ícone) do produto, usado no menu Outros */
+/* quadradinho colorido com a letra (ou o ícone) do produto */
 function marcaProduto(p, o) {
   return `<span class="mk" aria-hidden="true">${p.icone.arquivo ? `<img src="${h(urlImagem(p.icone.arquivo, o))}" alt="">` : h(p.letra)}</span>`;
 }
 
-function barraInicio(c, o) {
-  const ativos = c.produtos.filter(p => p.ativo);
-  const outros = ativos.length ? `
-      <div class="dd" id="dd">
-        <button class="ddb" type="button" aria-expanded="false" aria-controls="ddm">Outros ${SVG_SETA}</button>
-        <ul class="ddm" id="ddm">
-${ativos.map(p => `          <li><a href="/outros/${p.slug}" style="--ac:${h(p.cor)}" data-ev="menu:outros:${p.slug}">${marcaProduto(p, o)}<div><b>${h(p.nome)}</b><span>${h(p.descricaoMenu)}${p.status ? " · " + h(p.status) : ""}</span></div></a></li>`).join("\n")}
-        </ul>
-      </div>` : "";
-  return `<header class="bar on-dark" id="bar">
+/* Barra única do site. `atual` é a chave da porta em que a pessoa está ("provedores",
+   "dashboards", "apps") ou "" no hub. `contato` é para onde vai o botão de conversa. */
+function barra(atual, contato) {
+  const links = PORTAS.map(pt =>
+    `      <a href="${pt.url}"${atual === pt.chave ? ' aria-current="true"' : ""} data-ev="menu:${pt.chave}">${pt.menu}</a>`).join("\n");
+  return `<header class="bar" id="bar">
   <div class="bar-in">
-    ${logo("#topo")}
+    ${logo(atual ? "/" : "#topo")}
     ${NAVTOGGLE}
     <nav class="navlinks" id="navlinks" aria-label="Navegação principal">
-      <a href="#diagnostico">Diagnóstico</a>
-      <a href="#processos">Processos</a>
-      <a href="#dashboard">Dashboard</a>
-      <a href="#modelos">Modelos</a>${outros}
-      <a href="#faq">FAQ</a>
-      <a class="cta" href="#contato" data-ev="cta:menu">Falar com a Baishift</a>
+${links}
+      <a class="cta" href="${h(contato || "/#contato")}" data-ev="cta:menu">Falar com a Baishift</a>
     </nav>
   </div>
   <div id="prog" aria-hidden="true"></div>
-</header>`;
-}
-
-function barraProduto(p, c) {
-  const outros = c.produtos.filter(x => x.ativo && x.slug !== p.slug);
-  const cta = p.listaEspera.ativa ? '<a class="cta" href="#lista">Entrar na lista</a>' : '<a class="cta" href="/#contato">Falar com a Baishift</a>';
-  return `<header class="bar" id="bar">
-  <div class="bar-in">
-    ${logo("/")}
-    ${NAVTOGGLE}
-    <nav class="navlinks" id="navlinks" aria-label="Navegação">
-      <a href="/">Baishift</a>
-${outros.map(x => `      <a href="/outros/${x.slug}" data-ev="menu:outros:${x.slug}">${h(x.nome)}</a>`).join("\n")}
-      ${cta}
-    </nav>
-  </div>
 </header>`;
 }
 
@@ -106,4 +89,4 @@ function footEnd(site, voltar) {
   return `<div class="foot-end"><span>Baishift © <span id="yr">2026</span> · ${h(site.cidade)}</span><span><a href="mailto:${h(site.email)}">${h(site.email)}</a></span><span><a href="${voltar.href}">${voltar.texto}</a></span></div>`;
 }
 
-module.exports = { HOST, AVISO, SVG_WA, head, logo, barraInicio, barraProduto, footEnd, marcaProduto };
+module.exports = { HOST, AVISO, SVG_WA, SVG_GO, PORTAS, head, logo, barra, footEnd, marcaProduto };

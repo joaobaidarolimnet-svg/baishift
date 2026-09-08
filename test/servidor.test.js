@@ -30,7 +30,7 @@ test.before(async () => {
 test.after(() => { if (proc) proc.kill(); });
 
 test("boot: conteúdo gerado, dados preparados, usuário inicial", () => {
-  assert.match(saida, /conteúdo gerado: 5 arquivos/);
+  assert.match(saida, /conteúdo gerado: 8 arquivos/);
   assert.match(saida, /disco persistente em /);
   assert.match(saida, /usuário inicial criado: teste@baishift.com.br/);
 });
@@ -115,11 +115,11 @@ test("conteúdo, imagem pendente e pré-visualização", async () => {
   r = await fetch(base + "/gestor/api/imagens", { method: "POST", headers: { cookie: cookieDono, "x-gestor": "1", "content-type": "image/svg+xml" }, body: "<svg/>" });
   assert.equal(r.status, 400);
   const c = (await pede("GET", "/gestor/api/conteudo", { cookie: cookieDono })).json.conteudo;
-  c.produtos[0].capa = { arquivo: img.ref, alt: "Capa" }; c.inicio.titulo = "Prévia *marcada*";
-  const form = "conteudo=" + encodeURIComponent(JSON.stringify(c)) + "&pagina=inicio";
+  c.produtos[0].capa = { arquivo: img.ref, alt: "Capa" }; c.hub.titulo = "Prévia *marcada*";
+  const form = "conteudo=" + encodeURIComponent(JSON.stringify(c)) + "&pagina=hub";
   r = await pede("POST", "/gestor/api/previa", { cookie: cookieDono, gestor: false, corpo: form, tipo: "application/x-www-form-urlencoded" });
   assert.equal(r.status, 200); assert.match(r.texto, /data-previa=""/); assert.match(r.texto, /Prévia <em>marcada<\/em>/);
-  r = await pede("POST", "/gestor/api/previa", { cookie: cookieDono, gestor: false, corpo: form.replace("pagina=inicio", "pagina=produto:severino"), tipo: "application/x-www-form-urlencoded" });
+  r = await pede("POST", "/gestor/api/previa", { cookie: cookieDono, gestor: false, corpo: form.replace("pagina=hub", "pagina=produto:severino"), tipo: "application/x-www-form-urlencoded" });
   assert.equal(r.status, 200); assert.match(r.texto, /lp-capa/); assert.match(r.texto, new RegExp("/gestor/api/pendentes/" + img.id));
   assert.equal((await pede("POST", "/gestor/api/previa", { gestor: false, corpo: form, tipo: "application/x-www-form-urlencoded" })).status, 401);
 });

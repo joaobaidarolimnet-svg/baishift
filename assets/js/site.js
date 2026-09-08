@@ -8,8 +8,8 @@
 var CFG = window.BAISHIFT || {};
 var NS = "http://www.w3.org/2000/svg";
 var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-var C = { blue: "#1652F0", blueL: "#4D8BFF", orange: "#FF7A1A", green: "#12855A", red: "#D8402F", line: "#DDE5F3", muted: "#5B6E93", ink: "#0A1B3D" };
-var MONO = "IBM Plex Mono, monospace", SANS = "Inter, sans-serif", DISP = "Sora, sans-serif";
+var C = { blue: "#2F5BD0", blueL: "#7FA6FF", orange: "#EF562E", green: "#16A06B", red: "#D8402F", line: "#D9DEEB", muted: "#5A6788", ink: "#0F1A38" };
+var MONO = "Archivo, sans-serif", SANS = "Archivo, sans-serif", DISP = "Archivo, sans-serif";
 
 /* ---------- utilitários ---------- */
 function E(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
@@ -59,7 +59,7 @@ function grow(node, attr, to, dur) {
 var LIGHT = { grid: C.line, muted: C.muted, ink: C.ink, track: C.line, glow: false };
 var DARK  = { grid: "rgba(255,255,255,.09)", muted: "rgba(255,255,255,.55)", ink: "#fff", track: "rgba(255,255,255,.1)", glow: true };
 function pal(o) { return o.dark ? DARK : LIGHT; }
-function tone(c, o) { return o.dark ? ({ "#1652F0": "#4D8BFF", "#12855A": "#5ED9A0", "#FF7A1A": "#FF9A4D", "#D8402F": "#FF6B6B" }[c] || c) : c; }
+function tone(c, o) { return o.dark ? ({ "#2F5BD0": "#7FA6FF", "#16A06B": "#5ED9A0", "#EF562E": "#FF8A63", "#D8402F": "#FF6B6B" }[c] || c) : c; }
 var UID = 0;
 function glow(svg) {
   var id = "fx" + (++UID), d = E("defs"), f = E("filter", { id: id, x: "-20%", y: "-60%", width: "140%", height: "220%" });
@@ -99,7 +99,7 @@ function lineChart(host, o) {
     svg.appendChild(p);
     if (!RM) { var L = p.getTotalLength(); p.setAttribute("stroke-dasharray", L); p.setAttribute("stroke-dashoffset", L); vis(host, function () { p.style.transition = "stroke-dashoffset 1.3s ease"; p.setAttribute("stroke-dashoffset", 0); }); }
     if (o.dark && !o.small) halo(svg, X(n - 1, n), Y(s.d[n - 1]), c);
-    svg.appendChild(E("circle", { cx: X(n - 1, n), cy: Y(s.d[n - 1]), r: o.small ? 2.4 : 3.4, fill: c, stroke: o.dark ? "#071433" : "none", "stroke-width": 1.5 }));
+    svg.appendChild(E("circle", { cx: X(n - 1, n), cy: Y(s.d[n - 1]), r: o.small ? 2.4 : 3.4, fill: c, stroke: o.dark ? "#0C1B4A" : "none", "stroke-width": 1.5 }));
     var fs = o.fs || 7.4;
     if (o.end) svg.appendChild(T({ x: X(n - 1, n) - 2, y: Y(s.d[n - 1]) - 9, "text-anchor": "end", "font-family": MONO, "font-size": fs, "font-weight": 600, fill: c }, f(s.d[n - 1])));
     if (o.start) svg.appendChild(T({ x: X(0, n) + 2, y: Y(s.d[0]) - 9, "text-anchor": "start", "font-family": MONO, "font-size": fs, fill: P0.muted }, f(s.d[0])));
@@ -129,7 +129,7 @@ function liveLine(host, o) {
   var data = [], base = o.base || 6200, v = base;
   for (var i = 0; i < n; i++) { v = v * (1 + (rnd() - .48) * .08); v = Math.max(base * .55, Math.min(base * 1.6, v)); data.push(v); }
   var area = E("path", { fill: fill }), line = E("path", { fill: "none", stroke: c, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round", filter: fx });
-  var dot = E("circle", { r: 3.6, fill: c, stroke: "#071433", "stroke-width": 1.5 });
+  var dot = E("circle", { r: 3.6, fill: c, stroke: "#0C1B4A", "stroke-width": 1.5 });
   var lbl = T({ "text-anchor": "end", "font-family": MONO, "font-size": 9, "font-weight": 600, fill: c }, "");
   svg.appendChild(area); svg.appendChild(line); svg.appendChild(dot); svg.appendChild(lbl);
   var out = o.out;
@@ -507,6 +507,96 @@ function renderPanels(per) {
   });
 }
 
+
+/* ================= PAINÉIS SOB MEDIDA (/dashboards) =================
+   Três painéis demonstrativos, um por segmento. Os textos vêm do JSON;
+   os números aqui são ilustrativos e vivem no código, como no painel do provedor. */
+var M12 = ["out", "nov", "dez", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set"];
+var reais = function (v) { return "R$ " + br(v); };
+var SEGMENTOS = {
+  clinica: {
+    principal: function (h) {
+      lineChart(h, { w: 340, h: 126, labels: M12, end: true, fs: 7, alt: "faturamento particular e por convênio nos últimos 12 meses",
+        series: [{ d: [268, 279, 286, 291, 305, 312, 324, 336, 341, 352, 364, 372], c: C.blue, k: "particular" },
+                 { d: [96, 99, 101, 98, 104, 106, 108, 110, 109, 112, 114, 114], c: C.orange, k: "convênio" }], fmt: function (v) { return "R$ " + br(v) + " mil"; } });
+    },
+    secundario: function (h) {
+      hBar(h, { rh: 19, alt: "ocupação da agenda por profissional",
+        rows: [{ k: "PROFISSIONAL A", v: 94, t: "94%" }, { k: "PROFISSIONAL B", v: 89, t: "89%" },
+               { k: "PROFISSIONAL C", v: 82, t: "82%" }, { k: "PROFISSIONAL D", v: 71, t: "71%", alert: 1 }] });
+    },
+    rosca: function (h) {
+      donut(h, { center: "R$ 486 mil", sub: "faturamento do mês", alt: "composição do faturamento da clínica",
+        data: [{ k: "Consultas", v: 46, c: C.blue }, { k: "Procedimentos", v: 29, c: C.orange },
+               { k: "Exames", v: 15, c: C.green }, { k: "Convênios", v: 10, c: "#9AB4E8" }] });
+    }
+  },
+  transporte: {
+    principal: function (h) {
+      barChart(h, { w: 340, h: 126, a: [612, 640, 668, 655, 690, 712, 726, 748, 763, 781, 802, 824], b: [64, 58, 55, 61, 52, 48, 45, 43, 41, 38, 36, 33],
+        ca: C.green, cb: C.red, ka: "no prazo", kb: "em atraso", labels: M12, alt: "entregas no prazo e em atraso por mês" });
+    },
+    secundario: function (h) {
+      hBar(h, { rh: 19, alt: "custo por quilômetro em cada rota", max: 4.2,
+        rows: [{ k: "ROTA NORTE", v: 2.86, t: "R$ 2,86" }, { k: "ROTA SUL", v: 3.04, t: "R$ 3,04" },
+               { k: "ROTA LESTE", v: 3.21, t: "R$ 3,21" }, { k: "ROTA OESTE", v: 3.92, t: "R$ 3,92", alert: 1 }] });
+    },
+    rosca: function (h) {
+      donut(h, { center: "R$ 2,1 mi", sub: "receita do mês", alt: "composição da receita da transportadora",
+        data: [{ k: "Fretes", v: 58, c: C.blue }, { k: "Cargas fechadas", v: 24, c: C.orange },
+               { k: "Armazenagem", v: 12, c: C.green }, { k: "Outros", v: 6, c: "#9AB4E8" }] });
+    }
+  },
+  distribuicao: {
+    principal: function (h) {
+      lineChart(h, { w: 340, h: 126, labels: M12, end: true, fs: 7, alt: "faturamento e meta nos últimos 12 meses",
+        series: [{ d: [2.61, 2.68, 2.74, 2.7, 2.86, 2.94, 3.02, 3.11, 3.18, 3.24, 3.33, 3.41], c: C.blue, k: "faturado" },
+                 { d: [2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3.0, 3.05, 3.1, 3.15, 3.2, 3.25], c: C.orange, k: "meta" }],
+        fmt: function (v) { return "R$ " + br(v, 2) + " mi"; } });
+    },
+    secundario: function (h) {
+      hBar(h, { rh: 19, alt: "positivação de clientes por vendedor",
+        rows: [{ k: "VENDEDOR A", v: 91, t: "91%" }, { k: "VENDEDOR B", v: 84, t: "84%" },
+               { k: "VENDEDOR C", v: 78, t: "78%" }, { k: "VENDEDOR D", v: 63, t: "63%", alert: 1 }] });
+    },
+    rosca: function (h) {
+      donut(h, { center: "R$ 3,4 mi", sub: "faturamento do mês", alt: "mix de faturamento da distribuidora",
+        data: [{ k: "Bebidas", v: 38, c: C.blue }, { k: "Mercearia", v: 27, c: C.orange },
+               { k: "Higiene", v: 21, c: C.green }, { k: "Outros", v: 14, c: "#9AB4E8" }] });
+    }
+  }
+};
+
+function paineisSegmentos() {
+  var caixa = el("paineis-demo"); if (!caixa) return;
+  var botoes = caixa.querySelectorAll(".seg button[data-seg]"), desenhados = {};
+  function desenhar(painel, chave) {
+    if (desenhados[chave]) return;
+    desenhados[chave] = 1;
+    Array.prototype.forEach.call(painel.querySelectorAll("[data-gr]"), function (hst) {
+      var fn = SEGMENTOS[chave] && SEGMENTOS[chave][hst.getAttribute("data-gr")];
+      if (fn) { hst.innerHTML = ""; fn(hst); }
+    });
+  }
+  function mostrar(chave) {
+    Array.prototype.forEach.call(caixa.querySelectorAll("[data-painel]"), function (pn) {
+      var on = pn.getAttribute("data-painel") === chave;
+      pn.hidden = !on;
+      if (on) desenhar(pn, chave);
+    });
+    Array.prototype.forEach.call(caixa.querySelectorAll("[data-nota]"), function (nt) {
+      nt.hidden = nt.getAttribute("data-nota") !== chave;
+    });
+    Array.prototype.forEach.call(botoes, function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-seg") === chave ? "true" : "false");
+    });
+  }
+  Array.prototype.forEach.call(botoes, function (b) {
+    b.addEventListener("click", function () { mostrar(b.getAttribute("data-seg")); });
+  });
+  if (botoes.length) mostrar(botoes[0].getAttribute("data-seg"));
+}
+
 /* ================= INTERFACE ================= */
 
 /* menu mobile */
@@ -517,16 +607,6 @@ function renderPanels(per) {
   menu.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
   window.addEventListener("resize", function () { if (window.innerWidth > 900) close(); });
-})();
-
-/* menu "Outros" */
-(function () {
-  var dd = el("dd"); if (!dd) return;
-  var btn = dd.querySelector(".ddb");
-  function set(open) { dd.classList.toggle("open", open); btn.setAttribute("aria-expanded", open ? "true" : "false"); }
-  btn.addEventListener("click", function () { set(!dd.classList.contains("open")); });
-  document.addEventListener("click", function (e) { if (!dd.contains(e.target)) set(false); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") set(false); });
 })();
 
 /* carrossel do início: troca sozinho no intervalo, pausa com o mouse, o foco, a aba escondida
@@ -557,19 +637,14 @@ function renderPanels(per) {
   everyMs(ms, function () { if (!paused) go(i + 1); });
 })();
 
-/* barra: tema sobre o hero, progresso e seção ativa */
+/* barra: fio de progresso da leitura. A porta ativa vem marcada do servidor (aria-current). */
 (function () {
-  var bar = el("bar"), prog = el("prog"), hero = document.querySelector(".hero");
-  var links = Array.prototype.slice.call(document.querySelectorAll('.navlinks > a[href^="#"]:not(.cta)'));
-  var targets = links.map(function (a) { return el(a.getAttribute("href").slice(1)); }), ticking = false;
+  var prog = el("prog"); if (!prog) return;
+  var ticking = false;
   function update() {
     ticking = false;
     var h = document.documentElement, top = window.pageYOffset || h.scrollTop;
-    if (prog) prog.style.width = ((top / ((h.scrollHeight - h.clientHeight) || 1)) * 100) + "%";
-    if (bar) bar.classList.toggle("on-dark", hero ? top < hero.offsetTop + hero.offsetHeight - 62 : false);
-    var mark = top + 120, active = -1;
-    targets.forEach(function (t, i) { if (t && t.offsetTop <= mark) active = i; });
-    links.forEach(function (a, i) { i === active ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current"); });
+    prog.style.width = ((top / ((h.scrollHeight - h.clientHeight) || 1)) * 100) + "%";
   }
   window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener("resize", update);
@@ -654,6 +729,9 @@ try {
   on("dAfter", function (h) { dualBar(h, { dark: 1, w: 360, rh: 34, fs: 8, lw: 118, vw: 52, norm: "row", alt: "quatro indicadores antes e depois de seis meses de rito",
     rows: [{ k: "Inadimplência", a: 6.9, b: 4.8, ta: "6,9%", tb: "4,8%" }, { k: "Churn mensal", a: 2.02, b: 1.62, ta: "2,02%", tb: "1,62%" }, { k: "Fechamento", a: 20, b: 5, ta: "dia 20", tb: "dia 5" }, { k: "Fila de instalação", a: 38, b: 6, ta: "38", tb: "6" }] }); });
 
+  /* painéis por segmento em /dashboards */
+  paineisSegmentos();
+
   /* KPIs do hero com variação leve */
   var K = [{ id: "k1", v: 12480, f: "int", vol: .004 }, { id: "k2", v: 1242000, f: "brl", vol: .012 }, { id: "k3", v: 35.1, f: "pct", vol: .02 }, { id: "k4", v: 1.62, f: "pct2", vol: .03 }, { id: "k5", v: 4.8, f: "pct", vol: .03 }, { id: "k6", v: 99.4, f: "money", vol: .01 }];
   var fm = function (v, f) { if (f === "brl") return v >= 1e6 ? "R$ " + br(v / 1e6, 2) + " mi" : "R$ " + br(v / 1000) + " mil"; if (f === "pct") return br(v, 1) + "%"; if (f === "pct2") return br(v, 2) + "%"; if (f === "money") return "R$ " + br(v, 2); return br(v); };
@@ -698,7 +776,8 @@ try {
   var vistas = {};
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { var id = e.target.id; if (e.isIntersecting && !vistas[id]) { vistas[id] = 1; enviar("secao", id); io.unobserve(e.target); } }); }, { threshold: 0.2 });
-    ["diagnostico", "processos", "dashboard", "modelos", "faq", "contato"].forEach(function (id) { var s = el(id); if (s) io.observe(s); });
+    ["diagnostico", "processos", "dashboard", "modelos", "faq", "contato",
+     "quem", "honestidade", "paineis", "criterio", "lista", "ideia"].forEach(function (id) { var s = el(id); if (s) io.observe(s); });
   }
   document.addEventListener("click", function (e) { var a = e.target.closest ? e.target.closest("[data-ev]") : null; if (a && a.tagName !== "FORM") enviar("clique", a.getAttribute("data-ev")); });
   document.addEventListener("submit", function (e) {

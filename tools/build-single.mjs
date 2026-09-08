@@ -1,5 +1,7 @@
-/* Gera uma versão do site em arquivo único, com CSS e JS embutidos.
-   Serve para enviar por e-mail, abrir sem servidor ou publicar uma prévia. */
+/* Gera /provedores em arquivo único, com CSS e JS embutidos.
+   Serve para enviar por e-mail, abrir sem servidor ou publicar uma prévia.
+   É a página que carrega o argumento inteiro e funciona sozinha — o hub depende
+   das outras páginas do site, então não faz sentido em arquivo solto. */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 
 const root = new URL("../", import.meta.url);
@@ -7,11 +9,12 @@ const read = p => readFileSync(new URL(p, root), "utf8");
 
 const css = read("assets/css/site.css");
 const js  = read("assets/js/site.js");
-let html  = read("index.html");
+const PAGINA = "provedores.html";
+let html  = read(PAGINA);
 
 /* troca obrigatória: se o alvo não existir, o build para em vez de gerar arquivo quebrado */
 const swap = (texto, alvo, novo) => {
-  if (!texto.includes(alvo)) throw new Error("build-single: não encontrei no index.html -> " + alvo);
+  if (!texto.includes(alvo)) throw new Error("build-single: não encontrei em " + PAGINA + " -> " + alvo);
   return texto.replace(alvo, novo);
 };
 
@@ -31,7 +34,7 @@ for (const f of ["assets/marca/01-logo/baishift-principal.svg", "assets/marca/01
   const uri = "data:image/svg+xml," + encodeURIComponent(read(f).replace(/\n\s*/g, ""));
   html = html.split("/" + f).join(uri);
 }
-for (const [oque, marca] of [["estilos", "--blue:#1652F0"], ["script", "function procFlow"]])
+for (const [oque, marca] of [["estilos", "--navy:#142F7A"], ["script", "function procFlow"]])
   if (!html.includes(marca)) throw new Error("build-single: " + oque + " não foram embutidos");
 
 mkdirSync(new URL("dist/", root), { recursive: true });

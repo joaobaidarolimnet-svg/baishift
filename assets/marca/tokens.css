@@ -1,16 +1,17 @@
 :root{
   --navy:#142F7A;
-  --navy-deep:#0E2258;
+  --navy-deep:#0C1B4A;
+  --navy-line:#2A4189;
   --navy-light:#2A4FA8;
   --orange:#EF562E;
   --orange-light:#FF7A3D;
   --orange-deep:#C93F1C;
-  --mist:#F4F7FC;
-  --line:#DDE5F3;
-  --muted:#5B6E93;
+  --mist:#F4F5F9;
+  --paper:#F4F5F9;
+  --line:#D9DEEB;
+  --muted:#5A6788;
   --white:#FFFFFF;
-  --font-display:"Sora",system-ui,sans-serif;
-  --font-body:"Inter",system-ui,sans-serif;
-  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+  --font-display:"Archivo",system-ui,sans-serif;
+  --font-body:"Archivo",system-ui,sans-serif;
   --radius:14px;
 }
