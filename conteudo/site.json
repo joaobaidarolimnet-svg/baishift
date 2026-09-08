@@ -1,6 +1,6 @@
 {
   "versao": 1,
-  "atualizadoEm": "2026-09-02T00:00:00Z",
+  "atualizadoEm": "2026-09-04T13:04:32.923Z",
   "site": {
     "tituloAba": "Baishift — software de gestão, painéis e aplicativos",
     "descricao": "Soluções para gestores de alta performance, profissionais autônomos e estudantes. Gestão de provedores, painéis sob medida e aplicativos próprios.",
@@ -79,8 +79,8 @@
   "inicio": {
     "tituloAba": "Gestão de provedores — Baishift",
     "descricao": "Diagnóstico de gestão, consultoria de processos no IXC e dashboard da diretoria para provedores de internet. Decisão com número, não com sensação.",
-    "rotulo": "Diagnóstico · Processos · Dashboard",
-    "titulo": "O provedor decidindo *com número*, não com sensação.",
+    "rotulo": "*Inteligência* de dados que muda o *jogo*",
+    "titulo": "*A Reforma Tributária* vai impactar o seu *CAIXA* e ela não vai esperar você se preparar.",
     "subtitulo": "Três frentes, uma regra: primeiro os números aparecem, depois eles melhoram. Diagnóstico da operação, processos redesenhados dentro do IXC e o dashboard que a diretoria abre todo dia — feito por quem opera um provedor.",
     "botaoPrincipal": {
       "texto": "Começar pelo diagnóstico",
