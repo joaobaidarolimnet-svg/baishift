@@ -82,7 +82,7 @@ section{padding:clamp(52px,6.5vw,96px) 0}
 .btn-wa.mail:hover{background:#FF9A4D}
 
 /* ---------------- HUB · PÁGINA INICIAL ---------------- */
-.hub-hero{position:relative;overflow:hidden;background:var(--navy-deep);color:#fff;padding:clamp(30px,4vw,44px) 0 8px}
+.hub-hero{position:relative;overflow:hidden;background:var(--navy-deep);color:#fff;padding:clamp(48px,6.5vw,76px) 0 8px}
 .hub-hero::before{content:"";position:absolute;inset:0;pointer-events:none;
   background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.3px);background-size:26px 26px;
   -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 88%);mask-image:linear-gradient(180deg,#000 0%,transparent 88%)}
@@ -94,8 +94,9 @@ section{padding:clamp(52px,6.5vw,96px) 0}
 .hub-hero h1 em{font-style:normal;color:var(--orange)}
 .hub-hero p{margin:0;color:#B9C4E2;font-size:clamp(15px,2.4vw,19px);max-width:52ch;line-height:1.5}
 
-/* o caminho dos dados, desenhado em SVG, aberto sobre o navy */
-.hub-fluxo{margin-bottom:clamp(26px,4vw,38px)}
+/* o caminho dos dados, desenhado em SVG, fechando a página sobre o navy */
+.hub-fluxo{position:relative;background:var(--navy-deep);padding:clamp(30px,4.5vw,44px) 0 clamp(40px,5.5vw,56px);
+  border-top:1px solid var(--navy-line)}
 .hub-fluxo .cap{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-family:var(--mono);
   font-size:.61rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
   color:rgba(255,255,255,.45);margin-bottom:12px}
@@ -104,7 +105,7 @@ section{padding:clamp(52px,6.5vw,96px) 0}
   animation:pulse 2.6s infinite;flex:none}
 
 /* as duas portas */
-.doors{background:var(--navy-deep);padding:clamp(30px,4vw,38px) 0 clamp(44px,6vw,56px)}
+.doors{background:var(--navy-deep);padding:clamp(30px,4vw,38px) 0 clamp(38px,5vw,48px)}
 .door{display:block;position:relative;background:var(--navy);border:1px solid var(--navy-line);border-radius:14px;
   padding:26px 58px 28px 26px;margin-bottom:12px;text-decoration:none;
   transition:border-color .18s ease,transform .18s ease,background .18s ease}

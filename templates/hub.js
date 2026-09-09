@@ -47,10 +47,6 @@ ${barra("", "#contato")}
 <!-- ===================== TOPO ===================== -->
 <section class="hub-hero">
   <div class="wrap">
-    <div class="hub-fluxo" aria-hidden="false">
-      <div class="cap"><i aria-hidden="true"></i><b>${h(hb.legendaFluxo.split(" · ")[0])}</b>${hb.legendaFluxo.includes(" · ") ? " · " + h(hb.legendaFluxo.split(" · ").slice(1).join(" · ")) : ""}</div>
-      <div id="datapath"></div>
-    </div>
     <h1>${marcar(hb.titulo)}</h1>
     <p>${marcar(hb.subtitulo)}</p>
   </div>
@@ -62,6 +58,14 @@ ${barra("", "#contato")}
 
 ${portas}
 
+  </div>
+</section>
+
+<!-- ===================== CAMINHO DOS DADOS ===================== -->
+<section class="hub-fluxo" aria-label="Caminho dos dados">
+  <div class="wrap">
+    <div class="cap"><i aria-hidden="true"></i><b>${h(hb.legendaFluxo.split(" · ")[0])}</b>${hb.legendaFluxo.includes(" · ") ? " · " + h(hb.legendaFluxo.split(" · ").slice(1).join(" · ")) : ""}</div>
+    <div id="datapath"></div>
   </div>
 </section>
 
