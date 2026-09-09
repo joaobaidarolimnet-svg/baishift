@@ -52,7 +52,8 @@ test("modo local: materializa a imagem pendente, gera as páginas, remove órfã
   assert.ok(!fs.existsSync(path.join(raiz, "outros")), "landings do endereço antigo removidas");
   assert.ok(fs.readFileSync(path.join(raiz, "apps", "severino.html"), "utf8").includes(capa));
   assert.ok(fs.existsSync(path.join(raiz, "index.html")) && fs.existsSync(path.join(raiz, "provedores.html")));
-  assert.ok(fs.existsSync(path.join(raiz, "dashboards.html")) && fs.existsSync(path.join(raiz, "apps", "index.html")) && fs.existsSync(path.join(raiz, "sitemap.xml")));
+  assert.ok(fs.existsSync(path.join(raiz, "diagnostico.html")) && fs.existsSync(path.join(raiz, "apps", "index.html")) && fs.existsSync(path.join(raiz, "sitemap.xml")));
+  assert.ok(fs.existsSync(path.join(raiz, "provedores", "software", "index.html")) && fs.existsSync(path.join(raiz, "provedores", "software", "painel.html")));
   assert.equal(imagens.lerPendente(p.id), null, "pendente consumida");
   const hist = dados.lerJson("publicacoes.json", []);
   assert.equal(hist.length, 1); assert.equal(hist[0].modo, "local"); assert.equal(hist[0].quem.email, usuario.email);
@@ -94,7 +95,7 @@ test("modo GitHub: commit com os arquivos certos; falha no GitHub não grava nad
     const a = chamadas[0];
     assert.equal(a.token, "t"); assert.equal(a.repo, "x/y"); assert.equal(a.branch, "main"); assert.equal(a.autor.email, usuario.email);
     const caminhos = a.arquivos.map(x => x.caminho + (x.remover ? " (remover)" : ""));
-    assert.ok(caminhos.includes("conteudo/site.json") && caminhos.includes("index.html") && caminhos.includes("sitemap.xml") && caminhos.includes("apps/severino.html") && caminhos.includes("apps/index.html") && caminhos.includes("provedores.html") && caminhos.includes("dashboards.html"));
+    assert.ok(caminhos.includes("conteudo/site.json") && caminhos.includes("index.html") && caminhos.includes("sitemap.xml") && caminhos.includes("apps/severino.html") && caminhos.includes("apps/index.html") && caminhos.includes("provedores.html") && caminhos.includes("diagnostico.html") && caminhos.includes("provedores/software/painel.html"));
     assert.ok(caminhos.includes("conteudo/imagens/promo-" + imagens.hash8(PNG) + ".png"));
     assert.ok(caminhos.includes("apps/velho.html (remover)") && caminhos.includes("outros/severino.html (remover)") && caminhos.includes("conteudo/imagens/orfa-00000000.png (remover)"));
     assert.ok(fs.existsSync(path.join(raiz, "conteudo", "imagens", "promo-" + imagens.hash8(PNG) + ".png")));

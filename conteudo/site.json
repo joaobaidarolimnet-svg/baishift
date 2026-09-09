@@ -11,27 +11,20 @@
     "notaRodape": "Os painéis, o fluxo e os resultados desta página usam dados ilustrativos de um provedor de porte médio, para demonstrar o formato das entregas."
   },
   "hub": {
-    "titulo": "Soluções para gestores de alta performance, profissionais autônomos e estudantes",
-    "subtitulo": "Gestão de provedores, painéis sob medida e aplicativos próprios. Feitos dentro da operação, não em cima dela.",
+    "titulo": "Software e consultoria que resolvem problemas de gestão *de verdade*",
+    "subtitulo": "Duas frentes, dois públicos. Escolha a sua.",
     "portas": [
       {
         "quem": "Você tem um provedor de internet",
-        "titulo": "Gestão de provedores",
-        "texto": "Diagnóstico da operação, processos redesenhados dentro do IXC e o dashboard que a diretoria abre todo dia.",
+        "titulo": "Provedores de internet",
+        "texto": "Consultoria de gestão, processos redesenhados dentro do IXC e software feito para provedor — diagnóstico, painel da diretoria, totem, central do assinante e SVA.",
         "seloDestaque": "Frente principal",
         "selo": "consultoria e software"
       },
       {
-        "quem": "Você fecha o mês na planilha",
-        "titulo": "Painéis sob medida",
-        "texto": "O mesmo painel construído para o provedor, aplicado à sua operação: base, caixa, produtividade e margem lendo direto do seu sistema.",
-        "seloDestaque": "Qualquer segmento",
-        "selo": "clínica, transporte, distribuição"
-      },
-      {
-        "quem": "Você quer o aplicativo",
-        "titulo": "Aplicativos",
-        "texto": "Aprova Ordem para quem estuda para o Exame de Ordem. Severino para o autônomo que precisa organizar agenda e recebimento.",
+        "quem": "Você quer melhorar um pouco todo dia",
+        "titulo": "Baishift +1%",
+        "texto": "Aplicativos para melhorar um pouco todo dia — no estudo, no trabalho, na saúde e no dinheiro. Feitos por quem constrói software de gestão.",
         "seloDestaque": "Aprova Ordem",
         "selo": "no ar"
       }
@@ -74,7 +67,8 @@
       "titulo": "Conte como funciona hoje. A gente responde com *escopo e prazo*.",
       "texto": "Retorno em até dois dias úteis. Se não for caso para a Baishift, a resposta também diz isso.",
       "botaoWhatsapp": "Chamar no WhatsApp"
-    }
+    },
+    "legendaFluxo": "Caminho dos dados · de onde eles nascem até a decisão"
   },
   "inicio": {
     "tituloAba": "Gestão de provedores — Baishift",
@@ -118,6 +112,8 @@
     ]
   },
   "diagnostico": {
+    "tituloAba": "Diagnóstico de gestão para provedor de internet — Baishift",
+    "descricao": "Duas semanas lendo os números reais do seu IXC para mostrar onde o dinheiro está parando. Sem compromisso: o plano é seu mesmo se você não contratar.",
     "rotulo": "Diagnóstico",
     "titulo": "Primeiro, a empresa como ela é. Depois, para onde ela vai.",
     "lead": "Toda operação tem dois resultados: o que a diretoria sente e o que o número mostra. O diagnóstico mede a distância entre os dois — e entrega o mapa para fechá-la.",
@@ -211,58 +207,172 @@
     "lead": "Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular. Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.",
     "legendaCelular": "A pergunta da diretoria, no celular"
   },
-  "paineis": {
-    "tituloAba": "Painéis sob medida — Baishift",
-    "descricao": "O painel construído para o provedor, aplicado à sua operação: base, caixa, produtividade e margem lendo direto do sistema que você já usa.",
-    "rotulo": "Painéis sob medida",
-    "titulo": "O mesmo painel do provedor, na *sua* operação.",
-    "lead": "Clínica, transportadora, distribuidora: muda o vocabulário, não o método. Os números saem do sistema que a empresa já usa e chegam prontos na tela de quem decide.",
-    "segmentos": [
+  "painel": {
+    "areas": [
       {
-        "nome": "Clínica",
-        "rotulo": "Clínica médica e odontológica",
-        "titulo": "Agenda cheia não é o mesmo que mês fechado.",
-        "texto": "Ocupação por profissional, faltas, glosa de convênio e ticket médio no mesmo lugar — para saber qual cadeira paga a conta e qual só ocupa espaço."
+        "nome": "Comercial",
+        "rotulo": "Base, venda e instalação",
+        "titulo": "Vender não é o mesmo que instalar.",
+        "texto": "Ativações contra cancelamentos, o funil da venda até a ativação e a composição da base por plano — para ver quantos contratos já vendidos ainda não viraram receita."
       },
       {
-        "nome": "Transporte",
-        "rotulo": "Transportadora e frota",
-        "titulo": "Entregar no prazo é metade. A outra metade é o custo por quilômetro.",
-        "texto": "Prazo, ociosidade, custo por rota e sinistro lado a lado — a rota que parece boa no volume aparece cara no fechamento."
+        "nome": "Financeiro",
+        "rotulo": "Caixa, receita e inadimplência",
+        "titulo": "O caixa não espera o fechamento do mês.",
+        "texto": "Receita contra despesa, inadimplência por faixa de atraso e composição da receita — para saber o que entra, o que atrasa e o que já não volta mais."
       },
       {
-        "nome": "Distribuição",
-        "rotulo": "Distribuidora e atacado",
-        "titulo": "Vender mais com margem menor é andar para trás.",
-        "texto": "Faturamento contra meta, margem por mix, ruptura de estoque e positivação por vendedor — o crescimento aparece com o preço que ele custou."
+        "nome": "Campo",
+        "rotulo": "Ordens de serviço e equipes",
+        "titulo": "A equipe que fecha mais OS não é sempre a melhor.",
+        "texto": "Ordens concluídas contra reaberturas, produtividade por equipe e tipo de serviço — porque serviço refeito custa duas vezes e não aparece na contagem."
       }
     ],
+    "nota": "Os números deste painel são ilustrativos. No seu, eles vêm do banco do IXC que a operação já usa."
+  },
+  "software": {
+    "tituloAba": "Software para provedor de internet — Baishift",
+    "descricao": "Painel da diretoria, totem de autoatendimento, central do assinante e super app de SVA. Cada produto lê o banco do IXC e nasceu de um gargalo de operação real.",
+    "rotulo": "Catálogo",
+    "titulo": "Software para provedor, feito *depois* do processo.",
+    "lead": "Cada produto nasceu de um gargalo mapeado em operação real e lê o banco do IXC que você já usa. Dá para contratar direto, mas o encaixe fica melhor depois do diagnóstico.",
+    "nota": "Integra com o IXC Soft. Escopo, prazo e valor saem do diagnóstico.",
     "comoFunciona": {
-      "rotulo": "Como o painel é construído",
-      "titulo": "Quatro passos, sem trocar de sistema.",
+      "rotulo": "Como um produto entra na operação",
+      "titulo": "Processo primeiro, ferramenta depois.",
       "itens": [
         {
-          "titulo": "Leitura do seu sistema",
-          "texto": "O painel lê o banco do ERP que a empresa já usa. Nada de digitar de novo, nada de exportar planilha toda segunda-feira."
+          "titulo": "O gargalo aparece no diagnóstico",
+          "texto": "Antes de instalar qualquer coisa, o diagnóstico mostra qual etapa custa mais caro hoje e quanto ela custa por mês."
         },
         {
-          "titulo": "Indicadores combinados",
-          "texto": "Os números que mandam no mês são escolhidos junto com a diretoria. Se um indicador não muda decisão, ele não entra na tela."
+          "titulo": "O processo é arrumado no IXC",
+          "texto": "Ferramenta em cima de processo torto só acelera o erro. Primeiro a rotina é redesenhada onde a equipe já trabalha."
         },
         {
-          "titulo": "No computador e no celular",
-          "texto": "A mesma leitura na sala da diretoria e no celular de quem está na rua, com o histórico do período ao lado."
+          "titulo": "O produto lê o banco do sistema",
+          "texto": "Sem cadastro paralelo e sem exportar planilha: o produto conversa com o IXC que a operação já usa."
         },
         {
-          "titulo": "Rito de acompanhamento",
-          "texto": "Painel sem rito vira enfeite. A entrega inclui a reunião semanal que usa o número para decidir."
+          "titulo": "O número volta para a reunião",
+          "texto": "Cada produto entrega um indicador que entra no rito semanal. Se não muda decisão, não entra no escopo."
         }
       ]
     },
-    "fecho": {
-      "titulo": "Se o número não muda decisão, ele não entra no painel.",
-      "texto": "O escopo sai de uma conversa curta sobre como você fecha o mês hoje. Retorno em até dois dias úteis."
-    }
+    "produtos": [
+      {
+        "slug": "painel",
+        "nome": "Painel do provedor",
+        "ativo": true,
+        "demo": true,
+        "categoria": "Gestão",
+        "status": "no ar",
+        "cor": "#2F5BD0",
+        "resumo": "Comercial, financeiro e campo lidos direto do banco do IXC, no computador e no celular.",
+        "sub": "A visão do provedor, viva, no celular da diretoria.",
+        "titulo": "O painel que a diretoria abre *todo dia*.",
+        "lead": "Base, caixa, churn e campo direto do banco do IXC. Três áreas, os mesmos números, sem ninguém digitar de novo.",
+        "beneficios": [
+          {
+            "titulo": "Os indicadores que decidem",
+            "texto": "Base, ARPU, churn, inadimplência e produtividade de campo na mesma tela, com o histórico do período ao lado."
+          },
+          {
+            "titulo": "Sem exportar planilha",
+            "texto": "Lê o banco do IXC e atualiza sozinho. A planilha paralela de segunda-feira deixa de existir."
+          },
+          {
+            "titulo": "Feito para o celular",
+            "texto": "A pergunta da diretoria respondida em dez segundos, no domingo à noite."
+          }
+        ],
+        "preco": "Implantação mais mensalidade, definidas no diagnóstico."
+      },
+      {
+        "slug": "totem",
+        "nome": "Totem de autoatendimento",
+        "ativo": true,
+        "demo": false,
+        "categoria": "Atendimento",
+        "status": "em desenvolvimento",
+        "cor": "#EF562E",
+        "resumo": "Segunda via, desbloqueio e pagamento sem fila e sem atendente.",
+        "sub": "O atendimento de balcão que não consome atendente.",
+        "titulo": "A recepção resolvendo *sozinha* o que hoje ocupa a fila.",
+        "lead": "Segunda via, desbloqueio de confiança e pagamento direto no totem, com baixa automática no IXC.",
+        "beneficios": [
+          {
+            "titulo": "Segunda via e pagamento",
+            "texto": "Boleto, PIX e cartão no próprio totem, com a baixa caindo no IXC sem conferência manual depois."
+          },
+          {
+            "titulo": "Desbloqueio de confiança",
+            "texto": "O assinante resolve sozinho o que hoje para a recepção inteira no dia do vencimento."
+          },
+          {
+            "titulo": "Sem cadastro paralelo",
+            "texto": "Tudo que acontece no totem já nasce dentro do sistema que a operação usa."
+          }
+        ],
+        "preco": "Hardware mais licença mensal, sob escopo."
+      },
+      {
+        "slug": "central",
+        "nome": "Central do assinante",
+        "ativo": true,
+        "demo": false,
+        "categoria": "Atendimento",
+        "status": "em desenvolvimento",
+        "cor": "#16A06B",
+        "resumo": "Aplicativo do cliente: faturas, contrato, chamados e velocidade contratada.",
+        "sub": "O assinante resolvendo sozinho o que hoje vira ligação.",
+        "titulo": "As três dúvidas mais comuns *fora* da fila de atendimento.",
+        "lead": "Faturas, segunda via, chamados com status e agendamento de visita, na mão do assinante.",
+        "beneficios": [
+          {
+            "titulo": "Faturas e PIX",
+            "texto": "Segunda via, histórico e pagamento sem o assinante falar com ninguém."
+          },
+          {
+            "titulo": "Chamados com status",
+            "texto": "Abertura, acompanhamento e agendamento de visita, com o mesmo protocolo que o suporte enxerga."
+          },
+          {
+            "titulo": "Menos ligação no suporte",
+            "texto": "O que hoje ocupa a maior parte do atendimento sai da fila e vira autoatendimento."
+          }
+        ],
+        "preco": "Sob escopo, definido no diagnóstico."
+      },
+      {
+        "slug": "sva",
+        "nome": "Super app de SVA",
+        "ativo": true,
+        "demo": false,
+        "categoria": "Receita",
+        "status": "em desenvolvimento",
+        "cor": "#5B3A78",
+        "resumo": "Todos os serviços de valor agregado do provedor em um aplicativo só, com a sua marca.",
+        "sub": "Os SVA que o provedor já vende, num lugar que o assinante abre.",
+        "titulo": "O SVA deixa de ser linha na fatura e vira *produto usado*.",
+        "lead": "Streaming, segurança, saúde e educação sob a marca do provedor, em um acesso só.",
+        "beneficios": [
+          {
+            "titulo": "Tudo em um acesso",
+            "texto": "O assinante para de ter cinco logins de cinco parceiros para usar o que já paga."
+          },
+          {
+            "titulo": "Receita por assinante",
+            "texto": "O que hoje é cobrado e não é usado passa a ser usado — e a cancelar menos."
+          },
+          {
+            "titulo": "Marca do provedor",
+            "texto": "White label, com a identidade da sua operação, não a do fornecedor."
+          }
+        ],
+        "preco": "Modelo por assinante ativo, sob escopo."
+      }
+    ]
   },
   "modelos": {
     "rotulo": "Modelos de contratação",
@@ -454,7 +564,8 @@
         "convite": "Entre na lista e seja avisado quando o Severino *abrir para os primeiros profissionais*.",
         "campo": "Sua profissão",
         "placeholder": "Ex.: eletricista"
-      }
+      },
+      "categoria": "+1% Trabalho"
     },
     {
       "slug": "aprova-ordem",
@@ -505,7 +616,8 @@
         "convite": "Entre na lista e seja avisado quando o Aprova · Ordem *abrir a primeira turma*.",
         "campo": "Próximo exame",
         "placeholder": "Ex.: 1ª fase, próxima edição"
-      }
+      },
+      "categoria": "+1% Conhecimento"
     },
     {
       "slug": "aprova-suficiencia",
@@ -556,19 +668,21 @@
         "convite": "Entre na lista e seja avisado quando o Aprova · Suficiência *abrir a primeira turma*.",
         "campo": "Próximo exame",
         "placeholder": "Ex.: próxima edição"
-      }
+      },
+      "categoria": "+1% Conhecimento"
     }
   ],
   "apps": {
-    "tituloAba": "Aplicativos — Baishift",
-    "descricao": "Aprova Ordem para quem estuda para o Exame de Ordem e Severino para o autônomo que precisa organizar agenda e recebimento.",
-    "rotulo": "Aplicativos",
-    "titulo": "Aplicativos próprios, feitos pela *mesma régua*.",
-    "lead": "Produtos da Baishift, não projetos de cliente. Cada um nasce de um problema visto de perto e resolve com o menor número de telas possível.",
+    "tituloAba": "Baishift +1% — aplicativos para melhorar um pouco todo dia",
+    "descricao": "Aprova Ordem, Aprova Suficiência e Severino. Aplicativos que ajudam no estudo, no trabalho, na saúde e nas finanças.",
+    "rotulo": "Baishift +1%",
+    "titulo": "Um pouco melhor *todos os dias*.",
+    "lead": "Aplicativos que ajudam no estudo, no trabalho, na saúde e nas finanças — feitos por quem constrói software de gestão.",
     "vazio": "Nenhum aplicativo publicado por enquanto. Volte em breve.",
     "fecho": {
       "titulo": "Falta um aplicativo para o seu caso?",
       "texto": "Se o problema se repete todo mês e ninguém resolveu direito, conte como ele acontece. A resposta vem com escopo e prazo — ou com um \"não é caso para a Baishift\"."
-    }
+    },
+    "manifesto": "Ninguém passa na OAB, entra em forma ou organiza o dinheiro de uma vez. Acontece por acúmulo: um pouco todo dia, até virar resultado. Cada aplicativo da linha existe para tornar esse pouco mais fácil de manter."
   }
 }

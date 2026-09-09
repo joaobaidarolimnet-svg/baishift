@@ -93,6 +93,6 @@
 
   G.aoIniciar.push(async () => { if (!G.estado.eu.trocarSenha) await C.garantir(); });
   /* cada tela do painel pré-visualiza a página do site que ela edita */
-  const PAGINA_DA_TELA = { hub: "hub", paineis: "dashboards", apps: "apps" };
+  const PAGINA_DA_TELA = { hub: "hub", software: "software", painel: "software:painel", apps: "apps", diagnostico: "diagnostico" };
   G.aoNavegar.push(tela => { if (tela !== "produtos") C.paginaAtual = PAGINA_DA_TELA[tela] || "provedores"; });
 })();

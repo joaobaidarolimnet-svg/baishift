@@ -35,8 +35,11 @@
     host.append(card("Cartões 01 · 02 · 03 (abaixo do topo)", F.listaObjetos("inicio.frentesResumo", "", { fixo: true, titulo: (f, i) => "0" + (i + 1), campos: b => [F.texto(b + ".titulo", "Título", { max: L().item }), F.texto(b + ".texto", "Texto", { max: L().curto })] })));
   });
 
-  tela("diagnostico", "Frente 01 · Diagnóstico", "Cabeçalho, as três afirmações e o cartão \"Diagnóstico de gestão\". Os gráficos e os números da história continuam no código.", host => {
+  tela("diagnostico", "Frente 01 · Diagnóstico", "Alimenta a seção em /provedores e a landing própria em /diagnostico. Os gráficos e os números da história continuam no código.", host => {
     host.append(card("Cabeçalho", cab("diagnostico")));
+    host.append(card("Título da aba e descrição de /diagnostico",
+      F.texto("diagnostico.tituloAba", "Título da aba / do Google"),
+      F.multilinha("diagnostico.descricao", "Descrição para o Google", { max: L().curto })));
     host.append(card("As três afirmações", F.listaObjetos("diagnostico.afirmacoes", "", { fixo: true, titulo: (a, i) => "Afirmação " + (i + 1), campos: b => [F.texto(b + ".titulo", "Título", { ajuda: "*asteriscos* no trecho em azul." }), F.multilinha(b + ".texto", "Texto", { max: L().curto })] })));
     host.append(card("Cartão \"Diagnóstico de gestão\"",
       el("div", { class: "linha" }, F.texto("diagnostico.oferta.titulo", "Título", { max: L().item }), F.texto("diagnostico.oferta.selo", "Selo", { max: 40 })),
@@ -56,10 +59,11 @@
   tela("hub", "Início (hub)", "A página inicial: o topo, as três portas, o bloco \"quem faz\", a faixa de honestidade e a chamada de contato.", host => {
     host.append(card("Topo",
       F.texto("hub.titulo", "Título", { ajuda: "Use *asteriscos* no trecho em laranja." }),
-      F.multilinha("hub.subtitulo", "Subtítulo", { max: L().curto })));
+      F.multilinha("hub.subtitulo", "Subtítulo", { max: L().curto }),
+      F.texto("hub.legendaFluxo", "Legenda do fluxo de dados animado", { max: L().item, ajuda: "O trecho antes de \" · \" fica em verde." })));
     host.append(card("As três portas",
-      nota("A ordem é fixa: a primeira leva para /provedores, a segunda para /dashboards e a terceira para /apps."),
-      F.listaObjetos("hub.portas", "", { fixo: true, titulo: (pt, i) => ["1 · Provedores", "2 · Painéis", "3 · Aplicativos"][i],
+      nota("A ordem é fixa: a primeira porta leva para /provedores e a segunda para /apps."),
+      F.listaObjetos("hub.portas", "", { fixo: true, titulo: (pt, i) => ["1 · Provedores", "2 · Baishift +1%"][i],
         campos: b => [F.texto(b + ".quem", "Linha de cima (\"Você tem um provedor…\")", { max: L().item }),
                       F.texto(b + ".titulo", "Título", { max: L().item }),
                       F.multilinha(b + ".texto", "Texto", { max: L().curto }),
@@ -80,30 +84,55 @@
       F.texto("hub.contato.botaoWhatsapp", "Botão do WhatsApp", { max: L().item })));
   });
 
-  /* ---------- painéis sob medida ---------- */
-  tela("paineis", "Painéis sob medida", "A página /dashboards: topo, os três segmentos, como o painel é construído e o fecho. Os números dos painéis continuam no código.", host => {
-    host.append(card("Topo", cab("paineis")));
-    host.append(card("Título da aba e descrição",
-      F.texto("paineis.tituloAba", "Título da aba / do Google"),
-      F.multilinha("paineis.descricao", "Descrição para o Google", { max: L().curto })));
-    host.append(card("Os três segmentos",
-      nota("A ordem é fixa e casa com os painéis demonstrativos: clínica, transporte e distribuição."),
-      F.listaObjetos("paineis.segmentos", "", { fixo: true, titulo: (sg, i) => ["1 · Clínica", "2 · Transporte", "3 · Distribuição"][i],
+  /* ---------- painel do provedor ---------- */
+  tela("painel", "Painel do provedor", "As três áreas do painel demonstrativo — comercial, financeiro e campo — que aparecem em /provedores/software/painel. Os números e os gráficos continuam no código.", host => {
+    host.append(card("As três áreas",
+      nota("A ordem é fixa e casa com os painéis do código: comercial, financeiro e campo."),
+      F.listaObjetos("painel.areas", "", { fixo: true, titulo: (ar, i) => ["1 · Comercial", "2 · Financeiro", "3 · Campo"][i],
         campos: b => [el("div", { class: "linha" }, F.texto(b + ".nome", "Nome curto (botão)", { max: 40 }), F.texto(b + ".rotulo", "Rótulo acima do título", { max: L().item })),
                       F.texto(b + ".titulo", "Título"), F.multilinha(b + ".texto", "Texto", { max: L().curto })] })));
-    host.append(card("Como o painel é construído",
-      el("div", { class: "linha" }, F.texto("paineis.comoFunciona.rotulo", "Rótulo", { max: L().item }), F.texto("paineis.comoFunciona.titulo", "Título")),
-      F.listaObjetos("paineis.comoFunciona.itens", "Passos", { max: 6, novo: () => ({ titulo: "", texto: "" }), titulo: it => it.titulo || "Passo", textoAdicionar: "+ Adicionar passo",
+    host.append(card("Nota abaixo do painel", F.texto("painel.nota", "Aviso sobre os dados ilustrativos", { max: L().curto })));
+  });
+
+  /* ---------- catálogo de software para provedor ---------- */
+  tela("software", "Software (catálogo)", "A página /provedores/software e a página de cada produto. Desligue \"no catálogo\" para tirar um produto do ar sem apagar o texto.", host => {
+    host.append(card("Topo", cab("software")));
+    host.append(card("Título da aba e descrição",
+      F.texto("software.tituloAba", "Título da aba / do Google"),
+      F.multilinha("software.descricao", "Descrição para o Google", { max: L().curto })));
+    host.append(card("Nota abaixo dos cartões", F.texto("software.nota", "Nota", { max: L().curto })));
+    host.append(card("Como um produto entra na operação",
+      el("div", { class: "linha" }, F.texto("software.comoFunciona.rotulo", "Rótulo", { max: L().item }), F.texto("software.comoFunciona.titulo", "Título")),
+      F.listaObjetos("software.comoFunciona.itens", "Passos", { max: 6, novo: () => ({ titulo: "", texto: "" }), titulo: it => it.titulo || "Passo", textoAdicionar: "+ Adicionar passo",
         campos: b => [F.texto(b + ".titulo", "Título", { max: L().item }), F.multilinha(b + ".texto", "Texto", { max: L().curto })] })));
-    host.append(card("Fecho", F.texto("paineis.fecho.titulo", "Título"), F.multilinha("paineis.fecho.texto", "Texto", { max: L().curto })));
+    host.append(card("Produtos",
+      nota("O produto marcado com \"mostra o painel ao vivo\" ganha as três áreas e o painel completo na página dele. Só um produto precisa disso."),
+      F.listaObjetos("software.produtos", "", { max: 12, duplicar: true,
+        novo: () => ({ slug: "novo-produto", nome: "Novo produto", ativo: false, demo: false, categoria: "Gestão", status: "em desenvolvimento", cor: "#2F5BD0", resumo: "", sub: "", titulo: "", lead: "", beneficios: [], preco: "" }),
+        titulo: p => p.nome || "Produto", textoAdicionar: "+ Adicionar produto",
+        campos: b => [
+          el("div", { class: "linha" }, F.texto(b + ".nome", "Nome", { max: L().item }), F.texto(b + ".slug", "Endereço (/provedores/software/…)", { max: 40, ajuda: "Só letras minúsculas, números e hífen." })),
+          el("div", { class: "linha" }, F.chave(b + ".ativo", "No catálogo"), F.chave(b + ".demo", "Mostra o painel ao vivo")),
+          el("div", { class: "linha" }, F.texto(b + ".categoria", "Categoria", { max: 40 }), F.texto(b + ".status", "Situação", { max: L().item, ajuda: "\"no ar\" acende o ponto verde." })),
+          F.cor(b + ".cor", "Cor do produto"),
+          F.texto(b + ".resumo", "Resumo (no cartão do catálogo)", { max: L().curto }),
+          F.texto(b + ".titulo", "Título da página", { ajuda: "*asteriscos* no trecho em laranja." }),
+          F.multilinha(b + ".lead", "Texto de apoio da página", { max: L().curto }),
+          F.multilinha(b + ".sub", "Frase curta do produto", { max: L().curto }),
+          F.listaObjetos(b + ".beneficios", "O que ele resolve", { max: 6, novo: () => ({ titulo: "", texto: "" }), titulo: x => x.titulo || "Benefício", textoAdicionar: "+ Adicionar",
+            campos: k => [F.texto(k + ".titulo", "Título", { max: L().item }), F.multilinha(k + ".texto", "Texto", { max: L().curto })] }),
+          F.texto(b + ".preco", "Como é cobrado", { max: L().curto })
+        ] })));
   });
 
   /* ---------- índice dos aplicativos ---------- */
-  tela("apps", "Aplicativos (índice)", "A página /apps: topo e fecho. Os cartões saem sozinhos dos produtos ativos, editados em \"Produtos\".", host => {
+  tela("apps", "+1% (índice)", "A página /apps: topo, manifesto e fecho. Os cartões saem sozinhos dos produtos ativos, editados em \"Produtos\".", host => {
     host.append(card("Topo", cab("apps")));
     host.append(card("Título da aba e descrição",
       F.texto("apps.tituloAba", "Título da aba / do Google"),
       F.multilinha("apps.descricao", "Descrição para o Google", { max: L().curto })));
+    host.append(card("Manifesto da linha", nota("Aparece acima dos cartões, explicando o que é o +1%."),
+      F.multilinha("apps.manifesto", "Texto", { max: L().curto })));
     host.append(card("Sem aplicativos ativos", nota("Texto que aparece no lugar dos cartões quando nenhum produto está ativo."),
       F.texto("apps.vazio", "Aviso", { max: L().curto })));
     host.append(card("Fecho", F.texto("apps.fecho.titulo", "Título"), F.multilinha("apps.fecho.texto", "Texto", { max: L().curto })));

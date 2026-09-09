@@ -17,13 +17,13 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 await new Promise(r => ws.addEventListener("open", r));
 await send("Runtime.enable"); await send("Log.enable"); await send("Page.enable");
 
-const PAGINAS = ["/", "/provedores", "/dashboards", "/apps"];
+const PAGINAS = ["/", "/provedores", "/provedores/software", "/provedores/software/painel", "/diagnostico", "/apps"];
 async function load(w, h, mobile, caminho = "/") {
   await send("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: 1, mobile, screenWidth: w, screenHeight: h });
   await send("Page.navigate", { url: "http://127.0.0.1:8899" + caminho });
   await wait(2600);
 }
-const nome = c => (c === "/" ? "hub" : c.slice(1));
+const nome = c => (c === "/" ? "hub" : c.slice(1).replace(/\//g, "-"));
 async function scrollAll() {
   await ev(`(async()=>{const H=document.documentElement.scrollHeight;
     for(let y=0;y<H;y+=Math.round(window.innerHeight*0.7)){window.scrollTo(0,y);
@@ -52,14 +52,14 @@ for (const caminho of PAGINAS) {
   await shot("full-" + nome(caminho), "half");
 }
 
-/* /dashboards: os três painéis desenham ao trocar de segmento */
-await load(1440, 900, false, "/dashboards");
+/* o painel do provedor: as três áreas desenham ao trocar de aba */
+await load(1440, 900, false, "/provedores/software/painel");
 const segmentos = await ev(`(async()=>{const bs=[...document.querySelectorAll('.seg button[data-seg]')];const out=[];
   for(const b of bs){b.click();await new Promise(r=>setTimeout(r,500));
     const p=document.querySelector('[data-painel="'+b.dataset.seg+'"]');
     out.push(b.dataset.seg+':'+[...p.querySelectorAll('[data-gr]')].filter(c=>c.querySelector('svg')).length+'/3');}
   return out.join('  ');})()`);
-console.log("painéis      ", segmentos);
+console.log("áreas do painel", segmentos);
 
 /* mobile: menu */
 await load(390, 844, true, "/provedores");

@@ -11,11 +11,10 @@ const FONTES = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">`;
 const NAVTOGGLE = '<button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></button>';
 
-/* As três portas do site. A ordem vale para o menu, para o hub e para o sitemap. */
+/* As duas portas do site. A ordem vale para o menu, para o hub e para o sitemap. */
 const PORTAS = [
   { chave: "provedores", url: "/provedores", menu: "Provedores" },
-  { chave: "dashboards", url: "/dashboards", menu: "Painéis" },
-  { chave: "apps",       url: "/apps",       menu: "Aplicativos" }
+  { chave: "apps",       url: "/apps",       menu: "+1%" }
 ];
 
 function logo(href) {

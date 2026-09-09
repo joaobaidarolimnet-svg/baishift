@@ -106,8 +106,8 @@
       { grupo: "Provedores" }, { tela: "inicio", nome: "Topo" }, { tela: "diagnostico", nome: "Diagnóstico" }, { tela: "processos", nome: "Processos" },
       { tela: "dashboard", nome: "Dashboard" }, { tela: "modelos", nome: "Modelos" }, { tela: "perfil", nome: "Serve / não serve" }, { tela: "faq", nome: "FAQ" },
       { tela: "contato", nome: "Contato e rodapé" },
-      { grupo: "Painéis" }, { tela: "paineis", nome: "Painéis sob medida" },
-      { grupo: "Aplicativos" }, { tela: "apps", nome: "Índice" }, { tela: "produtos", nome: "Produtos" },
+      { tela: "software", nome: "Software (catálogo)" }, { tela: "painel", nome: "Painel do provedor" },
+      { grupo: "Baishift +1%" }, { tela: "apps", nome: "Índice da linha" }, { tela: "produtos", nome: "Aplicativos" },
       { grupo: "Geral" }, { tela: "site", nome: "Site" },
       { grupo: "Acesso" }, { tela: "usuarios", nome: "Usuários", admin: true }, { tela: "conta", nome: "Minha conta" }
     ],

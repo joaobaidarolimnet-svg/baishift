@@ -87,7 +87,7 @@ ${head({ titulo: ini.tituloAba, descricao: ini.descricao, descricaoSocial: st.de
 
 <a class="skip" href="#topo">Pular para o conteúdo</a>
 
-${barra("provedores", "#contato")}
+${barra("provedores", "/diagnostico")}
 
 <main id="topo">
 
@@ -142,10 +142,10 @@ ${d.afirmacoes.map(a => `      <div class="claim rv"><h3>${marcar(a.titulo)}</h3
           ${of.entregas.map(li).join("")}
         </ol>
         <div class="acts">
-          <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="#contato" href="#contato" data-ev="whatsapp:oferta">
+          <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="/diagnostico" href="/diagnostico" data-ev="whatsapp:oferta">
             ${SVG_WA}
             <span>${h(of.botao)}</span></a>
-          <a class="alt" href="#contato" data-ev="cta:oferta">${h(of.alternativa)}</a>
+          <a class="alt" href="/diagnostico" data-ev="cta:oferta">${h(of.alternativa)}</a>
         </div>
       </div>
     </div>
@@ -183,50 +183,26 @@ ${pr.cartoes.map((k, i) => `      <div class="proc${CLS[i]} rv"><span class="k">
   </div>
 </section>
 
-<!-- ===================== 03 · DASHBOARD ===================== -->
+<!-- ===================== 03 · SOFTWARE ===================== -->
 <section class="hud" id="dashboard" aria-labelledby="h-dash">
   <div class="wrap">
-    <div class="hud-head">
-      <div class="rv">${eyebrow("03", db.rotulo)}
-        <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">${marcar(db.titulo)}</h2>
-        <p class="lead" style="margin-top:14px">${marcar(db.lead)}</p></div>
-      <div class="rv">
-        <div class="phone" aria-hidden="true"><div class="screen">
-          <div class="sh"><span>Diretoria</span><b>ao vivo</b></div>
-          <div class="kp"><div class="lb">Base ativa</div><div class="vl">12.480 <small>+128</small></div></div>
-          <div class="kp"><div class="lb">Caixa hoje</div><div class="vl">R$ 41,2 mil <small>+8,4%</small></div></div>
-          <div class="kp"><div class="lb">Inadimplência</div><div class="vl">4,8% <small class="o">meta 3,5%</small></div></div>
-          <div class="kp ch"><div class="lb">Ativações · 7 dias</div><div class="chart" id="phChart"></div></div>
-        </div></div>
-        <p class="phone-cap">${h(db.legendaCelular)}</p>
-      </div>
+    <div class="rv">${eyebrow("03", db.rotulo)}
+      <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">${marcar(db.titulo)}</h2>
+      <p class="lead" style="margin-top:14px">${marcar(db.lead)}</p></div>
+    <div class="sw-prev rv">
+${c.software.produtos.filter(p => p.ativo).slice(0, 4).map(p => `      <a class="sw-card" href="/provedores/software/${h(p.slug)}" style="--ac:${h(p.cor)}" data-ev="software:${h(p.slug)}">
+        <span class="sw-cat">${h(p.categoria)}</span>
+        <b>${h(p.nome)}</b>
+        <span class="sw-txt">${h(p.resumo)}</span>
+        <span class="sw-st">${h(p.status)}</span>
+      </a>`).join("\n")}
     </div>
-    <div class="hud-tools rv">
-      <div class="seg" role="group" aria-label="Período">
-        <button type="button" data-periodo="7d" aria-pressed="false">7 dias</button>
-        <button type="button" data-periodo="30d" aria-pressed="false">30 dias</button>
-        <button type="button" data-periodo="12m" aria-pressed="true">12 meses</button>
-      </div>
-      <span class="hud-live"><i aria-hidden="true"></i>dados ilustrativos · atualizando</span>
-    </div>
-    <div class="monitor rv"><div class="pt">Recebimentos · agora <span id="monNow">R$ 0</span></div><div class="chart" id="monitor"></div></div>
-    <div class="panels">
-      <div class="panel rv" data-panel="ativ"><span class="pt">Ativações · <span class="per">12 meses</span></span><div class="pv">214</div><div class="pd">+9,7% vs. período anterior</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="churn"><span class="pt">Churn · <span class="per">12 meses</span></span><div class="pv">1,62%</div><div class="pd">−0,4 p.p. no período</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="inad"><span class="pt">Inadimplência · <span class="per">12 meses</span></span><div class="pv">4,8%</div><div class="pd or">meta 3,5%</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="prod"><span class="pt">Produtividade de campo · <span class="per">12 meses</span></span><div class="pv">92%</div><div class="pd">meta 85%</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="cresc"><span class="pt">Receita acumulada · <span class="per">12 meses</span></span><div class="pv">+31,5%</div><div class="pd">no período</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="gauge"><span class="pt">Controles implantados</span><div class="pv">75%</div><div class="pd or">12 em plano de ação</div><div class="chart"></div></div>
-    </div>
-    <div class="after rv">
-      <div><span class="mono">Antes e depois · exemplo</span><h3>Seis meses de rito, os mesmos quatro números.</h3>
-        <p>Os indicadores que mais mudam quando o processo passa a ser medido toda semana — no provedor-exemplo, de março a setembro.</p>
-        <div class="lg"><i>antes</i><i class="b">depois</i></div></div>
-      <div class="chart" id="dAfter"></div>
+    <div class="hero-acts rv" style="margin-top:26px">
+      <a class="btn btn-1" href="/provedores/software" data-ev="cta:catalogo">Ver o catálogo de software</a>
+      <a class="btn btn-ghost" href="/provedores/software/painel" data-ev="cta:painel">Abrir o painel do provedor</a>
     </div>
   </div>
 </section>
-
 <!-- ===================== MODELOS + FIT ===================== -->
 <section class="tint" id="modelos" aria-labelledby="h-modelos">
   <div class="wrap">

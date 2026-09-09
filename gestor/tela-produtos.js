@@ -20,7 +20,7 @@
     const r = await dialogoForm("Novo produto", form => form.append(G.campo("Nome", el("input", { name: "nome", type: "text", required: true, maxlength: L().item }), "Você preenche o resto na página do produto.")), async d => {
       const nome = String(d.nome || "").trim(); if (!nome) throw Object.assign(new Error("informe o nome"), { campo: "nome" });
       const slug = slugLivre(slugDe(nome));
-      P().push({ slug, nome, ativo: false, cor: "#1652F0", letra: nome.charAt(0).toUpperCase(), icone: { arquivo: "", alt: "" }, status: "em breve", descricaoMenu: "", descricao: "",
+      P().push({ slug, nome, ativo: false, cor: "#2F5BD0", categoria: "+1% Conhecimento", letra: nome.charAt(0).toUpperCase(), icone: { arquivo: "", alt: "" }, status: "em breve", descricaoMenu: "", descricao: "",
         publico: "", titulo: nome, lead: "", chips: [], capa: { arquivo: "", alt: "" },
         comoFunciona: { rotulo: "Como funciona", titulo: "Três coisas, feitas direito.", itens: [] }, blocos: [],
         listaEspera: { ativa: true, convite: "Entre na lista e seja avisado quando o " + nome + " *abrir*.", campo: "", placeholder: "" } });
@@ -42,12 +42,12 @@
         chave.querySelector("input").addEventListener("change", e => { p.ativo = e.target.checked; G.conteudo.marcar(); render(); });
         const mover = (d, rot) => el("button", { class: "btn btn-2 btn-mini", type: "button", title: rot, "aria-label": rot, disabled: (d < 0 ? i === 0 : i === ps.length - 1) || null, onclick: () => { [ps[i], ps[i + d]] = [ps[i + d], ps[i]]; G.conteudo.marcar(); render(); } }, d < 0 ? "↑" : "↓");
         return el("tr", {},
-          el("td", {}, el("div", { class: "produto-nome" }, marca(p), el("div", {}, el("b", { text: p.nome }), el("br"), el("span", { class: "mono", text: "/outros/" + p.slug })))),
+          el("td", {}, el("div", { class: "produto-nome" }, marca(p), el("div", {}, el("b", { text: p.nome }), el("br"), el("span", { class: "mono", text: "/apps/" + p.slug })))),
           el("td", {}, el("span", { class: "selo cinza", text: p.status || "—" })),
           el("td", {}, chave, el("span", { class: "selo " + (p.ativo ? "verde" : "cinza"), text: p.ativo ? "no menu" : "escondido" })),
           el("td", {}, el("div", { class: "item-acoes" }, mover(-1, "Mover para cima"), mover(1, "Mover para baixo"),
             el("a", { class: "btn btn-2 btn-mini", href: "#/produtos/" + p.slug }, "Editar"),
-            el("button", { class: "btn btn-2 btn-mini", type: "button", onclick: async () => { if (await confirmar("Remover \"" + p.nome + "\"? A página /outros/" + p.slug + " deixa de existir quando você publicar.", { botao: "Remover", perigo: true })) { ps.splice(i, 1); G.conteudo.marcar(); render(); } } }, "Remover"))));
+            el("button", { class: "btn btn-2 btn-mini", type: "button", onclick: async () => { if (await confirmar("Remover \"" + p.nome + "\"? A página /apps/" + p.slug + " deixa de existir quando você publicar.", { botao: "Remover", perigo: true })) { ps.splice(i, 1); G.conteudo.marcar(); render(); } } }, "Remover"))));
       });
       box.append(el("div", { class: "tabela-scroll" }, el("table", { class: "tabela" }, el("thead", {}, el("tr", {}, el("th", { text: "Produto" }), el("th", { text: "Status" }), el("th", { text: "Menu" }), el("th", {}))), el("tbody", {}, linhas))));
     }
@@ -70,10 +70,11 @@
 
     host.append(card("Identidade",
       el("div", { class: "linha" }, nomeCampo, slugCampo),
-      F.chave(b + ".ativo", "Ativo", "aparece no menu Outros e a página responde"),
+      F.chave(b + ".ativo", "Ativo", "aparece na linha +1% e a página responde"),
+      F.texto(b + ".categoria", "Categoria na linha +1%", { max: 40, ajuda: "Vira o filtro em /apps. Ex.: +1% Conhecimento, +1% Trabalho, +1% Saúde, +1% Finanças." }),
       el("div", { class: "linha tres" }, F.cor(b + ".cor", "Cor"), F.texto(b + ".letra", "Letra ou símbolo", { max: 2, ajuda: "Usada no menu e na arte quando não há ícone." }), F.texto(b + ".status", "Status", { max: L().item, placeholder: "em desenvolvimento" })),
       F.imagem(b + ".icone.arquivo", "Ícone (opcional, quadrado)", { contexto: p.slug + "-icone", alt: "alt", ajuda: "Substitui a letra no menu e na arte. PNG com transparência funciona." }),
-      F.texto(b + ".descricaoMenu", "Descrição curta no menu", { max: L().curto }),
+      F.texto(b + ".descricaoMenu", "Descrição curta (uso interno)", { max: L().curto }),
       F.multilinha(b + ".descricao", "Descrição para o Google e redes", { max: L().curto })));
     host.append(card("Topo da página",
       F.texto(b + ".publico", "Para quem é (linha pequena acima do título)", { max: L().curto }),

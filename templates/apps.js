@@ -7,13 +7,20 @@ module.exports = function paginaApps(c, o = {}) {
   const st = c.site, ap = c.apps, ativos = c.produtos.filter(p => p.ativo);
   const assunto = encodeURIComponent("Aplicativos da Baishift");
 
-  const cartoes = ativos.length ? ativos.map(p => `      <a class="app-card" href="/apps/${h(p.slug)}" style="--ac:${h(p.cor)}" data-ev="app:${h(p.slug)}">
+  const categorias = [...new Set(ativos.map(p => p.categoria).filter(Boolean))];
+  const filtro = categorias.length > 1 ? `    <div class="filtros" id="filtros-apps" role="group" aria-label="Categoria">
+      <button type="button" data-cat="" aria-pressed="true">Todos</button>
+${categorias.map(cat => `      <button type="button" data-cat="${h(cat)}" aria-pressed="false">${h(cat)}</button>`).join("\n")}
+    </div>` : "";
+
+  const cartoes = ativos.length ? ativos.map(p => `      <a class="app-card" href="/apps/${h(p.slug)}" style="--ac:${h(p.cor)}" data-cat="${h(p.categoria)}" data-ev="app:${h(p.slug)}">
         ${SVG_GO}
         ${marcaProduto(p, o)}
         <div class="app-txt">
-          ${p.publico ? `<span class="app-quem">${h(p.publico)}</span>` : ""}
+          ${p.categoria ? `<span class="app-quem">${h(p.categoria)}</span>` : ""}
           <h2>${h(p.nome)}</h2>
           <p>${marcar(p.descricao)}</p>
+          ${p.publico ? `<span class="app-publico">${h(p.publico)}</span>` : ""}
           ${p.status ? `<span class="app-status"><b aria-hidden="true"></b>${h(p.status)}</span>` : ""}
         </div>
       </a>`).join("\n\n") : `      <p class="app-vazio">${marcar(ap.vazio)}</p>`;
@@ -52,7 +59,12 @@ ${barra("apps", "#contato")}
 
 <section class="apps-lista" id="lista" aria-label="Aplicativos">
   <div class="wrap">
+    <p class="apps-manifesto"><b>Por que “+1%”.</b> ${marcar(ap.manifesto)}</p>
+${filtro}
+    <div class="apps-grid" id="apps-grid">
 ${cartoes}
+    </div>
+    <p class="apps-nota">Cada aplicativo tem nome e página próprios nas lojas. O <b>+1%</b> organiza a linha aqui dentro — não entra no nome do app.</p>
   </div>
 </section>
 
@@ -64,6 +76,7 @@ ${cartoes}
     </div>
     <ul class="serve rv">
 ${ativos.map(p => `      <li>${h(p.nome)}${p.status ? " · " + h(p.status) : ""}</li>`).join("\n")}
+      <li class="no">Ainda não existe um para saúde e outro para finanças</li>
     </ul>
   </div>
 </section>
