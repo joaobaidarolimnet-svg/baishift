@@ -47,8 +47,11 @@ ${barra("", "#contato")}
 <!-- ===================== TOPO ===================== -->
 <section class="hub-hero">
   <div class="wrap">
-    <h1>${marcar(hb.titulo)}</h1>
-    <p>${marcar(hb.subtitulo)}</p>
+    <div>
+      <h1>${marcar(hb.titulo)}</h1>
+      <p>${marcar(hb.subtitulo)}</p>
+    </div>
+    ${hb.chamadaMais ? `<p class="hub-mais">${marcar(hb.chamadaMais)}</p>` : ""}
   </div>
 </section>
 
