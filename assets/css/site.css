@@ -90,17 +90,17 @@ section{padding:clamp(52px,6.5vw,96px) 0}
   background:radial-gradient(40% 55% at 50% 10%,rgba(47,91,208,.30),transparent 68%),
              radial-gradient(26% 40% at 92% 92%,rgba(239,86,46,.16),transparent 70%)}
 .hub-hero>*{position:relative;z-index:1}
-/* o título fica sobre a porta da esquerda; a chamada do +1%, sobre a da direita */
-@media(min-width:900px){
-  .hub-hero .wrap{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:end}
-}
-.hub-mais{font-size:clamp(16px,2vw,20px);line-height:1.45;color:#AEBADA;max-width:34ch;
-  margin:22px 0 0;padding-left:16px;border-left:2px solid var(--navy-line)}
-.hub-mais em{font-style:normal;color:#fff;font-weight:600}
-@media(min-width:900px){.hub-mais{margin:0 0 6px}}
 .hub-hero h1{font-size:clamp(27px,5.4vw,46px);line-height:1.1;font-weight:800;margin:0 0 18px;max-width:24ch;color:#fff}
 .hub-hero h1 em{font-style:normal;color:var(--orange)}
 .hub-hero p{margin:0;color:#B9C4E2;font-size:clamp(15px,2.4vw,19px);max-width:52ch;line-height:1.5}
+
+/* as duas frases do topo: mesmo peso, cada uma sobre a sua porta */
+.hub-lead{margin:0 0 clamp(22px,3vw,30px);color:#8FA3D8;font-size:clamp(15px,2vw,17px);max-width:52ch}
+.hub-duo{display:grid;gap:20px}
+@media(min-width:900px){.hub-duo{grid-template-columns:repeat(2,1fr);gap:16px;align-items:end}}
+.hub-duo h1,.hub-duo .hub-mais{font-size:clamp(23px,3.3vw,33px);line-height:1.18;font-weight:700;
+  letter-spacing:-.025em;color:#fff;margin:0;max-width:21ch;text-wrap:balance}
+.hub-duo em{font-style:normal;color:var(--orange)}
 
 /* o caminho dos dados, desenhado em SVG, fechando a página sobre o navy */
 .hub-fluxo{position:relative;background:var(--navy-deep);padding:clamp(30px,4.5vw,44px) 0 clamp(40px,5.5vw,56px);
