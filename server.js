@@ -197,6 +197,9 @@ function responder404(req, res) {
 /* Endereços antigos das landings: /outros/<slug> passou a ser /apps/<slug>.
    Quem tem o link velho salvo (ou indexado) chega no lugar certo com 301. */
 function enderecoAntigo(caminho) {
+  /* os painéis por segmento viraram o painel do provedor, dentro do catálogo */
+  if (caminho === "/dashboards" || caminho === "/dashboards/" || caminho === "/dashboards.html")
+    return "/provedores/software/painel";
   if (caminho === "/outros" || caminho === "/outros/") return "/apps";
   if (!caminho.startsWith("/outros/")) return null;
   const resto = caminho.slice("/outros/".length).replace(/\.html$/, "");

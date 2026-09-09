@@ -30,7 +30,7 @@ test.before(async () => {
 test.after(() => { if (proc) proc.kill(); });
 
 test("boot: conteúdo gerado, dados preparados, usuário inicial", () => {
-  assert.match(saida, /conteúdo gerado: 8 arquivos/);
+  assert.match(saida, /conteúdo gerado: 13 arquivos/);
   assert.match(saida, /disco persistente em /);
   assert.match(saida, /usuário inicial criado: teste@baishift.com.br/);
 });

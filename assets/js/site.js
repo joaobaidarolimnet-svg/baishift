@@ -508,67 +508,70 @@ function renderPanels(per) {
 }
 
 
-/* ================= PAINÉIS SOB MEDIDA (/dashboards) =================
-   Três painéis demonstrativos, um por segmento. Os textos vêm do JSON;
-   os números aqui são ilustrativos e vivem no código, como no painel do provedor. */
+/* ================= PAINEL DO PROVEDOR =================
+   Três áreas do mesmo painel — comercial, financeiro e campo. Os textos vêm do
+   JSON; os números são ilustrativos e vivem aqui, como no painel do topo. */
 var M12 = ["out", "nov", "dez", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set"];
-var reais = function (v) { return "R$ " + br(v); };
 var SEGMENTOS = {
-  clinica: {
+  comercial: {
     principal: function (h) {
-      lineChart(h, { w: 340, h: 126, labels: M12, end: true, fs: 7, alt: "faturamento particular e por convênio nos últimos 12 meses",
-        series: [{ d: [268, 279, 286, 291, 305, 312, 324, 336, 341, 352, 364, 372], c: C.blue, k: "particular" },
-                 { d: [96, 99, 101, 98, 104, 106, 108, 110, 109, 112, 114, 114], c: C.orange, k: "convênio" }], fmt: function (v) { return "R$ " + br(v) + " mil"; } });
+      barChart(h, { w: 340, h: 126, a: [168, 176, 181, 174, 190, 196, 203, 209, 214, 221, 228, 236],
+        b: [61, 58, 64, 57, 55, 52, 49, 47, 45, 43, 41, 38],
+        ca: C.green, cb: C.red, ka: "ativações", kb: "cancelamentos", labels: M12,
+        alt: "ativações e cancelamentos por mês nos últimos 12 meses" });
     },
     secundario: function (h) {
-      hBar(h, { rh: 19, alt: "ocupação da agenda por profissional",
-        rows: [{ k: "PROFISSIONAL A", v: 94, t: "94%" }, { k: "PROFISSIONAL B", v: 89, t: "89%" },
-               { k: "PROFISSIONAL C", v: 82, t: "82%" }, { k: "PROFISSIONAL D", v: 71, t: "71%", alert: 1 }] });
+      hBar(h, { rh: 19, alt: "contratos parados em cada etapa entre a venda e a instalação", max: 60,
+        rows: [{ k: "VIABILIDADE", v: 12, t: "12" }, { k: "AGENDAMENTO", v: 19, t: "19" },
+               { k: "FILA DE CAMPO", v: 45, t: "45", alert: 1 }, { k: "ATIVAÇÃO", v: 7, t: "7" }] });
     },
     rosca: function (h) {
-      donut(h, { center: "R$ 486 mil", sub: "faturamento do mês", alt: "composição do faturamento da clínica",
-        data: [{ k: "Consultas", v: 46, c: C.blue }, { k: "Procedimentos", v: 29, c: C.orange },
-               { k: "Exames", v: 15, c: C.green }, { k: "Convênios", v: 10, c: "#9AB4E8" }] });
+      donut(h, { center: "12.480", sub: "assinantes ativos", alt: "composição da base por plano",
+        data: [{ k: "500 Mega", v: 44, c: C.blue }, { k: "300 Mega", v: 31, c: C.orange },
+               { k: "1 Giga", v: 17, c: C.green }, { k: "Empresarial", v: 8, c: "#9AB4E8" }] });
     }
   },
-  transporte: {
+  financeiro: {
     principal: function (h) {
-      barChart(h, { w: 340, h: 126, a: [612, 640, 668, 655, 690, 712, 726, 748, 763, 781, 802, 824], b: [64, 58, 55, 61, 52, 48, 45, 43, 41, 38, 36, 33],
-        ca: C.green, cb: C.red, ka: "no prazo", kb: "em atraso", labels: M12, alt: "entregas no prazo e em atraso por mês" });
+      lineChart(h, { w: 340, h: 126, labels: M12, end: true, fs: 7,
+        alt: "receita e despesa nos últimos 12 meses",
+        series: [{ d: [944, 968, 991, 1002, 1038, 1061, 1090, 1124, 1156, 1183, 1214, 1242], c: C.blue, k: "receita" },
+                 { d: [712, 726, 741, 749, 764, 771, 780, 789, 794, 799, 803, 806], c: C.orange, k: "despesa" }],
+        fmt: function (v) { return "R$ " + br(v) + " mil"; } });
     },
     secundario: function (h) {
-      hBar(h, { rh: 19, alt: "custo por quilômetro em cada rota", max: 4.2,
-        rows: [{ k: "ROTA NORTE", v: 2.86, t: "R$ 2,86" }, { k: "ROTA SUL", v: 3.04, t: "R$ 3,04" },
-               { k: "ROTA LESTE", v: 3.21, t: "R$ 3,21" }, { k: "ROTA OESTE", v: 3.92, t: "R$ 3,92", alert: 1 }] });
+      hBar(h, { rh: 19, alt: "inadimplência por faixa de atraso", max: 60,
+        rows: [{ k: "1 A 15 DIAS", v: 52, t: "R$ 52 mil" }, { k: "16 A 30 DIAS", v: 31, t: "R$ 31 mil" },
+               { k: "31 A 60 DIAS", v: 24, t: "R$ 24 mil" }, { k: "ACIMA DE 60", v: 41, t: "R$ 41 mil", alert: 1 }] });
     },
     rosca: function (h) {
-      donut(h, { center: "R$ 2,1 mi", sub: "receita do mês", alt: "composição da receita da transportadora",
-        data: [{ k: "Fretes", v: 58, c: C.blue }, { k: "Cargas fechadas", v: 24, c: C.orange },
-               { k: "Armazenagem", v: 12, c: C.green }, { k: "Outros", v: 6, c: "#9AB4E8" }] });
+      donut(h, { center: "R$ 1,24 mi", sub: "receita do mês", alt: "composição da receita",
+        data: [{ k: "Internet", v: 74, c: C.blue }, { k: "SVA", v: 14, c: C.orange },
+               { k: "Instalação", v: 7, c: C.green }, { k: "Outros", v: 5, c: "#9AB4E8" }] });
     }
   },
-  distribuicao: {
+  campo: {
     principal: function (h) {
-      lineChart(h, { w: 340, h: 126, labels: M12, end: true, fs: 7, alt: "faturamento e meta nos últimos 12 meses",
-        series: [{ d: [2.61, 2.68, 2.74, 2.7, 2.86, 2.94, 3.02, 3.11, 3.18, 3.24, 3.33, 3.41], c: C.blue, k: "faturado" },
-                 { d: [2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3.0, 3.05, 3.1, 3.15, 3.2, 3.25], c: C.orange, k: "meta" }],
-        fmt: function (v) { return "R$ " + br(v, 2) + " mi"; } });
+      barChart(h, { w: 340, h: 126, a: [412, 428, 441, 435, 462, 478, 491, 506, 519, 533, 548, 561],
+        b: [38, 35, 41, 33, 30, 28, 26, 24, 22, 21, 19, 17],
+        ca: C.green, cb: C.red, ka: "OS concluídas", kb: "reaberturas", labels: M12,
+        alt: "ordens de serviço concluídas e reaberturas por mês" });
     },
     secundario: function (h) {
-      hBar(h, { rh: 19, alt: "positivação de clientes por vendedor",
-        rows: [{ k: "VENDEDOR A", v: 91, t: "91%" }, { k: "VENDEDOR B", v: 84, t: "84%" },
-               { k: "VENDEDOR C", v: 78, t: "78%" }, { k: "VENDEDOR D", v: 63, t: "63%", alert: 1 }] });
+      hBar(h, { rh: 19, alt: "produtividade de cada equipe de campo",
+        rows: [{ k: "EQUIPE A", v: 96, t: "96%" }, { k: "EQUIPE B", v: 92, t: "92%" },
+               { k: "EQUIPE C", v: 88, t: "88%" }, { k: "EQUIPE D", v: 74, t: "74%", alert: 1 }] });
     },
     rosca: function (h) {
-      donut(h, { center: "R$ 3,4 mi", sub: "faturamento do mês", alt: "mix de faturamento da distribuidora",
-        data: [{ k: "Bebidas", v: 38, c: C.blue }, { k: "Mercearia", v: 27, c: C.orange },
-               { k: "Higiene", v: 21, c: C.green }, { k: "Outros", v: 14, c: "#9AB4E8" }] });
+      donut(h, { center: "561", sub: "OS no mês", alt: "tipos de ordem de serviço",
+        data: [{ k: "Instalação", v: 38, c: C.blue }, { k: "Reparo", v: 34, c: C.orange },
+               { k: "Mudança", v: 16, c: C.green }, { k: "Retirada", v: 12, c: "#9AB4E8" }] });
     }
   }
 };
 
-function paineisSegmentos() {
-  var caixa = el("paineis-demo"); if (!caixa) return;
+function painelDoProvedor() {
+  var caixa = el("painel-demo"); if (!caixa) return;
   var botoes = caixa.querySelectorAll(".seg button[data-seg]"), desenhados = {};
   function desenhar(painel, chave) {
     if (desenhados[chave]) return;
@@ -595,6 +598,21 @@ function paineisSegmentos() {
     b.addEventListener("click", function () { mostrar(b.getAttribute("data-seg")); });
   });
   if (botoes.length) mostrar(botoes[0].getAttribute("data-seg"));
+}
+
+/* filtro por categoria na linha +1% (/apps) */
+function filtroApps() {
+  var caixa = el("filtros-apps"), grade = el("apps-grid");
+  if (!caixa || !grade) return;
+  var cards = Array.prototype.slice.call(grade.querySelectorAll("[data-cat]"));
+  caixa.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-cat]"); if (!b) return;
+    var cat = b.getAttribute("data-cat");
+    Array.prototype.forEach.call(caixa.querySelectorAll("button"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    cards.forEach(function (c) { c.hidden = !!cat && c.getAttribute("data-cat") !== cat; });
+  });
 }
 
 /* ================= INTERFACE ================= */
@@ -729,8 +747,9 @@ try {
   on("dAfter", function (h) { dualBar(h, { dark: 1, w: 360, rh: 34, fs: 8, lw: 118, vw: 52, norm: "row", alt: "quatro indicadores antes e depois de seis meses de rito",
     rows: [{ k: "Inadimplência", a: 6.9, b: 4.8, ta: "6,9%", tb: "4,8%" }, { k: "Churn mensal", a: 2.02, b: 1.62, ta: "2,02%", tb: "1,62%" }, { k: "Fechamento", a: 20, b: 5, ta: "dia 20", tb: "dia 5" }, { k: "Fila de instalação", a: 38, b: 6, ta: "38", tb: "6" }] }); });
 
-  /* painéis por segmento em /dashboards */
-  paineisSegmentos();
+  /* as três áreas do painel do provedor e o filtro da linha +1% */
+  painelDoProvedor();
+  filtroApps();
 
   /* KPIs do hero com variação leve */
   var K = [{ id: "k1", v: 12480, f: "int", vol: .004 }, { id: "k2", v: 1242000, f: "brl", vol: .012 }, { id: "k3", v: 35.1, f: "pct", vol: .02 }, { id: "k4", v: 1.62, f: "pct2", vol: .03 }, { id: "k5", v: 4.8, f: "pct", vol: .03 }, { id: "k6", v: 99.4, f: "money", vol: .01 }];

@@ -8,42 +8,44 @@ consulta um serviço de localização por IP para as métricas do painel.
 
 ## Estrutura
 
-A página inicial é um **hub com três portas**. Cada porta é uma página inteira:
+A página inicial é um **hub com duas portas**, sobre o fluxo de dados desenhado em SVG:
 
 | Endereço | O que fica lá |
 |---|---|
-| `/` | Hub: topo, as três portas, "quem faz", "honestidade poupa reunião" e contato |
-| `/provedores` | A frente principal: diagnóstico, consultoria de processos, dashboard do provedor, modelos de contratação, serve/não serve, FAQ e formulário |
-| `/dashboards` | Painéis sob medida, com um painel demonstrativo por segmento (clínica, transporte, distribuição) |
-| `/apps` | Índice dos aplicativos; cada um em `/apps/<slug>` |
+| `/` | Hub: o caminho dos dados animado, as duas portas, "quem faz", "honestidade" e contato |
+| `/provedores` | A consultoria: diagnóstico, processos no IXC, prévia do catálogo, modelos, serve/não serve, FAQ |
+| `/provedores/software` | Catálogo de software para provedor |
+| `/provedores/software/<slug>` | Página de cada produto. O marcado com `demo` traz o painel do provedor ao vivo |
+| `/diagnostico` | Landing própria da isca gratuita, com o formulário |
+| `/apps` | A linha **Baishift +1%**, com filtro por categoria |
+| `/apps/<slug>` | Página de cada aplicativo |
 
-`/outros/<slug>` era o endereço antigo das landings e **redireciona (301)** para
-`/apps/<slug>` no `server.js` — quem tem o link velho salvo ou indexado chega no lugar certo.
+Redirecionamentos permanentes (301) no `server.js`, para nenhum link antigo se perder:
+`/dashboards` → `/provedores/software/painel` · `/outros/<slug>` → `/apps/<slug>`.
 
 ```
 conteudo/site.json      FONTE DA VERDADE dos textos, produtos e carrossel — edite aqui (ou pelo painel)
 conteudo/imagens/       imagens enviadas pelo painel
-templates/hub.js        modelo da página inicial (as três portas)
+templates/hub.js        modelo da página inicial (duas portas + fluxo de dados)
 templates/provedores.js modelo de /provedores
-templates/paineis.js    modelo de /dashboards
-templates/apps.js       modelo de /apps (índice)
+templates/software.js   modelo de /provedores/software (catálogo)
+templates/software-produto.js  modelo de /provedores/software/<slug>
+templates/diagnostico.js       modelo de /diagnostico
+templates/apps.js       modelo de /apps (linha +1%)
 templates/produto.js    modelo de /apps/<slug>
 templates/comum.js      <head>, barra de navegação e rodapé compartilhados
 lib/                    validação do conteúdo, gerador das páginas, acesso, publicação, imagens, métricas
 gestor/                 painel do gestor (login, telas, estilos)
 dados/                  (ignorado) disco persistente local: usuários, eventos, imagens pendentes
-index.html              GERADO: o hub
-provedores.html         GERADO
-dashboards.html         GERADO
-apps/index.html         GERADO: índice dos aplicativos
-apps/*.html             GERADOS: landing pages dos aplicativos
+index.html · provedores.html · diagnostico.html    GERADOS
+provedores/software/*.html · apps/*.html           GERADOS
 sitemap.xml             GERADO
 404.html                página de erro
 assets/css/site.css     estilos (paleta, componentes, responsivo, landing pages, carrossel)
 assets/js/site.js       motor de gráficos SVG, animações contínuas, menu, carrossel, formulários
 assets/marca/           kit oficial da marca V2 (logos, ícones, favicons, social, papelaria; guia em identidade-baishift.html)
 assets/img/             favicon e ícones do app (copiados do kit) e imagem de compartilhamento
-server.js               servidor (Railway): gera o site do JSON ao subir, URLs limpas, redirect do endereço antigo, cache versionado, 404
+server.js               servidor (Railway): gera o site do JSON ao subir, URLs limpas, redirects, cache versionado, 404
 test/                   testes (npm test)
 robots.txt · site.webmanifest · favicon.ico
 dist/                   /provedores em arquivo único (gerado)
@@ -56,16 +58,25 @@ tools/                  geradores (site, arquivo único, imagens) e verificaçã
 `*trecho*` para o destaque em cor, `**trecho**` para negrito e `[texto](url)` para link; em
 textos longos, linha em branco separa parágrafos.
 
+**Ligar e desligar um produto.** Cada item de `software.produtos` e de `produtos` tem um
+`ativo`. Desligado, ele some do catálogo, do sitemap e a página dele deixa de existir na
+publicação seguinte — o texto continua guardado no JSON.
+
 ### Identidade
 
 O site inteiro usa a paleta oficial do kit da marca — navy `#142F7A`, navy profundo
 `#0C1B4A`, linha `#2A4189`, laranja `#EF562E`, papel `#F4F5F9` — e uma fonte só,
 **Archivo**, do título ao rótulo. Os mesmos valores estão em `assets/marca/tokens.css`.
 
-**Painéis por segmento (`/dashboards`).** Três painéis demonstrativos — clínica, transporte
-e distribuição — trocados por botões (`paineisSegmentos()`); cada um desenha sob demanda e só
-uma vez. Os textos saem do JSON; os números são ilustrativos e vivem no `assets/js/site.js`,
-como no painel do provedor.
+**Fluxo de dados no hub.** `dataPath()` desenha o caminho dos dados na página inicial —
+fontes (ERP, omnichannel, recebimentos, pagamentos) → núcleo Baishift → painel, indicadores
+e fechamento, com pacotes percorrendo os fios. É o mesmo desenho da frente 01 em `/provedores`.
+
+**Painel do provedor (`/provedores/software/painel`).** Três áreas — comercial, financeiro e
+campo — trocadas por botões (`painelDoProvedor()`); cada uma desenha sob demanda e só uma vez.
+Abaixo delas fica o painel completo, com troca de período (7 dias / 30 dias / 12 meses),
+monitor de recebimentos ao vivo e o antes/depois. Os textos saem do JSON; os números são
+ilustrativos e vivem no `assets/js/site.js`.
 
 **Gráficos em movimento contínuo.** Frente 01: `dataPath()` — fontes (ERP, Omnichannel,
 Recebimentos, Pagamentos) → núcleo vertical Baishift Gestão → Painel, alta/baixa

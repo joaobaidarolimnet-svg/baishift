@@ -49,9 +49,8 @@ window.BAISHIFT = {"whatsapp":"","email":"contato@baishift.com.br"};
     <button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="navlinks"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></button>
     <nav class="navlinks" id="navlinks" aria-label="Navegação principal">
       <a href="/provedores" aria-current="true" data-ev="menu:provedores">Provedores</a>
-      <a href="/dashboards" data-ev="menu:dashboards">Painéis</a>
-      <a href="/apps" data-ev="menu:apps">Aplicativos</a>
-      <a class="cta" href="#contato" data-ev="cta:menu">Falar com a Baishift</a>
+      <a href="/apps" data-ev="menu:apps">+1%</a>
+      <a class="cta" href="/diagnostico" data-ev="cta:menu">Falar com a Baishift</a>
     </nav>
   </div>
   <div id="prog" aria-hidden="true"></div>
@@ -141,10 +140,10 @@ window.BAISHIFT = {"whatsapp":"","email":"contato@baishift.com.br"};
           <li>Mapa dos processos atuais no IXC</li><li>Gargalos do pedido ao caixa, com valor</li><li>Situação real do caixa e da carteira</li><li>Indicadores disponíveis hoje e os que faltam</li><li>Inconsistências fiscais e de faturamento</li><li>Controles ausentes por setor</li><li>Priorização das ações por retorno</li><li>Plano com cronograma e responsável</li>
         </ol>
         <div class="acts">
-          <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="#contato" href="#contato" data-ev="whatsapp:oferta">
+          <a class="btn btn-wa" data-whatsapp data-fallback="Agendar o diagnóstico" data-fallback-href="/diagnostico" href="/diagnostico" data-ev="whatsapp:oferta">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.8 8.8 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 1 1 21 11.5z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
             <span>Agendar pelo WhatsApp</span></a>
-          <a class="alt" href="#contato" data-ev="cta:oferta">ou envie uma mensagem</a>
+          <a class="alt" href="/diagnostico" data-ev="cta:oferta">ou envie uma mensagem</a>
         </div>
       </div>
     </div>
@@ -188,50 +187,44 @@ window.BAISHIFT = {"whatsapp":"","email":"contato@baishift.com.br"};
   </div>
 </section>
 
-<!-- ===================== 03 · DASHBOARD ===================== -->
+<!-- ===================== 03 · SOFTWARE ===================== -->
 <section class="hud" id="dashboard" aria-labelledby="h-dash">
   <div class="wrap">
-    <div class="hud-head">
-      <div class="rv"><span class="eyebrow"><b>Frente 03</b> Dashboard</span>
-        <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">A visão geral do provedor, viva.</h2>
-        <p class="lead" style="margin-top:14px">Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular. Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.</p></div>
-      <div class="rv">
-        <div class="phone" aria-hidden="true"><div class="screen">
-          <div class="sh"><span>Diretoria</span><b>ao vivo</b></div>
-          <div class="kp"><div class="lb">Base ativa</div><div class="vl">12.480 <small>+128</small></div></div>
-          <div class="kp"><div class="lb">Caixa hoje</div><div class="vl">R$ 41,2 mil <small>+8,4%</small></div></div>
-          <div class="kp"><div class="lb">Inadimplência</div><div class="vl">4,8% <small class="o">meta 3,5%</small></div></div>
-          <div class="kp ch"><div class="lb">Ativações · 7 dias</div><div class="chart" id="phChart"></div></div>
-        </div></div>
-        <p class="phone-cap">A pergunta da diretoria, no celular</p>
-      </div>
+    <div class="rv"><span class="eyebrow"><b>Frente 03</b> Dashboard</span>
+      <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">A visão geral do provedor, viva.</h2>
+      <p class="lead" style="margin-top:14px">Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular. Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.</p></div>
+    <div class="sw-prev rv">
+      <a class="sw-card" href="/provedores/software/painel" style="--ac:#2F5BD0" data-ev="software:painel">
+        <span class="sw-cat">Gestão</span>
+        <b>Painel do provedor</b>
+        <span class="sw-txt">Comercial, financeiro e campo lidos direto do banco do IXC, no computador e no celular.</span>
+        <span class="sw-st">no ar</span>
+      </a>
+      <a class="sw-card" href="/provedores/software/totem" style="--ac:#EF562E" data-ev="software:totem">
+        <span class="sw-cat">Atendimento</span>
+        <b>Totem de autoatendimento</b>
+        <span class="sw-txt">Segunda via, desbloqueio e pagamento sem fila e sem atendente.</span>
+        <span class="sw-st">em desenvolvimento</span>
+      </a>
+      <a class="sw-card" href="/provedores/software/central" style="--ac:#16A06B" data-ev="software:central">
+        <span class="sw-cat">Atendimento</span>
+        <b>Central do assinante</b>
+        <span class="sw-txt">Aplicativo do cliente: faturas, contrato, chamados e velocidade contratada.</span>
+        <span class="sw-st">em desenvolvimento</span>
+      </a>
+      <a class="sw-card" href="/provedores/software/sva" style="--ac:#5B3A78" data-ev="software:sva">
+        <span class="sw-cat">Receita</span>
+        <b>Super app de SVA</b>
+        <span class="sw-txt">Todos os serviços de valor agregado do provedor em um aplicativo só, com a sua marca.</span>
+        <span class="sw-st">em desenvolvimento</span>
+      </a>
     </div>
-    <div class="hud-tools rv">
-      <div class="seg" role="group" aria-label="Período">
-        <button type="button" data-periodo="7d" aria-pressed="false">7 dias</button>
-        <button type="button" data-periodo="30d" aria-pressed="false">30 dias</button>
-        <button type="button" data-periodo="12m" aria-pressed="true">12 meses</button>
-      </div>
-      <span class="hud-live"><i aria-hidden="true"></i>dados ilustrativos · atualizando</span>
-    </div>
-    <div class="monitor rv"><div class="pt">Recebimentos · agora <span id="monNow">R$ 0</span></div><div class="chart" id="monitor"></div></div>
-    <div class="panels">
-      <div class="panel rv" data-panel="ativ"><span class="pt">Ativações · <span class="per">12 meses</span></span><div class="pv">214</div><div class="pd">+9,7% vs. período anterior</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="churn"><span class="pt">Churn · <span class="per">12 meses</span></span><div class="pv">1,62%</div><div class="pd">−0,4 p.p. no período</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="inad"><span class="pt">Inadimplência · <span class="per">12 meses</span></span><div class="pv">4,8%</div><div class="pd or">meta 3,5%</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="prod"><span class="pt">Produtividade de campo · <span class="per">12 meses</span></span><div class="pv">92%</div><div class="pd">meta 85%</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="cresc"><span class="pt">Receita acumulada · <span class="per">12 meses</span></span><div class="pv">+31,5%</div><div class="pd">no período</div><div class="chart"></div></div>
-      <div class="panel rv" data-panel="gauge"><span class="pt">Controles implantados</span><div class="pv">75%</div><div class="pd or">12 em plano de ação</div><div class="chart"></div></div>
-    </div>
-    <div class="after rv">
-      <div><span class="mono">Antes e depois · exemplo</span><h3>Seis meses de rito, os mesmos quatro números.</h3>
-        <p>Os indicadores que mais mudam quando o processo passa a ser medido toda semana — no provedor-exemplo, de março a setembro.</p>
-        <div class="lg"><i>antes</i><i class="b">depois</i></div></div>
-      <div class="chart" id="dAfter"></div>
+    <div class="hero-acts rv" style="margin-top:26px">
+      <a class="btn btn-1" href="/provedores/software" data-ev="cta:catalogo">Ver o catálogo de software</a>
+      <a class="btn btn-ghost" href="/provedores/software/painel" data-ev="cta:painel">Abrir o painel do provedor</a>
     </div>
   </div>
 </section>
-
 <!-- ===================== MODELOS + FIT ===================== -->
 <section class="tint" id="modelos" aria-labelledby="h-modelos">
   <div class="wrap">
