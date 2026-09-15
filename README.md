@@ -14,7 +14,7 @@ apoio (catálogo, produto, diagnóstico) existem para quem quer se aprofundar:
 
 | Endereço | O que fica lá |
 |---|---|
-| `/` | **A página inteira**: promessa, a frente do provedor (diagnóstico, processos, software, modelos, serve/não serve, FAQ), quem faz e o formulário de contato |
+| `/` | **A página inteira**: promessa, a frente do provedor (diagnóstico, processos, o painel do provedor ao vivo, catálogo de software, modelos, serve/não serve, FAQ), quem faz e o formulário de contato |
 | `/provedores/software` | Catálogo de software para provedor |
 | `/provedores/software/<slug>` | Página de cada produto. O marcado com `demo` traz o painel do provedor ao vivo |
 | `/diagnostico` | Landing própria da isca gratuita, com o formulário |
@@ -29,6 +29,7 @@ conteudo/site.json      FONTE DA VERDADE dos textos, produtos e carrossel — ed
 conteudo/imagens/       imagens enviadas pelo painel
 templates/hub.js        modelo da página inicial (duas portas + fluxo de dados)
 templates/provedor-secoes.js  as seções da frente do provedor, usadas dentro da home
+templates/painel-demo.js      o painel do provedor (três áreas + painel completo), na home e na página do produto
 templates/software.js   modelo de /provedores/software (catálogo)
 templates/software-produto.js  modelo de /provedores/software/<slug>
 templates/diagnostico.js       modelo de /diagnostico
@@ -73,8 +74,9 @@ O site inteiro usa a paleta oficial do kit da marca — navy `#142F7A`, navy pro
 fontes (ERP, omnichannel, recebimentos, pagamentos) → núcleo Baishift → painel, indicadores
 e fechamento, com pacotes percorrendo os fios. É o mesmo desenho da frente 01 em `/provedores`.
 
-**Painel do provedor (`/provedores/software/painel`).** Três áreas — comercial, financeiro e
-campo — trocadas por botões (`painelDoProvedor()`); cada uma desenha sob demanda e só uma vez.
+**Painel do provedor.** Três áreas — comercial, financeiro e campo — trocadas por botões
+(`painelDoProvedor()`); cada uma desenha sob demanda e só uma vez. O mesmo bloco aparece na
+página inicial, dentro da frente 03, e na página do produto em `/provedores/software/painel`.
 Abaixo delas fica o painel completo, com troca de período (7 dias / 30 dias / 12 meses),
 monitor de recebimentos ao vivo e o antes/depois. Os textos saem do JSON; os números são
 ilustrativos e vivem no `assets/js/site.js`.

@@ -217,6 +217,178 @@ window.BAISHIFT = {"whatsapp":"","email":"contato@baishift.com.br"};
     <div class="rv"><span class="eyebrow"><b>Frente 03</b> Dashboard</span>
       <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">A visão geral do provedor, viva.</h2>
       <p class="lead" style="margin-top:14px">Base, caixa, churn e campo direto do banco — no painel da diretoria e no celular. Passe o mouse em qualquer ponto para ver o número e troque o período para ver a mesma operação em outra escala.</p></div>
+    <p class="lead rv" style="margin-top:20px">O painel do provedor, ao vivo — três áreas, os mesmos números, sem ninguém digitar de novo.</p>
+  </div>
+</section>
+
+<section class="pn-demo" id="areas" aria-label="Áreas do painel">
+  <div class="wrap" id="painel-demo">
+    <div class="hud-tools">
+      <div class="seg" role="group" aria-label="Área do painel">
+        <button type="button" data-seg="comercial" aria-pressed="true">Comercial</button>
+        <button type="button" data-seg="financeiro" aria-pressed="false">Financeiro</button>
+        <button type="button" data-seg="campo" aria-pressed="false">Campo</button>
+      </div>
+      <span class="hud-live"><i aria-hidden="true"></i>dados ilustrativos</span>
+    </div>
+
+      <div class="pn-nota" data-nota="comercial">
+        <span class="mono">Base, venda e instalação</span>
+        <h2>Vender não é o mesmo que instalar.</h2>
+        <p>Ativações contra cancelamentos, o funil da venda até a ativação e a composição da base por plano — para ver quantos contratos já vendidos ainda não viraram receita.</p>
+      </div>
+      <div class="pn-nota" data-nota="financeiro" hidden>
+        <span class="mono">Caixa, receita e inadimplência</span>
+        <h2>O caixa não espera o fechamento do mês.</h2>
+        <p>Receita contra despesa, inadimplência por faixa de atraso e composição da receita — para saber o que entra, o que atrasa e o que já não volta mais.</p>
+      </div>
+      <div class="pn-nota" data-nota="campo" hidden>
+        <span class="mono">Ordens de serviço e equipes</span>
+        <h2>A equipe que fecha mais OS não é sempre a melhor.</h2>
+        <p>Ordens concluídas contra reaberturas, produtividade por equipe e tipo de serviço — porque serviço refeito custa duas vezes e não aparece na contagem.</p>
+      </div>
+
+      <div class="dash" data-painel="comercial">
+        <div class="dash-top"><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+          <span class="ttl">Painel do provedor · comercial</span><span class="live"><b aria-hidden="true"></b>ilustrativo</span></div>
+        <div class="kpis">
+        <div class="kpi"><div class="lb">Base ativa</div><div class="vl">12.480</div><div class="dt">+128 líquidos</div></div>
+        <div class="kpi"><div class="lb">Ativações no mês</div><div class="vl">236</div><div class="dt">+3,6%</div></div>
+        <div class="kpi"><div class="lb">Cancelamentos</div><div class="vl">38</div><div class="dt">−4 no mês</div></div>
+        <div class="kpi"><div class="lb">Churn</div><div class="vl">1,62%</div><div class="dt">−0,4 p.p.</div></div>
+        <div class="kpi"><div class="lb">Contratos parados</div><div class="vl">45</div><div class="dt or">meta 10</div></div>
+        <div class="kpi"><div class="lb">ARPU</div><div class="vl">R$ 99,40</div><div class="dt">+R$ 3,10</div></div>
+        </div>
+        <div class="dash-body">
+          <div>
+            <div class="chart-h"><span>Ativações e cancelamentos · 12 meses</span><div class="legend"><i class="g">Ativações</i><i class="r">Cancelamentos</i></div></div>
+            <div class="chart" data-gr="principal"></div>
+            <div class="chart-h" style="margin-top:14px"><span>Contratos parados entre a venda e a ativação</span></div>
+            <div class="chart" data-gr="secundario"></div>
+          </div>
+          <div>
+            <div class="chart-h"><span>Composição da base por plano</span></div>
+            <div class="chart" data-gr="rosca"></div>
+            <div class="chart-h" style="margin-top:16px"><span>O que esta área responde</span></div>
+            <ul class="pn-perg">
+              <li>Quantos contratos já vendidos ainda não viraram receita?</li>
+              <li>Em qual etapa o pedido para mais tempo?</li>
+              <li>O churn está caindo ou só a ativação está subindo?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash" data-painel="financeiro" hidden>
+        <div class="dash-top"><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+          <span class="ttl">Painel do provedor · financeiro</span><span class="live"><b aria-hidden="true"></b>ilustrativo</span></div>
+        <div class="kpis">
+        <div class="kpi"><div class="lb">Receita do mês</div><div class="vl">R$ 1,24 mi</div><div class="dt">+8,4%</div></div>
+        <div class="kpi"><div class="lb">Recebido no mês</div><div class="vl">R$ 1,09 mi</div><div class="dt">87,9% da receita</div></div>
+        <div class="kpi"><div class="lb">Inadimplência</div><div class="vl">4,8%</div><div class="dt or">meta 3,5%</div></div>
+        <div class="kpi"><div class="lb">Margem</div><div class="vl">35,1%</div><div class="dt">+2,6 p.p.</div></div>
+        <div class="kpi"><div class="lb">Ticket médio</div><div class="vl">R$ 99,40</div><div class="dt">+R$ 3,10</div></div>
+        <div class="kpi"><div class="lb">Fechamento</div><div class="vl">dia 5</div><div class="dt">auditável</div></div>
+        </div>
+        <div class="dash-body">
+          <div>
+            <div class="chart-h"><span>Receita e despesa · 12 meses</span><div class="legend"><i>Receita</i><i class="o">Despesa</i></div></div>
+            <div class="chart" data-gr="principal"></div>
+            <div class="chart-h" style="margin-top:14px"><span>Inadimplência por faixa de atraso</span></div>
+            <div class="chart" data-gr="secundario"></div>
+          </div>
+          <div>
+            <div class="chart-h"><span>Composição da receita</span></div>
+            <div class="chart" data-gr="rosca"></div>
+            <div class="chart-h" style="margin-top:16px"><span>O que esta área responde</span></div>
+            <ul class="pn-perg">
+              <li>Quanto da receita do mês virou caixa de verdade?</li>
+              <li>Qual faixa de atraso já não volta mais?</li>
+              <li>A margem cresceu por receita ou por corte de despesa?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash" data-painel="campo" hidden>
+        <div class="dash-top"><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+          <span class="ttl">Painel do provedor · campo</span><span class="live"><b aria-hidden="true"></b>ilustrativo</span></div>
+        <div class="kpis">
+        <div class="kpi"><div class="lb">OS no mês</div><div class="vl">561</div><div class="dt">+2,4%</div></div>
+        <div class="kpi"><div class="lb">Concluídas no prazo</div><div class="vl">92,7%</div><div class="dt">meta 90%</div></div>
+        <div class="kpi"><div class="lb">Reaberturas</div><div class="vl">17</div><div class="dt">−2 no mês</div></div>
+        <div class="kpi"><div class="lb">Tempo de instalação</div><div class="vl">2,1 dias</div><div class="dt">meta 3 dias</div></div>
+        <div class="kpi"><div class="lb">Produtividade média</div><div class="vl">88%</div><div class="dt">meta 85%</div></div>
+        <div class="kpi"><div class="lb">Equipes ativas</div><div class="vl">4</div><div class="dt">sem alteração</div></div>
+        </div>
+        <div class="dash-body">
+          <div>
+            <div class="chart-h"><span>OS concluídas e reaberturas · 12 meses</span><div class="legend"><i class="g">Concluídas</i><i class="r">Reaberturas</i></div></div>
+            <div class="chart" data-gr="principal"></div>
+            <div class="chart-h" style="margin-top:14px"><span>Produtividade de cada equipe</span></div>
+            <div class="chart" data-gr="secundario"></div>
+          </div>
+          <div>
+            <div class="chart-h"><span>Tipos de ordem de serviço</span></div>
+            <div class="chart" data-gr="rosca"></div>
+            <div class="chart-h" style="margin-top:16px"><span>O que esta área responde</span></div>
+            <ul class="pn-perg">
+              <li>Qual equipe fecha muita OS e volta no mesmo endereço?</li>
+              <li>O serviço refeito está contando como produtividade?</li>
+              <li>A fila de instalação cabe na capacidade de campo?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    <p class="pn-rodape">Os números deste painel são ilustrativos. No seu, eles vêm do banco do IXC que a operação já usa.</p>
+  </div>
+</section>
+<!-- ===================== PAINEL COMPLETO ===================== -->
+<section class="hud" id="completo" aria-labelledby="h-completo">
+  <div class="wrap">
+    <div class="hud-head">
+      <div class="rv"><h2 id="h-completo" style="font-size:clamp(1.5rem,3vw,2.2rem)">O painel completo, com o período que a diretoria escolhe</h2>
+        <p class="lead" style="margin-top:14px">Sete dias, trinta dias ou doze meses: os mesmos indicadores, na janela que a pergunta pede. Passe o mouse nos gráficos.</p></div>
+      <div class="rv">
+        <div class="phone" aria-hidden="true"><div class="screen">
+          <div class="sh"><span>Diretoria</span><b>ao vivo</b></div>
+          <div class="kp"><div class="lb">Base ativa</div><div class="vl">12.480 <small>+128</small></div></div>
+          <div class="kp"><div class="lb">Caixa hoje</div><div class="vl">R$ 41,2 mil <small>+8,4%</small></div></div>
+          <div class="kp"><div class="lb">Inadimplência</div><div class="vl">4,8% <small class="o">meta 3,5%</small></div></div>
+          <div class="kp ch"><div class="lb">Ativações · 7 dias</div><div class="chart" id="phChart"></div></div>
+        </div></div>
+        <p class="phone-cap">A pergunta da diretoria, no celular</p>
+      </div>
+    </div>
+    <div class="hud-tools rv">
+      <div class="seg" role="group" aria-label="Período">
+        <button type="button" data-periodo="7d" aria-pressed="false">7 dias</button>
+        <button type="button" data-periodo="30d" aria-pressed="false">30 dias</button>
+        <button type="button" data-periodo="12m" aria-pressed="true">12 meses</button>
+      </div>
+      <span class="hud-live"><i aria-hidden="true"></i>dados ilustrativos · atualizando</span>
+    </div>
+    <div class="monitor rv"><div class="pt">Recebimentos · agora <span id="monNow">R$ 0</span></div><div class="chart" id="monitor"></div></div>
+    <div class="panels">
+      <div class="panel rv" data-panel="ativ"><span class="pt">Ativações · <span class="per">12 meses</span></span><div class="pv">214</div><div class="pd">+9,7% vs. período anterior</div><div class="chart"></div></div>
+      <div class="panel rv" data-panel="churn"><span class="pt">Churn · <span class="per">12 meses</span></span><div class="pv">1,62%</div><div class="pd">−0,4 p.p. no período</div><div class="chart"></div></div>
+      <div class="panel rv" data-panel="inad"><span class="pt">Inadimplência · <span class="per">12 meses</span></span><div class="pv">4,8%</div><div class="pd or">meta 3,5%</div><div class="chart"></div></div>
+      <div class="panel rv" data-panel="prod"><span class="pt">Produtividade de campo · <span class="per">12 meses</span></span><div class="pv">92%</div><div class="pd">meta 85%</div><div class="chart"></div></div>
+      <div class="panel rv" data-panel="cresc"><span class="pt">Receita acumulada · <span class="per">12 meses</span></span><div class="pv">+31,5%</div><div class="pd">no período</div><div class="chart"></div></div>
+      <div class="panel rv" data-panel="gauge"><span class="pt">Controles implantados</span><div class="pv">75%</div><div class="pd or">12 em plano de ação</div><div class="chart"></div></div>
+    </div>
+    <div class="after rv">
+      <div><span class="mono">Antes e depois · exemplo</span><h3>Seis meses de rito, os mesmos quatro números.</h3>
+        <p>Os indicadores que mais mudam quando o processo passa a ser medido toda semana — no provedor-exemplo, de março a setembro.</p>
+        <div class="lg"><i>antes</i><i class="b">depois</i></div></div>
+      <div class="chart" id="dAfter"></div>
+    </div>
+  </div>
+</section>
+
+<section class="hud" aria-label="Catálogo de software">
+  <div class="wrap">
     <div class="sw-prev rv">
       <a class="sw-card" href="/provedores/software/painel" style="--ac:#2F5BD0" data-ev="software:painel">
         <span class="sw-cat">Gestão</span>

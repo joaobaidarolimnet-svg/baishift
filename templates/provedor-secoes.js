@@ -4,6 +4,7 @@
 "use strict";
 const { h, marcar, semMarcas, urlImagem, jsonEmbutido } = require("../lib/html");
 const { HOST, SVG_WA, footEnd } = require("./comum");
+const { painelCompleto } = require("./painel-demo");
 
 const PAINEL_DEMO = `<div class="dash rv">
       <div class="dash-top"><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
@@ -158,6 +159,12 @@ ${pr.cartoes.map((k, i) => `      <div class="proc${CLS[i]} rv"><span class="k">
     <div class="rv">${eyebrow("03", db.rotulo)}
       <h2 id="h-dash" style="font-size:clamp(1.7rem,3.6vw,2.7rem);margin-top:14px">${marcar(db.titulo)}</h2>
       <p class="lead" style="margin-top:14px">${marcar(db.lead)}</p></div>
+    <p class="lead rv" style="margin-top:20px">O painel do provedor, ao vivo — três áreas, os mesmos números, sem ninguém digitar de novo.</p>
+  </div>
+</section>
+${painelCompleto(c)}
+<section class="hud" aria-label="Catálogo de software">
+  <div class="wrap">
     <div class="sw-prev rv">
 ${c.software.produtos.filter(p => p.ativo).slice(0, 4).map(p => `      <a class="sw-card" href="/provedores/software/${h(p.slug)}" style="--ac:${h(p.cor)}" data-ev="software:${h(p.slug)}">
         <span class="sw-cat">${h(p.categoria)}</span>
