@@ -13,7 +13,7 @@ const NAVTOGGLE = '<button class="navtoggle" id="navtoggle" type="button" aria-l
 
 /* As duas portas do site. A ordem vale para o menu, para o hub e para o sitemap. */
 const PORTAS = [
-  { chave: "provedores", url: "/provedores", menu: "Provedores" },
+  { chave: "provedores", url: "/",           menu: "Provedores" },
   { chave: "apps",       url: "/apps",       menu: "Outros Apps" }
 ];
 
@@ -65,14 +65,15 @@ function marcaProduto(p, o) {
   return `<span class="mk" aria-hidden="true">${p.icone.arquivo ? `<img src="${h(urlImagem(p.icone.arquivo, o))}" alt="">` : h(p.letra)}</span>`;
 }
 
-/* Barra única do site. `atual` é a chave da porta em que a pessoa está ("provedores",
-   "dashboards", "apps") ou "" no hub. `contato` é para onde vai o botão de conversa. */
-function barra(atual, contato) {
+/* Barra única do site. `atual` é a chave da porta em que a pessoa está ("provedores"
+   ou "apps"); `contato` é para onde vai o botão de conversa; `naHome` faz a logo
+   rolar para o topo em vez de recarregar a página. */
+function barra(atual, contato, naHome) {
   const links = PORTAS.map(pt =>
     `      <a href="${pt.url}"${atual === pt.chave ? ' aria-current="true"' : ""} data-ev="menu:${pt.chave}">${pt.menu}</a>`).join("\n");
   return `<header class="bar" id="bar">
   <div class="bar-in">
-    ${logo(atual ? "/" : "#topo")}
+    ${logo(naHome ? "#topo" : "/")}
     ${NAVTOGGLE}
     <nav class="navlinks" id="navlinks" aria-label="Navegação principal">
 ${links}

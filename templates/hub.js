@@ -1,15 +1,15 @@
-/* Modelo da página inicial: o hub com as três portas do site.
+/* Modelo da página inicial. O topo apresenta a Baishift e a frente de provedores;
+   logo abaixo vem a frente inteira, sem precisar clicar em nada.
    Regra: todo valor do JSON passa por h() ou marcar() antes de entrar no HTML. */
 "use strict";
-const { h, marcar, semMarcas } = require("../lib/html");
-const { HOST, AVISO, SVG_WA, SVG_GO, PORTAS, head, barra } = require("./comum");
+const { h, marcar } = require("../lib/html");
+const { HOST, AVISO, SVG_GO, PORTAS, head, barra } = require("./comum");
+const { secoesProvedor, rodapeProvedor, dadosProvedor } = require("./provedor-secoes");
 
 module.exports = function paginaHub(c, o = {}) {
   const st = c.site, hb = c.hub;
-  const [localidade, uf] = st.cidade.split(",").map(s => s.trim());
-  const assunto = encodeURIComponent("Contato — Baishift");
 
-  const portas = hb.portas.map((pt, i) => `      <a class="door${i ? " door-2" : ""}" href="${h(pt.link || PORTAS[i].url)}" data-ev="porta:${PORTAS[i].chave}">
+  const portas = hb.portas.slice(0, 1).map((pt, i) => `      <a class="door" href="${h(pt.link || PORTAS[i].url)}" data-ev="porta:${PORTAS[i].chave}">
         ${SVG_GO}
         <p class="who">${h(pt.quem)}</p>
         <h2>${h(pt.titulo)}</h2>
@@ -17,18 +17,10 @@ module.exports = function paginaHub(c, o = {}) {
         <span class="status"><b>${h(pt.seloDestaque)}</b> · ${h(pt.selo)}</span>
       </a>`).join("\n\n");
 
-  const ld = { "@context": "https://schema.org", "@graph": [
-    { "@type": "ProfessionalService", "@id": HOST + "/#organizacao", "name": "Baishift", "url": HOST + "/",
-      "email": st.email, "description": semMarcas(hb.subtitulo),
-      "image": HOST + "/assets/img/og.png", "logo": HOST + "/assets/marca/01-logo/baishift-principal.svg",
-      "address": { "@type": "PostalAddress", "addressLocality": localidade || "", "addressRegion": uf || "", "addressCountry": "BR" },
-      "areaServed": { "@type": "Country", "name": "Brasil" },
-      "knowsAbout": ["Gestão de provedor de internet", "IXC Soft", "Controladoria", "Business intelligence", "Painéis gerenciais", "Aplicativos"],
-      "hasOfferCatalog": { "@type": "OfferCatalog", "name": "Frentes de atuação", "itemListElement": hb.portas.map(pt => (
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": pt.titulo, "description": semMarcas(pt.texto) } })) } },
+  const ld = { "@context": "https://schema.org", "@graph": dadosProvedor(c).concat([
     { "@type": "WebSite", "@id": HOST + "/#site", "url": HOST + "/", "name": "Baishift", "inLanguage": "pt-BR",
       "publisher": { "@id": HOST + "/#organizacao" } }
-  ] };
+  ]) };
 
   return `<!DOCTYPE html>
 ${AVISO}
@@ -40,7 +32,7 @@ ${head({ titulo: st.tituloAba, descricao: st.descricao, descricaoSocial: st.desc
 
 <a class="skip" href="#topo">Pular para o conteúdo</a>
 
-${barra("", "#contato")}
+${barra("provedores", "#contato", true)}
 
 <main id="topo">
 
@@ -61,13 +53,7 @@ ${portas}
   </div>
 </section>
 
-<!-- ===================== CAMINHO DOS DADOS ===================== -->
-<section class="hub-fluxo" aria-label="Caminho dos dados">
-  <div class="wrap">
-    <div class="cap"><i aria-hidden="true"></i><b>${h(hb.legendaFluxo.split(" · ")[0])}</b>${hb.legendaFluxo.includes(" · ") ? " · " + h(hb.legendaFluxo.split(" · ").slice(1).join(" · ")) : ""}</div>
-    <div id="datapath"></div>
-  </div>
-</section>
+${secoesProvedor(c, o)}
 
 <!-- ===================== QUEM FAZ ===================== -->
 <section class="hub-quem" id="quem">
@@ -84,39 +70,9 @@ ${hb.quemSomos.fatos.map(f => `      <div class="fact">
   </div>
 </section>
 
-<!-- ===================== HONESTIDADE ===================== -->
-<section class="hub-band" id="honestidade">
-  <div class="wrap">
-    <div class="rv">
-      <h2>${marcar(hb.honestidade.titulo)}</h2>
-      <p>${marcar(hb.honestidade.texto)}</p>
-    </div>
-    <ul class="serve rv">
-${hb.honestidade.serve.map(s => `      <li>${marcar(s)}</li>`).join("\n")}
-${hb.honestidade.naoServe.map(s => `      <li class="no">${marcar(s)}</li>`).join("\n")}
-    </ul>
-  </div>
-</section>
-
 </main>
 
-<footer class="hub-contato" id="contato">
-  <div class="wrap">
-    <h2>${marcar(hb.contato.titulo)}</h2>
-    <p>${marcar(hb.contato.texto)}</p>
-    <div class="actions">
-      <a class="btn btn-1" data-whatsapp data-fallback="Escrever para a Baishift" data-fallback-href="mailto:${h(st.email)}?subject=${assunto}" href="mailto:${h(st.email)}?subject=${assunto}" data-ev="whatsapp:hub">
-        ${SVG_WA}
-        <span>${h(hb.contato.botaoWhatsapp)}</span></a>
-      <a class="mail" href="mailto:${h(st.email)}">${h(st.email)}</a>
-    </div>
-    <div class="hub-foot">
-      <img src="/assets/marca/01-logo/baishift-branco.svg" alt="Baishift" width="911" height="175">
-      <span>Baishift © <span id="yr">2026</span> · ${h(st.cidade)}</span>
-      <span><a href="#topo">Voltar ao topo ↑</a></span>
-    </div>
-  </div>
-</footer>
+${rodapeProvedor(c)}
 
 <script src="/assets/js/site.js" defer></script>
 

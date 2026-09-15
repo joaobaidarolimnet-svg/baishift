@@ -118,18 +118,7 @@ section{padding:clamp(52px,6.5vw,96px) 0}
 .door:hover .go,.door:focus-visible .go{color:var(--orange);transform:translateX(4px)}
 .door .status{display:inline-block;margin-top:14px;font-size:.78rem;font-weight:600;color:#8FA3D8;border:1px solid var(--navy-line);border-radius:20px;padding:4px 12px}
 .door .status b{color:#fff;font-weight:600}
-@media(min-width:900px){
-  .doors .wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:stretch}
-  .door{margin-bottom:0;display:flex;flex-direction:column}
-  .door .who{flex:none}
-  .door p:not(.who){flex:1}
-}
-/* a segunda porta é a saída secundária: some do centro do palco sem sumir do site */
-.door-2{background:transparent;border-style:dashed}
-.door-2 h2{font-size:clamp(20px,3vw,24px);color:#C9D2EA}
-.door-2 .who{color:#8FA3D8}
-.door-2 p{color:#8FA3D8;font-size:.9rem}
-.door-2:hover,.door-2:focus-visible{background:rgba(255,255,255,.04);border-style:solid}
+@media(min-width:900px){.door p{max-width:70ch}}
 
 /* quem faz */
 .hub-quem{padding:clamp(52px,6.5vw,72px) 0;background:var(--paper)}
@@ -277,6 +266,11 @@ section{padding:clamp(52px,6.5vw,96px) 0}
 
 /* ---------------- HERO ---------------- */
 .hero{position:relative;overflow:hidden;background:var(--navy);color:#fff;padding:clamp(40px,5.5vw,74px) 0 0;border-bottom:1px solid rgba(255,255,255,.08)}
+/* dentro da home, este bloco não é mais o topo da página: é a abertura da frente do provedor */
+.hero-meio{border-top:1px solid var(--navy-line)}
+.hero .h1{font-family:var(--display);font-weight:700;letter-spacing:-.025em;text-wrap:balance;
+  font-size:clamp(2rem,5.2vw,3.5rem);line-height:1.1;margin:20px 0 0;max-width:14ch;color:#fff}
+.hero .h1 em{font-style:normal;color:var(--orange)}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.10) 1px,transparent 1.3px);background-size:24px 24px;
   -webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 92%);mask-image:linear-gradient(180deg,#000 0%,transparent 92%)}
 .hero::after{content:"";position:absolute;inset:-30% -10% auto -10%;height:680px;pointer-events:none;
@@ -285,6 +279,7 @@ section{padding:clamp(52px,6.5vw,96px) 0}
 .hero-grid{display:grid;gap:34px}
 @media(min-width:1080px){.hero-grid{grid-template-columns:.85fr 1.15fr;align-items:center;gap:46px}}
 .pill{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:99px;padding:6px 14px;color:rgba(255,255,255,.78)}
+.pill em{font-style:normal;color:var(--orange)}
 .pill b{width:8px;height:8px;border-radius:50%;background:#5ED9A0;animation:pulse 2.6s infinite;flex:none}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(94,217,160,.5)}70%{box-shadow:0 0 0 9px rgba(94,217,160,0)}100%{box-shadow:0 0 0 0 rgba(94,217,160,0)}}
 .hero h1{font-size:clamp(2rem,5.2vw,3.5rem);margin:20px 0 0;max-width:14ch;color:#fff}

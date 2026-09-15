@@ -1,9 +1,9 @@
-/* Modelo de /provedores — a frente principal: diagnóstico, processos, dashboard,
-   modelos, serve/não serve, FAQ e contato. Recebe o conteúdo validado e devolve o HTML.
+/* As seções da frente de provedores: diagnóstico, processos, software, modelos,
+   serve/não serve, FAQ e o rodapé com o formulário. Moram dentro da página inicial.
    Regra: todo valor do JSON passa por h() ou marcar() antes de entrar no HTML. */
 "use strict";
 const { h, marcar, semMarcas, urlImagem, jsonEmbutido } = require("../lib/html");
-const { HOST, AVISO, SVG_WA, head, barra, footEnd } = require("./comum");
+const { HOST, SVG_WA, footEnd } = require("./comum");
 
 const PAINEL_DEMO = `<div class="dash rv">
       <div class="dash-top"><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
@@ -55,48 +55,17 @@ const li = s => `<li>${marcar(s)}</li>`;
 const eyebrow = (n, r) => `<span class="eyebrow"><b>Frente ${n}</b> ${h(r)}</span>`;
 const botao = (b, cls, ev) => b.texto ? `<a class="btn ${cls}" href="${h(b.link || "#")}" data-ev="${ev}">${h(b.texto)}</a>` : "";
 
-module.exports = function paginaProvedores(c, o = {}) {
-  const st = c.site, ini = c.inicio, d = c.diagnostico, of = d.oferta, pr = c.processos, db = c.dashboard, mo = c.modelos, pf = c.perfil, fq = c.faq, ct = c.contato;
+/* as seções da frente do provedor, da chamada até o FAQ */
+function secoesProvedor(c, o = {}) {
+  const ini = c.inicio, d = c.diagnostico, of = d.oferta, pr = c.processos, db = c.dashboard, mo = c.modelos, pf = c.perfil, fq = c.faq;
   const visual = ini.carrossel.imagens.length ? carrossel(ini.carrossel, o) : (ini.painelAtivo ? PAINEL_DEMO : "");
   const ANC = ["#diagnostico", "#processos", "#dashboard"], CLS = ["", " b", " c"];
-  const [localidade, uf] = st.cidade.split(",").map(s => s.trim());
-
-  const ld = { "@context": "https://schema.org", "@graph": [
-    { "@type": "ProfessionalService", "@id": HOST + "/#organizacao", "name": "Baishift", "url": HOST + "/",
-      "mainEntityOfPage": HOST + "/provedores",
-      "email": st.email,
-      "description": "Diagnóstico de gestão, consultoria de processos no IXC e dashboard para provedores de internet.",
-      "image": HOST + "/assets/img/og.png", "logo": HOST + "/assets/marca/01-logo/baishift-principal.svg",
-      "address": { "@type": "PostalAddress", "addressLocality": localidade || "", "addressRegion": uf || "", "addressCountry": "BR" },
-      "areaServed": { "@type": "Country", "name": "Brasil" },
-      "knowsAbout": ["Gestão de provedor de internet", "IXC Soft", "Controladoria", "Business intelligence", "Automação de processos"],
-      "hasOfferCatalog": { "@type": "OfferCatalog", "name": "Frentes de atuação", "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diagnóstico de gestão", "description": "Situação real da empresa com os números do IXC e plano priorizado por retorno." } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de processos", "description": "Processos atuais, a desenvolver e a melhorar — escritos, parametrizados no IXC e treinados." } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Dashboard", "description": "Painel da diretoria com base, caixa, churn e campo direto do banco, no computador e no celular." } } ] } },
-    { "@type": "FAQPage", "@id": HOST + "/provedores#faq", "mainEntity": fq.itens.map(q => ({ "@type": "Question", "name": q.pergunta, "acceptedAnswer": { "@type": "Answer", "text": semMarcas(q.resposta) } })) }
-  ] };
-
-  return `<!DOCTYPE html>
-${AVISO}
-<html lang="pt-BR"${o.previa ? ' data-previa=""' : ""}>
-<head>
-${head({ titulo: ini.tituloAba, descricao: ini.descricao, descricaoSocial: st.descricaoSocial, caminho: "/provedores", site: st, manifesto: false, previa: o.previa })}
-</head>
-<body>
-
-<a class="skip" href="#topo">Pular para o conteúdo</a>
-
-${barra("provedores", "/diagnostico")}
-
-<main id="topo">
-
-<!-- ===================== HERO ===================== -->
-<div class="hero">
+  return `<!-- ===================== A FRENTE DO PROVEDOR ===================== -->
+<div class="hero hero-meio" id="provedores">
   <div class="wrap hero-grid${visual ? "" : " solo"}">
     <div>
-      <span class="pill mono"><b aria-hidden="true"></b> ${h(ini.rotulo)}</span>
-      <h1>${marcar(ini.titulo)}</h1>
+      <span class="pill mono"><b aria-hidden="true"></b> ${marcar(ini.rotulo)}</span>
+      <h2 class="h1">${marcar(ini.titulo)}</h2>
       <p class="hero-sub">${marcar(ini.subtitulo)}</p>
       <div class="hero-acts">
         ${botao(ini.botaoPrincipal, "btn-1", "cta:principal")}
@@ -231,10 +200,13 @@ ${fq.itens.map(q => `      <details><summary>${h(q.pergunta)}</summary>${marcar(
     </div>
   </div>
 </section>
+`;
+}
 
-</main>
-
-<footer id="contato">
+/* o rodapé de contato, com as áreas e o formulário do diagnóstico */
+function rodapeProvedor(c) {
+  const st = c.site, ct = c.contato;
+  return `<footer id="contato">
   <div class="wrap">
     <div class="foot-grid">
       <div class="rv">
@@ -270,19 +242,27 @@ ${ct.areas.map(a => `          <div><b>${h(a.titulo)}</b><span>${h(a.texto)}</sp
     ${footEnd(st, { href: "/", texto: "Voltar para o início ↑" })}
     <p class="foot-note">${h(st.notaRodape)}</p>
   </div>
-</footer>
+</footer>`;
+}
 
-<a class="wa" data-whatsapp data-fallback="Falar com a Baishift" data-fallback-href="#contato" href="#contato" aria-label="Falar com a Baishift" data-ev="whatsapp:flutuante">
-  ${SVG_WA}
-  <span>Falar no WhatsApp</span>
-</a>
+/* os nós de dados estruturados que a frente do provedor acrescenta */
+function dadosProvedor(c) {
+  const st = c.site, fq = c.faq;
+  const [localidade, uf] = st.cidade.split(",").map(s => s.trim());
+  return [
+    { "@type": "ProfessionalService", "@id": HOST + "/#organizacao", "name": "Baishift", "url": HOST + "/",
+      "email": st.email,
+      "description": "Diagnóstico de gestão, consultoria de processos no IXC e software para provedor de internet.",
+      "image": HOST + "/assets/img/og.png", "logo": HOST + "/assets/marca/01-logo/baishift-principal.svg",
+      "address": { "@type": "PostalAddress", "addressLocality": localidade || "", "addressRegion": uf || "", "addressCountry": "BR" },
+      "areaServed": { "@type": "Country", "name": "Brasil" },
+      "knowsAbout": ["Gestão de provedor de internet", "IXC Soft", "Controladoria", "Business intelligence", "Automação de processos"],
+      "hasOfferCatalog": { "@type": "OfferCatalog", "name": "Frentes de atuação", "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diagnóstico de gestão", "description": "Situação real da empresa com os números do IXC e plano priorizado por retorno." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria de processos", "description": "Processos atuais, a desenvolver e a melhorar — escritos, parametrizados no IXC e treinados." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software para provedor", "description": "Painel da diretoria, totem, central do assinante e SVA, lendo o banco do IXC." } } ] } },
+    { "@type": "FAQPage", "@id": HOST + "/#faq", "mainEntity": fq.itens.map(q => ({ "@type": "Question", "name": q.pergunta, "acceptedAnswer": { "@type": "Answer", "text": semMarcas(q.resposta) } })) }
+  ];
+}
 
-<script src="/assets/js/site.js" defer></script>
-
-<script type="application/ld+json">
-${jsonEmbutido(ld)}
-</script>
-</body>
-</html>
-`;
-};
+module.exports = { secoesProvedor, rodapeProvedor, dadosProvedor };

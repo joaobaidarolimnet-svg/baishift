@@ -59,11 +59,10 @@
   tela("hub", "Início (hub)", "A página inicial: o topo, as três portas, o bloco \"quem faz\", a faixa de honestidade e a chamada de contato.", host => {
     host.append(card("Topo",
       F.texto("hub.titulo", "Título", { ajuda: "Use *asteriscos* no trecho em laranja." }),
-      F.multilinha("hub.subtitulo", "Subtítulo", { max: L().curto }),
-      F.texto("hub.legendaFluxo", "Legenda do fluxo de dados animado", { max: L().item, ajuda: "O trecho antes de \" · \" fica em verde." })));
+      F.multilinha("hub.subtitulo", "Subtítulo", { max: L().curto })));
     host.append(card("As três portas",
       nota("A primeira porta é a principal e ocupa mais espaço; a segunda é a saída secundária. O endereço de cada uma fica no campo \"Link\"."),
-      F.listaObjetos("hub.portas", "", { fixo: true, titulo: (pt, i) => ["1 · Provedores (principal)", "2 · Outros Apps (secundária)"][i],
+      F.listaObjetos("hub.portas", "", { fixo: true, titulo: (pt, i) => ["1 · Provedores (aparece na home)", "2 · Outros Apps (só no menu)"][i],
         campos: b => [F.texto(b + ".quem", "Linha de cima (\"Você tem um provedor…\")", { max: L().item }),
                       F.texto(b + ".titulo", "Título", { max: L().item }),
                       F.multilinha(b + ".texto", "Texto", { max: L().curto }),

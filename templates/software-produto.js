@@ -163,7 +163,7 @@ ${p.beneficios.map((b, i) => `      <div class="feat rv"><div class="ic">${Strin
       "audience": { "@type": "Audience", "audienceType": "Provedor de internet" } },
     { "@type": "BreadcrumbList", "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Início", "item": HOST + "/" },
-      { "@type": "ListItem", "position": 2, "name": "Provedores", "item": HOST + "/provedores" },
+      { "@type": "ListItem", "position": 2, "name": "Provedores", "item": HOST + "/" },
       { "@type": "ListItem", "position": 3, "name": "Software", "item": HOST + "/provedores/software" },
       { "@type": "ListItem", "position": 4, "name": p.nome, "item": HOST + url }] }
   ] };

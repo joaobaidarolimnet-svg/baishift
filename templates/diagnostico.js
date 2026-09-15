@@ -33,7 +33,7 @@ ${barra("provedores", "#lead")}
 
 <section class="hub-hero">
   <div class="wrap">
-    <a class="volta" href="/provedores">← Provedores</a>
+    <a class="volta" href="/">← Início</a>
     <span class="mono pn-rotulo">${h(of.selo)}</span>
     <h1>${marcar(d.titulo)}</h1>
     <p>${marcar(d.lead)}</p>
@@ -91,7 +91,7 @@ ${d.afirmacoes.map(a => `        <h3 class="dg-s">${marcar(a.titulo)}</h3>
 
 <footer class="hub-contato">
   <div class="wrap">
-    ${footEnd(st, { href: "/provedores", texto: "Voltar para Provedores ↑" })}
+    ${footEnd(st, { href: "/", texto: "Voltar para o início ↑" })}
   </div>
 </footer>
 

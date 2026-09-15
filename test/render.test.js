@@ -5,7 +5,6 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { carregar, validar } = require("../lib/conteudo");
-const paginaProvedores = require("../templates/provedores");
 const paginaHub = require("../templates/hub");
 const paginaSoftware = require("../templates/software");
 const paginaSoftwareProduto = require("../templates/software-produto");
@@ -16,17 +15,17 @@ const base = () => JSON.parse(JSON.stringify(carregar()));
 const conta = (s, re) => (s.match(re) || []).length;
 const IMG = n => ({ arquivo: "conteudo/imagens/promo-" + String(n).repeat(8) + ".webp", alt: "Promo " + n, link: "" });
 
-test("provedores com painel demonstrativo", () => {
-  const html = paginaProvedores(validar(base()));
+test("home traz o painel demonstrativo da frente do provedor", () => {
+  const html = paginaHub(validar(base()));
   assert.ok(html.includes('id="cRec"'));
   assert.ok(!html.includes('id="carrossel"'));
   assert.ok(html.includes('class="wrap hero-grid"'));
   assert.ok(html.startsWith("<!DOCTYPE html>\n<!-- GERADO"));
 });
 
-test("provedores com carrossel de uma imagem: sem setas, sem pontos, sem painel", () => {
+test("home com carrossel de uma imagem: sem setas, sem pontos, sem painel", () => {
   const o = base(); o.inicio.carrossel.imagens = [IMG(1)];
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.ok(html.includes('id="carrossel"'));
   assert.ok(!html.includes('id="cRec"'));
   assert.equal(conta(html, /class="cs-slide/g), 1);
@@ -36,7 +35,7 @@ test("provedores com carrossel de uma imagem: sem setas, sem pontos, sem painel"
 
 test("início com três imagens e link: setas, pontos e link no slide", () => {
   const o = base(); o.inicio.carrossel.imagens = [Object.assign(IMG(1), { link: "https://x.y" }), IMG(2), IMG(3)]; o.inicio.carrossel.intervalo = 9;
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.equal(conta(html, /class="cs-slide/g), 3);
   assert.equal(conta(html, /class="cs-slide on"/g), 1);
   assert.equal(conta(html, /role="tab"/g), 3);
@@ -47,7 +46,7 @@ test("início com três imagens e link: setas, pontos e link no slide", () => {
 
 test("início sem painel e sem imagens: só o texto", () => {
   const o = base(); o.inicio.painelAtivo = false;
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.ok(!html.includes('id="cRec"'));
   assert.ok(!html.includes('id="carrossel"'));
   assert.ok(html.includes('class="wrap hero-grid solo"'));
@@ -55,26 +54,26 @@ test("início sem painel e sem imagens: só o texto", () => {
 
 test("escapa e marca", () => {
   const o = base(); o.inicio.titulo = "<script>x</script> *azul* **forte**";
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.ok(!html.includes("<script>x</script>"));
   assert.ok(html.includes("&lt;script&gt;x&lt;/script&gt; <em>azul</em> <strong>forte</strong>"));
 });
 
 test("a barra é a mesma em todas as páginas e marca a porta onde a pessoa está", () => {
   const c = validar(base());
-  const links = /<a href="\/provedores"[^>]*>Provedores<\/a>[\s\S]*?<a href="\/apps"[^>]*>Outros Apps<\/a>/;
-  [paginaHub(c), paginaProvedores(c), paginaSoftware(c), paginaDiagnostico(c), paginaApps(c)]
+  const links = /<a href="\/"[^>]*>Provedores<\/a>[\s\S]*?<a href="\/apps"[^>]*>Outros Apps<\/a>/;
+  [paginaHub(c), paginaSoftware(c), paginaDiagnostico(c), paginaApps(c)]
     .forEach(html => assert.match(html, links));
   assert.ok(!paginaHub(c).includes('href="/dashboards"'), "a porta de painéis deixou de existir");
-  [paginaProvedores(c), paginaSoftware(c), paginaDiagnostico(c)]
-    .forEach(html => assert.ok(html.includes('<a href="/provedores" aria-current="true"')));
+  [paginaHub(c), paginaSoftware(c), paginaDiagnostico(c)]
+    .forEach(html => assert.ok(html.includes('<a href="/" aria-current="true"')));
   assert.ok(paginaApps(c).includes('<a href="/apps" aria-current="true"'));
-  assert.equal(conta(paginaHub(c), /aria-current="true"/g), 0, "no hub nenhuma porta fica marcada");
+  assert.equal(conta(paginaHub(c), /aria-current="true"/g), 1, "a home é a própria frente de provedores");
 });
 
 test("FAQ vai para o HTML e para o JSON-LD sem marcações", () => {
   const o = base(); o.faq.itens = [{ pergunta: "Só uma?", resposta: "Sim, *só* uma.\n\nSegundo parágrafo." }];
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.equal(conta(html, /<details>/g), 1);
   assert.ok(html.includes("<p>Sim, <em>só</em> uma.</p>\n<p>Segundo parágrafo.</p>"));
   const ld = JSON.parse(html.match(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/)[1]);
@@ -85,7 +84,7 @@ test("FAQ vai para o HTML e para o JSON-LD sem marcações", () => {
 
 test("contato e rodapé usam site.email e site.cidade", () => {
   const o = base(); o.site.email = "oi@baishift.com.br"; o.site.cidade = "Cacoal, RO";
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.ok(html.includes('href="mailto:oi@baishift.com.br"'));
   assert.ok(html.includes("· Cacoal, RO</span>"));
   assert.ok(html.includes('window.BAISHIFT = {"whatsapp":"","email":"oi@baishift.com.br"}'));
@@ -93,13 +92,13 @@ test("contato e rodapé usam site.email e site.cidade", () => {
 
 test("botão secundário vazio some", () => {
   const o = base(); o.inicio.botaoSecundario.texto = "";
-  const html = paginaProvedores(validar(o));
+  const html = paginaHub(validar(o));
   assert.ok(!/<div class="hero-acts">[\s\S]{0,400}?btn-ghost/.test(html), "o botão secundário do topo some");
   assert.ok(html.includes('data-ev="cta:principal"'));
 });
 
 test("pré-visualização marca o html", () => {
-  const html = paginaProvedores(validar(base()), { previa: true });
+  const html = paginaHub(validar(base()), { previa: true });
   assert.ok(html.includes('<html lang="pt-BR" data-previa="">'));
   assert.ok(html.includes('content="noindex, nofollow"'));
 });
@@ -176,7 +175,6 @@ test("sitemap só com produtos ativos e data do conteúdo", () => {
   const o = base(); o.produtos[2].ativo = false; o.atualizadoEm = "2026-09-03T10:00:00Z";
   const xml = sitemap(validar(o));
   assert.ok(xml.includes("<loc>https://www.baishift.com.br/</loc><lastmod>2026-09-03</lastmod>"));
-  assert.ok(xml.includes("/provedores</loc>"));
   assert.ok(xml.includes("/diagnostico</loc>"));
   assert.ok(xml.includes("/provedores/software</loc>"));
   assert.ok(xml.includes("/provedores/software/painel</loc>"));
@@ -189,7 +187,7 @@ test("sitemap só com produtos ativos e data do conteúdo", () => {
 test("paginas devolve um arquivo por página ativa", () => {
   const o = base(); o.produtos[1].ativo = false;
   const arq = paginas(validar(o));
-  assert.deepEqual(Object.keys(arq).sort(), ["apps/aprova-suficiencia.html", "apps/index.html", "apps/severino.html", "diagnostico.html", "index.html", "provedores.html", "provedores/software/central.html", "provedores/software/index.html", "provedores/software/painel.html", "provedores/software/sva.html", "provedores/software/totem.html", "sitemap.xml"]);
+  assert.deepEqual(Object.keys(arq).sort(), ["apps/aprova-suficiencia.html", "apps/index.html", "apps/severino.html", "diagnostico.html", "index.html", "provedores/software/central.html", "provedores/software/index.html", "provedores/software/painel.html", "provedores/software/sva.html", "provedores/software/totem.html", "sitemap.xml"]);
 });
 
 test("gerarTudo grava, remove o que saiu e apaga as landings do endereço antigo", () => {
@@ -199,28 +197,32 @@ test("gerarTudo grava, remove o que saiu e apaga as landings do endereço antigo
   fs.mkdirSync(path.join(raiz, "outros"));
   fs.writeFileSync(path.join(raiz, "outros", "severino.html"), "x");
   fs.writeFileSync(path.join(raiz, "dashboards.html"), "x");
+  fs.writeFileSync(path.join(raiz, "provedores.html"), "x");
   const o = base(); o.produtos[2].ativo = false;
   const r = gerarTudo(validar(o), raiz);
-  assert.deepEqual(r.escritos.sort(), ["apps/aprova-ordem.html", "apps/index.html", "apps/severino.html", "diagnostico.html", "index.html", "provedores.html", "provedores/software/central.html", "provedores/software/index.html", "provedores/software/painel.html", "provedores/software/sva.html", "provedores/software/totem.html", "sitemap.xml"]);
-  assert.deepEqual(r.removidos.sort(), ["apps/velho.html", "dashboards.html", "outros/severino.html"]);
+  assert.deepEqual(r.escritos.sort(), ["apps/aprova-ordem.html", "apps/index.html", "apps/severino.html", "diagnostico.html", "index.html", "provedores/software/central.html", "provedores/software/index.html", "provedores/software/painel.html", "provedores/software/sva.html", "provedores/software/totem.html", "sitemap.xml"]);
+  assert.deepEqual(r.removidos.sort(), ["apps/velho.html", "dashboards.html", "outros/severino.html", "provedores.html"]);
   assert.ok(fs.existsSync(path.join(raiz, "index.html")));
   assert.ok(!fs.existsSync(path.join(raiz, "apps", "velho.html")));
   assert.ok(!fs.existsSync(path.join(raiz, "apps", "aprova-suficiencia.html")));
   assert.ok(!fs.existsSync(path.join(raiz, "outros")), "a pasta do endereço antigo some quando esvazia");
   assert.ok(!fs.existsSync(path.join(raiz, "dashboards.html")), "a página de painéis por segmento sai do disco");
+  assert.ok(!fs.existsSync(path.join(raiz, "provedores.html")), "a frente de provedores virou a home");
   assert.equal(fs.readdirSync(raiz).filter(f => f.includes(".tmp-")).length, 0, "não sobra arquivo temporário");
   fs.rmSync(raiz, { recursive: true, force: true });
 });
 
 /* ---------- hub, painéis e índice dos aplicativos ---------- */
 
-test("hub: duas portas, com os endereços na ordem certa, e o fluxo de dados", () => {
+test("home: uma porta só e a frente do provedor inteira abaixo dela", () => {
   const html = paginaHub(validar(base()));
-  assert.equal(conta(html, /class="door[ "]/g), 2);
+  assert.equal(conta(html, /class="door[ "]/g), 1, "os aplicativos saíram da home e ficaram no menu");
   assert.ok(html.includes('href="/provedores" data-ev="porta:provedores"'));
-  assert.ok(html.includes('href="/apps" data-ev="porta:apps"'));
-  assert.equal(conta(html, /class="door door-2"/g), 1, "a porta dos aplicativos é a secundária");
-  assert.ok(html.includes('id="datapath"'), "o caminho dos dados é desenhado no hub");
+  assert.ok(!html.includes('data-ev="porta:apps"'));
+  /* tudo que era /provedores mora aqui agora, sem clique nenhum */
+  ["id=\"diagnostico\"", "id=\"processos\"", "id=\"dashboard\"", "id=\"modelos\"", "id=\"faq\"", "id=\"lead\"", "id=\"quem\""]
+    .forEach(alvo => assert.ok(html.includes(alvo), "falta " + alvo));
+  assert.equal(conta(html, /id="datapath"/g), 1, "o caminho dos dados aparece uma vez só");
   assert.ok(html.includes('<link rel="canonical" href="https://www.baishift.com.br/">'));
   assert.ok(html.startsWith("<!DOCTYPE html>\n<!-- GERADO"));
 });

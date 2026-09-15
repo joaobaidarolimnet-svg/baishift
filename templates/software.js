@@ -33,7 +33,7 @@ ${cf.itens.map((f, i) => `      <div class="feat rv"><div class="ic">${String(i 
         { "@type": "ListItem", "position": i + 1, "name": p.nome, "url": HOST + "/provedores/software/" + p.slug })) } },
     { "@type": "BreadcrumbList", "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Início", "item": HOST + "/" },
-      { "@type": "ListItem", "position": 2, "name": "Provedores", "item": HOST + "/provedores" },
+      { "@type": "ListItem", "position": 2, "name": "Provedores", "item": HOST + "/" },
       { "@type": "ListItem", "position": 3, "name": "Software", "item": HOST + "/provedores/software" }] }
   ] };
 
@@ -53,7 +53,7 @@ ${barra("provedores", "/diagnostico")}
 
 <section class="hub-hero">
   <div class="wrap">
-    <a class="volta" href="/provedores">← Provedores</a>
+    <a class="volta" href="/">← Início</a>
     <span class="mono pn-rotulo">${h(sw.rotulo)}</span>
     <h1>${marcar(sw.titulo)}</h1>
     <p>${marcar(sw.lead)}</p>
@@ -90,7 +90,7 @@ ${ativos.map(p => `      <li>${h(p.nome)} · ${h(p.status)}</li>`).join("\n")}
       <a class="btn btn-1" href="/diagnostico" data-ev="cta:software">Agendar o diagnóstico</a>
       <a class="mail" href="mailto:${h(st.email)}?subject=${assunto}">${h(st.email)}</a>
     </div>
-    ${footEnd(st, { href: "/provedores", texto: "Voltar para Provedores ↑" })}
+    ${footEnd(st, { href: "/", texto: "Voltar para o início ↑" })}
   </div>
 </footer>
 

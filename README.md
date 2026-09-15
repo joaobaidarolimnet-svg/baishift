@@ -8,13 +8,13 @@ consulta um serviço de localização por IP para as métricas do painel.
 
 ## Estrutura
 
-O site é todo voltado ao **provedor de internet**. A página inicial é um hub com uma porta
-principal (provedores) e uma saída secundária (Outros Apps), sobre o fluxo de dados em SVG:
+O site é todo voltado ao **provedor de internet**, e a frente inteira cabe na página
+inicial — não é preciso clicar em nada para ler a proposta completa. As páginas de
+apoio (catálogo, produto, diagnóstico) existem para quem quer se aprofundar:
 
 | Endereço | O que fica lá |
 |---|---|
-| `/` | Hub: a promessa do provedor, as duas portas, o caminho dos dados animado, "quem faz", "honestidade" e contato |
-| `/provedores` | A consultoria: diagnóstico, processos no IXC, prévia do catálogo, modelos, serve/não serve, FAQ |
+| `/` | **A página inteira**: promessa, a frente do provedor (diagnóstico, processos, software, modelos, serve/não serve, FAQ), quem faz e o formulário de contato |
 | `/provedores/software` | Catálogo de software para provedor |
 | `/provedores/software/<slug>` | Página de cada produto. O marcado com `demo` traz o painel do provedor ao vivo |
 | `/diagnostico` | Landing própria da isca gratuita, com o formulário |
@@ -22,13 +22,13 @@ principal (provedores) e uma saída secundária (Outros Apps), sobre o fluxo de 
 | `/apps/<slug>` | Página de cada aplicativo |
 
 Redirecionamentos permanentes (301) no `server.js`, para nenhum link antigo se perder:
-`/dashboards` → `/provedores/software/painel` · `/outros/<slug>` → `/apps/<slug>`.
+`/provedores` → `/` · `/dashboards` → `/provedores/software/painel` · `/outros/<slug>` → `/apps/<slug>`.
 
 ```
 conteudo/site.json      FONTE DA VERDADE dos textos, produtos e carrossel — edite aqui (ou pelo painel)
 conteudo/imagens/       imagens enviadas pelo painel
 templates/hub.js        modelo da página inicial (duas portas + fluxo de dados)
-templates/provedores.js modelo de /provedores
+templates/provedor-secoes.js  as seções da frente do provedor, usadas dentro da home
 templates/software.js   modelo de /provedores/software (catálogo)
 templates/software-produto.js  modelo de /provedores/software/<slug>
 templates/diagnostico.js       modelo de /diagnostico
@@ -38,7 +38,7 @@ templates/comum.js      <head>, barra de navegação e rodapé compartilhados
 lib/                    validação do conteúdo, gerador das páginas, acesso, publicação, imagens, métricas
 gestor/                 painel do gestor (login, telas, estilos)
 dados/                  (ignorado) disco persistente local: usuários, eventos, imagens pendentes
-index.html · provedores.html · diagnostico.html    GERADOS
+index.html · diagnostico.html                      GERADOS
 provedores/software/*.html · apps/*.html           GERADOS
 sitemap.xml             GERADO
 404.html                página de erro
