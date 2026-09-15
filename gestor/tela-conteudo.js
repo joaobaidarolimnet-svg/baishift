@@ -62,12 +62,13 @@
       F.multilinha("hub.subtitulo", "Subtítulo", { max: L().curto }),
       F.texto("hub.legendaFluxo", "Legenda do fluxo de dados animado", { max: L().item, ajuda: "O trecho antes de \" · \" fica em verde." })));
     host.append(card("As três portas",
-      nota("A ordem é fixa: a primeira porta leva para /provedores e a segunda para /apps."),
-      F.listaObjetos("hub.portas", "", { fixo: true, titulo: (pt, i) => ["1 · Provedores", "2 · Baishift +1%"][i],
+      nota("A primeira porta é a principal e ocupa mais espaço; a segunda é a saída secundária. O endereço de cada uma fica no campo \"Link\"."),
+      F.listaObjetos("hub.portas", "", { fixo: true, titulo: (pt, i) => ["1 · Provedores (principal)", "2 · Outros Apps (secundária)"][i],
         campos: b => [F.texto(b + ".quem", "Linha de cima (\"Você tem um provedor…\")", { max: L().item }),
                       F.texto(b + ".titulo", "Título", { max: L().item }),
                       F.multilinha(b + ".texto", "Texto", { max: L().curto }),
-                      el("div", { class: "linha" }, F.texto(b + ".seloDestaque", "Selo · parte em negrito", { max: 40 }), F.texto(b + ".selo", "Selo · resto", { max: L().item }))] })));
+                      el("div", { class: "linha" }, F.texto(b + ".seloDestaque", "Selo · parte em negrito", { max: 40 }), F.texto(b + ".selo", "Selo · resto", { max: L().item })),
+                      F.link(b + ".link", "Link da porta")] })));
     host.append(card("Quem faz",
       F.texto("hub.quemSomos.titulo", "Título"),
       F.multilinha("hub.quemSomos.apoio", "Texto de apoio", { max: L().curto }),
@@ -126,12 +127,12 @@
   });
 
   /* ---------- índice dos aplicativos ---------- */
-  tela("apps", "+1% (índice)", "A página /apps: topo, manifesto e fecho. Os cartões saem sozinhos dos produtos ativos, editados em \"Produtos\".", host => {
+  tela("apps", "Outros Apps (índice)", "A página /apps: topo, manifesto e fecho. Os cartões saem sozinhos dos produtos ativos, editados em \"Produtos\".", host => {
     host.append(card("Topo", cab("apps")));
     host.append(card("Título da aba e descrição",
       F.texto("apps.tituloAba", "Título da aba / do Google"),
       F.multilinha("apps.descricao", "Descrição para o Google", { max: L().curto })));
-    host.append(card("Manifesto da linha", nota("Aparece acima dos cartões, explicando o que é o +1%."),
+    host.append(card("Manifesto da linha", nota("Aparece acima dos cartões, explicando por que estes aplicativos ficam separados da frente de provedores."),
       F.multilinha("apps.manifesto", "Texto", { max: L().curto })));
     host.append(card("Sem aplicativos ativos", nota("Texto que aparece no lugar dos cartões quando nenhum produto está ativo."),
       F.texto("apps.vazio", "Aviso", { max: L().curto })));

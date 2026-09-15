@@ -107,7 +107,7 @@
       { tela: "dashboard", nome: "Dashboard" }, { tela: "modelos", nome: "Modelos" }, { tela: "perfil", nome: "Serve / não serve" }, { tela: "faq", nome: "FAQ" },
       { tela: "contato", nome: "Contato e rodapé" },
       { tela: "software", nome: "Software (catálogo)" }, { tela: "painel", nome: "Painel do provedor" },
-      { grupo: "Baishift +1%" }, { tela: "apps", nome: "Índice da linha" }, { tela: "produtos", nome: "Aplicativos" },
+      { grupo: "Outros Apps" }, { tela: "apps", nome: "Índice" }, { tela: "produtos", nome: "Aplicativos" },
       { grupo: "Geral" }, { tela: "site", nome: "Site" },
       { grupo: "Acesso" }, { tela: "usuarios", nome: "Usuários", admin: true }, { tela: "conta", nome: "Minha conta" }
     ],

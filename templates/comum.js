@@ -14,7 +14,7 @@ const NAVTOGGLE = '<button class="navtoggle" id="navtoggle" type="button" aria-l
 /* As duas portas do site. A ordem vale para o menu, para o hub e para o sitemap. */
 const PORTAS = [
   { chave: "provedores", url: "/provedores", menu: "Provedores" },
-  { chave: "apps",       url: "/apps",       menu: "+1%" }
+  { chave: "apps",       url: "/apps",       menu: "Outros Apps" }
 ];
 
 function logo(href) {

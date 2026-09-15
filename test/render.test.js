@@ -62,7 +62,7 @@ test("escapa e marca", () => {
 
 test("a barra é a mesma em todas as páginas e marca a porta onde a pessoa está", () => {
   const c = validar(base());
-  const links = /<a href="\/provedores"[^>]*>Provedores<\/a>[\s\S]*?<a href="\/apps"[^>]*>\+1%<\/a>/;
+  const links = /<a href="\/provedores"[^>]*>Provedores<\/a>[\s\S]*?<a href="\/apps"[^>]*>Outros Apps<\/a>/;
   [paginaHub(c), paginaProvedores(c), paginaSoftware(c), paginaDiagnostico(c), paginaApps(c)]
     .forEach(html => assert.match(html, links));
   assert.ok(!paginaHub(c).includes('href="/dashboards"'), "a porta de painéis deixou de existir");
@@ -117,7 +117,7 @@ test("produto padrão: arte com letra e chips, como funciona, lista de espera", 
   assert.ok(html.includes('id="lista"'));
   assert.ok(html.includes('data-ev="lista:severino"'));
   assert.ok(html.includes('<body style="--ac:#F5A300">'));
-  assert.ok(html.includes('<a href="/apps" aria-current="true" data-ev="menu:apps">+1%</a>'));
+  assert.ok(html.includes('<a href="/apps" aria-current="true" data-ev="menu:apps">Outros Apps</a>'));
   assert.ok(!html.includes("lp-blocos"));
 });
 
@@ -216,9 +216,10 @@ test("gerarTudo grava, remove o que saiu e apaga as landings do endereço antigo
 
 test("hub: duas portas, com os endereços na ordem certa, e o fluxo de dados", () => {
   const html = paginaHub(validar(base()));
-  assert.equal(conta(html, /class="door"/g), 2);
+  assert.equal(conta(html, /class="door[ "]/g), 2);
   assert.ok(html.includes('href="/provedores" data-ev="porta:provedores"'));
   assert.ok(html.includes('href="/apps" data-ev="porta:apps"'));
+  assert.equal(conta(html, /class="door door-2"/g), 1, "a porta dos aplicativos é a secundária");
   assert.ok(html.includes('id="datapath"'), "o caminho dos dados é desenhado no hub");
   assert.ok(html.includes('<link rel="canonical" href="https://www.baishift.com.br/">'));
   assert.ok(html.startsWith("<!DOCTYPE html>\n<!-- GERADO"));
@@ -267,11 +268,12 @@ test("apps: um cartão por produto ativo, apontando para /apps/<slug>", () => {
   assert.ok(html.includes('data-ev="app:severino"'));
 });
 
-test("linha +1%: o filtro traz uma categoria por vez, sem repetir", () => {
+test("outros apps: o filtro traz uma categoria por vez, sem repetir", () => {
   const html = paginaApps(validar(base()));
   assert.ok(html.includes('id="filtros-apps"'));
-  assert.equal(conta(html, /data-cat="\+1% Conhecimento"/g), 3, "um botão e os dois cartões");
-  assert.equal(conta(html, /data-cat="\+1% Trabalho"/g), 2, "um botão e um cartão");
+  assert.equal(conta(html, /data-cat="Estudo e provas"/g), 3, "um botão e os dois cartões");
+  assert.equal(conta(html, /data-cat="Trabalho autônomo"/g), 2, "um botão e um cartão");
+  assert.ok(!html.includes("+1%"), "a linha deixou de se chamar +1%");
 });
 
 test("apps sem nenhum produto ativo mostra o aviso", () => {

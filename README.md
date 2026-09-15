@@ -8,16 +8,17 @@ consulta um serviço de localização por IP para as métricas do painel.
 
 ## Estrutura
 
-A página inicial é um **hub com duas portas**, sobre o fluxo de dados desenhado em SVG:
+O site é todo voltado ao **provedor de internet**. A página inicial é um hub com uma porta
+principal (provedores) e uma saída secundária (Outros Apps), sobre o fluxo de dados em SVG:
 
 | Endereço | O que fica lá |
 |---|---|
-| `/` | Hub: o caminho dos dados animado, as duas portas, "quem faz", "honestidade" e contato |
+| `/` | Hub: a promessa do provedor, as duas portas, o caminho dos dados animado, "quem faz", "honestidade" e contato |
 | `/provedores` | A consultoria: diagnóstico, processos no IXC, prévia do catálogo, modelos, serve/não serve, FAQ |
 | `/provedores/software` | Catálogo de software para provedor |
 | `/provedores/software/<slug>` | Página de cada produto. O marcado com `demo` traz o painel do provedor ao vivo |
 | `/diagnostico` | Landing própria da isca gratuita, com o formulário |
-| `/apps` | A linha **Baishift +1%**, com filtro por categoria |
+| `/apps` | **Outros Apps** — aplicativos próprios fora da frente de provedores, com filtro por categoria |
 | `/apps/<slug>` | Página de cada aplicativo |
 
 Redirecionamentos permanentes (301) no `server.js`, para nenhum link antigo se perder:
@@ -31,7 +32,7 @@ templates/provedores.js modelo de /provedores
 templates/software.js   modelo de /provedores/software (catálogo)
 templates/software-produto.js  modelo de /provedores/software/<slug>
 templates/diagnostico.js       modelo de /diagnostico
-templates/apps.js       modelo de /apps (linha +1%)
+templates/apps.js       modelo de /apps (Outros Apps)
 templates/produto.js    modelo de /apps/<slug>
 templates/comum.js      <head>, barra de navegação e rodapé compartilhados
 lib/                    validação do conteúdo, gerador das páginas, acesso, publicação, imagens, métricas

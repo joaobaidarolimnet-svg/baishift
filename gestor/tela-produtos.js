@@ -20,7 +20,7 @@
     const r = await dialogoForm("Novo produto", form => form.append(G.campo("Nome", el("input", { name: "nome", type: "text", required: true, maxlength: L().item }), "Você preenche o resto na página do produto.")), async d => {
       const nome = String(d.nome || "").trim(); if (!nome) throw Object.assign(new Error("informe o nome"), { campo: "nome" });
       const slug = slugLivre(slugDe(nome));
-      P().push({ slug, nome, ativo: false, cor: "#2F5BD0", categoria: "+1% Conhecimento", letra: nome.charAt(0).toUpperCase(), icone: { arquivo: "", alt: "" }, status: "em breve", descricaoMenu: "", descricao: "",
+      P().push({ slug, nome, ativo: false, cor: "#2F5BD0", categoria: "Estudo e provas", letra: nome.charAt(0).toUpperCase(), icone: { arquivo: "", alt: "" }, status: "em breve", descricaoMenu: "", descricao: "",
         publico: "", titulo: nome, lead: "", chips: [], capa: { arquivo: "", alt: "" },
         comoFunciona: { rotulo: "Como funciona", titulo: "Três coisas, feitas direito.", itens: [] }, blocos: [],
         listaEspera: { ativa: true, convite: "Entre na lista e seja avisado quando o " + nome + " *abrir*.", campo: "", placeholder: "" } });
@@ -70,8 +70,8 @@
 
     host.append(card("Identidade",
       el("div", { class: "linha" }, nomeCampo, slugCampo),
-      F.chave(b + ".ativo", "Ativo", "aparece na linha +1% e a página responde"),
-      F.texto(b + ".categoria", "Categoria na linha +1%", { max: 40, ajuda: "Vira o filtro em /apps. Ex.: +1% Conhecimento, +1% Trabalho, +1% Saúde, +1% Finanças." }),
+      F.chave(b + ".ativo", "Ativo", "aparece em Outros Apps e a página responde"),
+      F.texto(b + ".categoria", "Categoria", { max: 40, ajuda: "Vira o filtro em /apps. Ex.: Estudo e provas, Trabalho autônomo." }),
       el("div", { class: "linha tres" }, F.cor(b + ".cor", "Cor"), F.texto(b + ".letra", "Letra ou símbolo", { max: 2, ajuda: "Usada no menu e na arte quando não há ícone." }), F.texto(b + ".status", "Status", { max: L().item, placeholder: "em desenvolvimento" })),
       F.imagem(b + ".icone.arquivo", "Ícone (opcional, quadrado)", { contexto: p.slug + "-icone", alt: "alt", ajuda: "Substitui a letra no menu e na arte. PNG com transparência funciona." }),
       F.texto(b + ".descricaoMenu", "Descrição curta (uso interno)", { max: L().curto }),

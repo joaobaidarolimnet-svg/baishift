@@ -600,7 +600,7 @@ function painelDoProvedor() {
   if (botoes.length) mostrar(botoes[0].getAttribute("data-seg"));
 }
 
-/* filtro por categoria na linha +1% (/apps) */
+/* filtro por categoria em Outros Apps (/apps) */
 function filtroApps() {
   var caixa = el("filtros-apps"), grade = el("apps-grid");
   if (!caixa || !grade) return;
@@ -747,7 +747,7 @@ try {
   on("dAfter", function (h) { dualBar(h, { dark: 1, w: 360, rh: 34, fs: 8, lw: 118, vw: 52, norm: "row", alt: "quatro indicadores antes e depois de seis meses de rito",
     rows: [{ k: "Inadimplência", a: 6.9, b: 4.8, ta: "6,9%", tb: "4,8%" }, { k: "Churn mensal", a: 2.02, b: 1.62, ta: "2,02%", tb: "1,62%" }, { k: "Fechamento", a: 20, b: 5, ta: "dia 20", tb: "dia 5" }, { k: "Fila de instalação", a: 38, b: 6, ta: "38", tb: "6" }] }); });
 
-  /* as três áreas do painel do provedor e o filtro da linha +1% */
+  /* as três áreas do painel do provedor e o filtro de Outros Apps */
   painelDoProvedor();
   filtroApps();
 

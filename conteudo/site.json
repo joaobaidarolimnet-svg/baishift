@@ -2,32 +2,33 @@
   "versao": 1,
   "atualizadoEm": "2026-09-04T13:04:32.923Z",
   "site": {
-    "tituloAba": "Baishift — software de gestão, painéis e aplicativos",
-    "descricao": "Soluções para gestores de alta performance, profissionais autônomos e estudantes. Gestão de provedores, painéis sob medida e aplicativos próprios.",
-    "descricaoSocial": "O provedor decidindo com número, não com sensação. Diagnóstico, consultoria de processos e dashboard feitos por quem opera um provedor.",
+    "tituloAba": "Baishift — gestão, processos e software para provedor de internet",
+    "descricao": "Diagnóstico da operação, consultoria de processos no IXC e o painel da diretoria, para provedor de internet. Feito por quem opera um provedor.",
+    "descricaoSocial": "O provedor decidindo com número, não com sensação. Diagnóstico, consultoria de processos e software feitos por quem opera um provedor.",
     "whatsapp": "",
     "email": "contato@baishift.com.br",
     "cidade": "Rolim de Moura, RO",
     "notaRodape": "Os painéis, o fluxo e os resultados desta página usam dados ilustrativos de um provedor de porte médio, para demonstrar o formato das entregas."
   },
   "hub": {
-    "titulo": "Software e consultoria que resolvem problemas de gestão *de verdade*",
-    "subtitulo": "Duas frentes, dois públicos. Escolha a sua.",
-    "chamadaMais": "E aplicativos que fazem você *um pouco melhor* todo dia.",
+    "titulo": "Software e consultoria que resolvem problemas de gestão *de verdade*.",
+    "subtitulo": "Diagnóstico da operação, processos redesenhados dentro do IXC e o painel que a diretoria abre todo dia. Feito por quem opera um provedor.",
     "portas": [
       {
         "quem": "Você tem um provedor de internet",
         "titulo": "Provedores de internet",
         "texto": "Consultoria de gestão, processos redesenhados dentro do IXC e software feito para provedor — diagnóstico, painel da diretoria, totem, central do assinante e SVA.",
         "seloDestaque": "Frente principal",
-        "selo": "consultoria e software"
+        "selo": "consultoria e software",
+        "link": "/provedores"
       },
       {
-        "quem": "Você quer melhorar um pouco todo dia",
-        "titulo": "Baishift +1%",
-        "texto": "Aplicativos para melhorar um pouco todo dia — no estudo, no trabalho, na saúde e no dinheiro. Feitos por quem constrói software de gestão.",
+        "quem": "Fora do provedor",
+        "titulo": "Outros aplicativos",
+        "texto": "Aprova Ordem para quem estuda para o Exame de Ordem. Severino para o autônomo que precisa organizar agenda e recebimento.",
         "seloDestaque": "Aprova Ordem",
-        "selo": "no ar"
+        "selo": "no ar",
+        "link": "/apps"
       }
     ],
     "quemSomos": {
@@ -53,13 +54,13 @@
     },
     "honestidade": {
       "titulo": "Honestidade poupa reunião.",
-      "texto": "O mesmo critério vale para as três frentes. Se o seu caso está na coluna da direita, a conversa termina rápido — e você não perde tempo.",
+      "texto": "Se o seu caso está na coluna da direita, a conversa termina rápido — e você não perde tempo.",
       "serve": [
-        "Empresa que já sente o processo travar e quer decidir com número",
-        "Quem vai liberar acesso aos próprios dados"
+        "Provedor de 2 mil a 50 mil assinantes que já sente o processo travar",
+        "Diretoria que quer decidir com número e vai liberar acesso aos próprios dados"
       ],
       "naoServe": [
-        "Quem quer trocar de sistema em trinta dias",
+        "Quem quer trocar de ERP em trinta dias",
         "Quem procura o fornecedor mais barato da praça",
         "Quem quer painel bonito sem arrumar o processo antes"
       ]
@@ -566,7 +567,7 @@
         "campo": "Sua profissão",
         "placeholder": "Ex.: eletricista"
       },
-      "categoria": "+1% Trabalho"
+      "categoria": "Trabalho autônomo"
     },
     {
       "slug": "aprova-ordem",
@@ -618,7 +619,7 @@
         "campo": "Próximo exame",
         "placeholder": "Ex.: 1ª fase, próxima edição"
       },
-      "categoria": "+1% Conhecimento"
+      "categoria": "Estudo e provas"
     },
     {
       "slug": "aprova-suficiencia",
@@ -670,20 +671,20 @@
         "campo": "Próximo exame",
         "placeholder": "Ex.: próxima edição"
       },
-      "categoria": "+1% Conhecimento"
+      "categoria": "Estudo e provas"
     }
   ],
   "apps": {
-    "tituloAba": "Baishift +1% — aplicativos para melhorar um pouco todo dia",
-    "descricao": "Aprova Ordem, Aprova Suficiência e Severino. Aplicativos que ajudam no estudo, no trabalho, na saúde e nas finanças.",
-    "rotulo": "Baishift +1%",
-    "titulo": "Um pouco melhor *todos os dias*.",
-    "lead": "Aplicativos que ajudam no estudo, no trabalho, na saúde e nas finanças — feitos por quem constrói software de gestão.",
+    "tituloAba": "Outros aplicativos — Baishift",
+    "descricao": "Aprova Ordem, Aprova Suficiência e Severino. Aplicativos próprios da Baishift, fora da frente de provedores de internet.",
+    "rotulo": "Outros aplicativos",
+    "titulo": "Aplicativos próprios, fora do *provedor*.",
+    "lead": "Produtos da Baishift, não projetos de cliente. Cada um nasceu de um problema visto de perto e resolve com o menor número de telas possível.",
     "vazio": "Nenhum aplicativo publicado por enquanto. Volte em breve.",
     "fecho": {
       "titulo": "Falta um aplicativo para o seu caso?",
       "texto": "Se o problema se repete todo mês e ninguém resolveu direito, conte como ele acontece. A resposta vem com escopo e prazo — ou com um \"não é caso para a Baishift\"."
     },
-    "manifesto": "Ninguém passa na OAB, entra em forma ou organiza o dinheiro de uma vez. Acontece por acúmulo: um pouco todo dia, até virar resultado. Cada aplicativo da linha existe para tornar esse pouco mais fácil de manter."
+    "manifesto": "São aplicativos que não têm nada a ver com provedor de internet: nasceram de problemas do dia a dia que se repetem e que ninguém tinha resolvido direito. Ficam aqui, separados da frente principal."
   }
 }

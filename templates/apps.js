@@ -59,12 +59,12 @@ ${barra("apps", "#contato")}
 
 <section class="apps-lista" id="lista" aria-label="Aplicativos">
   <div class="wrap">
-    <p class="apps-manifesto"><b>Por que “+1%”.</b> ${marcar(ap.manifesto)}</p>
+    <p class="apps-manifesto"><b>Por que ficam aqui.</b> ${marcar(ap.manifesto)}</p>
 ${filtro}
     <div class="apps-grid" id="apps-grid">
 ${cartoes}
     </div>
-    <p class="apps-nota">Cada aplicativo tem nome e página próprios nas lojas. O <b>+1%</b> organiza a linha aqui dentro — não entra no nome do app.</p>
+    <p class="apps-nota">Cada aplicativo tem nome e página próprios nas lojas. Esta página só organiza a lista — a frente principal da Baishift é <a href="/provedores">provedor de internet</a>.</p>
   </div>
 </section>
 

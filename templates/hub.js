@@ -9,7 +9,7 @@ module.exports = function paginaHub(c, o = {}) {
   const [localidade, uf] = st.cidade.split(",").map(s => s.trim());
   const assunto = encodeURIComponent("Contato — Baishift");
 
-  const portas = hb.portas.map((pt, i) => `      <a class="door" href="${PORTAS[i].url}" data-ev="porta:${PORTAS[i].chave}">
+  const portas = hb.portas.map((pt, i) => `      <a class="door${i ? " door-2" : ""}" href="${h(pt.link || PORTAS[i].url)}" data-ev="porta:${PORTAS[i].chave}">
         ${SVG_GO}
         <p class="who">${h(pt.quem)}</p>
         <h2>${h(pt.titulo)}</h2>
@@ -47,11 +47,8 @@ ${barra("", "#contato")}
 <!-- ===================== TOPO ===================== -->
 <section class="hub-hero">
   <div class="wrap">
-    <p class="hub-lead">${marcar(hb.subtitulo)}</p>
-    <div class="hub-duo">
-      <h1>${marcar(hb.titulo)}</h1>
-      ${hb.chamadaMais ? `<p class="hub-mais">${marcar(hb.chamadaMais)}</p>` : ""}
-    </div>
+    <h1>${marcar(hb.titulo)}</h1>
+    <p>${marcar(hb.subtitulo)}</p>
   </div>
 </section>
 
